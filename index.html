@@ -10,6 +10,12 @@
 <meta name="theme-color" content="#0f4c9c">
 <meta name="author" content="Gemma &amp; Ray">
 
+<!-- El web no ha de sortir a Google. Important: la porta d'entrada amaga el
+     contingut amb CSS, però el text continua sent al codi de la pàgina, així
+     que sense aquesta línia els cercadors sí que el podrien indexar.
+     EDIT HERE: esborreu aquesta línia si algun dia voleu que sigui públic. -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+
 <!-- Xarxes socials -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ca_ES">
@@ -29,11 +35,80 @@
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="./styles.css">
+
+<!-- ========================================
+     PORTA D'ENTRADA
+     Aquest script ha d'anar aquí, abans que es pinti res, perquè el web
+     no aparegui ni un instant abans de posar la contrasenya.
+     ======================================== -->
+<script>
+  (function () {
+    try {
+      if (localStorage.getItem("gr-entrada") !== "oberta") {
+        document.documentElement.classList.add("gated");
+      }
+    } catch (e) {
+      // Si el navegador té l'emmagatzematge bloquejat, demanem la contrasenya
+      document.documentElement.classList.add("gated");
+    }
+  })();
+</script>
 </head>
 
 <body>
 
 <a class="skip-link" href="#contingut">Salta al contingut</a>
+
+<!-- ========================================
+     00 · PORTA D'ENTRADA (contrasenya)
+     EDIT HERE: per canviar la contrasenya, vegeu script.js → wedding.gate
+     ======================================== -->
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <div class="gate__sea" aria-hidden="true"></div>
+  <div class="gate__glow" aria-hidden="true"></div>
+
+  <svg class="gate__deco gate__deco--l float-slow" viewBox="0 0 140 64" aria-hidden="true"><use href="#i-olive"></use></svg>
+  <svg class="gate__deco gate__deco--r float-slower" viewBox="0 0 140 64" aria-hidden="true"><use href="#i-olive"></use></svg>
+
+  <div class="gate__card">
+    <div class="gate__frame" aria-hidden="true">
+      <svg class="gate__corner gate__corner--tl"><use href="#i-corner"></use></svg>
+      <svg class="gate__corner gate__corner--tr"><use href="#i-corner"></use></svg>
+      <svg class="gate__corner gate__corner--bl"><use href="#i-corner"></use></svg>
+      <svg class="gate__corner gate__corner--br"><use href="#i-corner"></use></svg>
+    </div>
+
+    <p class="gate__place">Blanes · Costa Brava</p>
+    <p class="gate__names" id="gateTitle">Gemma <i class="amp">&amp;</i> Ray</p>
+    <p class="gate__date">14 · 05 · 2027</p>
+
+    <svg class="gate__rule draw" viewBox="0 0 160 30" aria-hidden="true"><use href="#i-wave"></use></svg>
+
+    <p class="gate__lede">
+      Aquest racó és només per a la gent que estimem.<br>
+      Escriviu la paraula que us vam enviar amb la invitació.
+    </p>
+
+    <form class="gate__form" id="gateForm" novalidate>
+      <div class="gate__field">
+        <label class="gate__label" for="gatePass">La paraula màgica</label>
+        <input class="gate__input" type="password" id="gatePass" name="gatePass"
+               autocomplete="current-password" autocapitalize="none"
+               spellcheck="false" required placeholder="············">
+        <button class="gate__peek" type="button" id="gatePeek"
+                aria-pressed="false" aria-label="Mostrar la contrasenya">veure</button>
+      </div>
+
+      <p class="gate__error" id="gateError" role="alert" aria-live="assertive"></p>
+
+      <button class="btn btn--solid gate__submit" type="submit">Entrar</button>
+    </form>
+
+    <p class="gate__help">
+      No la trobeu? Escriviu-nos i us la tornem a enviar de seguida.
+    </p>
+  </div>
+</div>
 
 <!-- ========================================
      PRELOADER · seqüència d'obertura

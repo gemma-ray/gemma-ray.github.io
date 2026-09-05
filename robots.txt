@@ -1,0 +1,5 @@
+# El web del casament no ha de sortir als cercadors.
+# Esborreu aquest fitxer (i el <meta name="robots"> de l'index.html)
+# si algun dia voleu que sigui públic.
+User-agent: *
+Disallow: /

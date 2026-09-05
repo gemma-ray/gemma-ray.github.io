@@ -12,12 +12,13 @@ GitHub Pages i ja està en línia.
 
 1. [Estructura del projecte](#estructura-del-projecte)
 2. [Veure'l en local](#veure-l-en-local)
-3. [Canviar la informació del casament](#canviar-la-informació-del-casament)
-4. [Substituir les fotos](#substituir-les-fotos)
-5. [Configurar el formulari RSVP](#configurar-el-formulari-rsvp)
-6. [Publicar-lo amb GitHub Pages](#publicar-lo-amb-github-pages)
-7. [Afegir o treure seccions](#afegir-o-treure-seccions)
-8. [Accessibilitat i rendiment](#accessibilitat-i-rendiment)
+3. [La porta d'entrada (contrasenya)](#la-porta-dentrada-contrasenya)
+4. [Canviar la informació del casament](#canviar-la-informació-del-casament)
+5. [Substituir les fotos](#substituir-les-fotos)
+6. [Configurar el formulari RSVP](#configurar-el-formulari-rsvp)
+7. [Publicar-lo amb GitHub Pages](#publicar-lo-amb-github-pages)
+8. [Afegir o treure seccions](#afegir-o-treure-seccions)
+9. [Accessibilitat i rendiment](#accessibilitat-i-rendiment)
 
 ---
 
@@ -73,6 +74,75 @@ npx serve .
 I obriu <http://localhost:8000>.
 
 > No cal instal·lar res més. No hi ha `npm install`, ni `build`, ni `dist`.
+
+---
+
+## La porta d'entrada (contrasenya)
+
+En obrir el web es demana una paraula abans d'ensenyar res.
+La contrasenya actual és **`gemmairay`** (no distingeix majúscules ni espais,
+així que `Gemmairay` o ` GEMMAIRAY ` també funcionen).
+
+Un cop entrat, el navegador ho recorda **120 dies**, així que els convidats
+només l'hauran d'escriure un cop per dispositiu.
+
+### ⚠️ Això no és seguretat de veritat
+
+Aquest web és estàtic: no hi ha servidor, i per tant la comprovació de la
+contrasenya es fa **dins del navegador**. Qualsevol persona amb coneixements
+tècnics pot obrir el codi font de la pàgina i trobar-la.
+
+Serveix per **evitar visites casuals** i perquè el web no circuli fora del
+cercle de convidats. **No hi poseu mai res sensible al darrere**: ni números de
+compte reals, ni adreces privades, ni dades de tercers.
+
+Perquè el web tampoc no aparegui a Google, hi ha un `robots.txt` i una etiqueta
+`<meta name="robots" content="noindex">` a l'`index.html`. Cal tenir-ho present
+perquè el text de la pàgina és al codi font encara que la porta estigui tancada:
+sense aquestes dues línies, els cercadors el podrien indexar igualment.
+
+### Canviar la contrasenya
+
+No es guarda en clar, sinó com una empremta, per si algú tafaneja el codi.
+Per canviar-la:
+
+1. Obriu el web, i després la consola del navegador
+   (Chrome: ⌥⌘J · Safari: cal activar el menú Desenvolupament).
+2. Escriviu-hi:
+
+   ```js
+   grHash("la-nova-paraula")
+   ```
+
+3. Copieu el resultat i enganxeu-lo a `script.js`:
+
+   ```js
+   gate: {
+     hash: "aquí-el-resultat",
+     enabled: true,
+     rememberDays: 120
+   }
+   ```
+
+### Treure la porta i obrir el web a tothom
+
+A `script.js`, canvieu una sola línia:
+
+```js
+gate: { enabled: false, ... }
+```
+
+També podeu esborrar el `robots.txt` i l'etiqueta `<meta name="robots">`
+si voleu que el web sigui indexable.
+
+### Tornar a veure la porta mentre proveu coses
+
+Com que el navegador recorda que ja heu entrat, per tornar a veure-la
+escriviu això a la consola i recarregueu:
+
+```js
+localStorage.removeItem("gr-entrada"); location.reload();
+```
 
 ---
 
