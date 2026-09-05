@@ -74,73 +74,13 @@ const safe = (label, fn) => {
 };
 
 /* ========================================
-   PRELOADER · seqüència d'obertura
+   ENTRADA A LA PÀGINA
+   Marca el web com a llest de seguida (sense preloader fals):
+   altres seccions (deep-link, manuscrit) esperen aquest senyal.
    ======================================== */
-safe("preloader", () => {
-  const pre = $("#preloader");
-  if (!pre) return;
-
-  const bar = $("#preloaderBar");
-  const count = $("#preloaderCount");
-  const messages = [
-    "Preparant el mar…",
-    "Encenent les espelmes…",
-    "Refredant el cava…",
-    "Posant les taules…",
-    "Ja gairebé hi som…"
-  ];
-
-  if (isReduced()) {
-    pre.remove();
-    document.body.classList.remove("is-locked");
-    document.documentElement.classList.add("is-ready");
-    return;
-  }
-
-  document.body.classList.add("is-locked");
-
-  let progress = 0;
-  let msgIndex = 0;
-  const started = performance.now();
-  const MIN_DURATION = 2400; // el web mereix una entrada tranquil·la
-
-  const tick = setInterval(() => {
-    progress = Math.min(progress + Math.random() * 16 + 6, 100);
-    if (bar) bar.style.transform = `scaleX(${progress / 100})`;
-
-    const nextMsg = Math.floor((progress / 100) * messages.length);
-    if (nextMsg !== msgIndex && messages[nextMsg]) {
-      msgIndex = nextMsg;
-      if (count) count.textContent = messages[nextMsg];
-    }
-    if (progress >= 100) clearInterval(tick);
-  }, 260);
-
-  const finish = () => {
-    const elapsed = performance.now() - started;
-    const wait = Math.max(0, MIN_DURATION - elapsed);
-
-    setTimeout(() => {
-      clearInterval(tick);
-      if (bar) bar.style.transform = "scaleX(1)";
-      if (count) count.textContent = "Benvinguts";
-      pre.classList.add("is-done");
-
-      setTimeout(() => {
-        pre.classList.add("is-out");
-        document.body.classList.remove("is-locked");
-        document.documentElement.classList.add("is-ready");
-        window.dispatchEvent(new CustomEvent("wedding:ready"));
-        setTimeout(() => pre.remove(), 1600);
-      }, 620);
-    }, wait);
-  };
-
-  if (document.readyState === "complete") finish();
-  else window.addEventListener("load", finish, { once: true });
-
-  // Xarxa lenta? No deixem ningú tancat al preloader.
-  setTimeout(finish, 6000);
+safe("ready", () => {
+  document.documentElement.classList.add("is-ready");
+  window.dispatchEvent(new CustomEvent("wedding:ready"));
 });
 
 /* ========================================
@@ -319,8 +259,9 @@ safe("smooth-scroll", () => {
 
 /* ========================================
    ENLLAÇOS COMPARTITS (…/#rsvp)
-   El preloader bloqueja el desplaçament, així que el navegador no arriba
-   a la secció tot sol. Ho fem nosaltres quan el web ja està a punt.
+   Ho fem nosaltres quan el web ja està a punt, en lloc de deixar-ho al
+   navegador: així el salt és fiable encara que el disseny trigui a
+   assentar-se.
    ======================================== */
 safe("deep-link", () => {
   const hash = window.location.hash;
@@ -511,15 +452,77 @@ safe("sea", () => {
   if (!canvas || isReduced()) return;
 
   const ctx = canvas.getContext("2d");
+
+  /* ── LES CAPES ──────────────────────────────────────────────────────
+     amp, len, speed i y són EXACTAMENT els de sempre: la forma, l'alçada
+     i el moviment no canvien. L'únic que canvia és l'ompliment, que ara
+     és un degradat de dues parades en lloc d'un color pla, perquè cada
+     aiguada quedi més densa a la base, com la pintura que baixa i s'hi
+     acumula. */
   const layers = [
-    { color: "rgba(202, 220, 234, 0.55)", amp: 10, len: 0.010, speed: 0.018, y: 0.30 },
-    { color: "rgba(123, 165, 200, 0.65)", amp: 14, len: 0.008, speed: 0.013, y: 0.46 },
-    { color: "rgba(33, 96, 168, 0.75)",   amp: 18, len: 0.006, speed: 0.009, y: 0.62 },
-    { color: "rgba(15, 76, 156, 0.85)",   amp: 12, len: 0.011, speed: 0.021, y: 0.78 },
-    { color: "rgba(10, 46, 90, 0.95)",    amp: 16, len: 0.005, speed: 0.007, y: 0.92 }
+    // rgb = el to de la capa; edge / body / pool = l'opacitat a la cresta,
+    // just per dins, i al fons. Aquest és el perfil d'una aiguada: la vora
+    // queda marcada perquè el pigment s'hi diposita, just per dins s'aclareix
+    // i al fons torna a acumular-se.
+    { amp: 10, len: 0.010, speed: 0.018, y: 0.30, rgb: "199, 213, 223", edge: 0.30, body: 0.18, pool: 0.44 },
+    { amp: 14, len: 0.008, speed: 0.013, y: 0.46, rgb: "184, 203, 216", edge: 0.38, body: 0.24, pool: 0.52 },
+    { amp: 18, len: 0.006, speed: 0.009, y: 0.62, rgb: "160, 183, 201", edge: 0.44, body: 0.28, pool: 0.60 },
+    { amp: 12, len: 0.011, speed: 0.021, y: 0.78, rgb: "129, 158, 183", edge: 0.46, body: 0.30, pool: 0.64 },
+    { amp: 16, len: 0.005, speed: 0.007, y: 0.92, rgb: "111, 145, 174", edge: 0.52, body: 0.34, pool: 0.74 }
   ];
 
+  /* ── EL PIGMENT ──────────────────────────────────────────────────────
+     Dues textures separades, perquè fan feines diferents:
+
+       taques  — clapes irregulars, grans, on el pigment s'acumula més.
+                 És el que treu la sensació de color pla.
+       gra     — la trama del cotó, molt fina, per sota de tot.
+
+     Les dues surten de filtres SVG de veritat (feTurbulence, un
+     feDisplacementMap que only remena la textura per dins, i un
+     feComponentTransfer que hi puja el contrast perquè les clapes es
+     distingeixin en lloc de quedar en una grisor uniforme).
+
+     Els filtres es resolen UNA vegada i es guarden com a imatge. Filtrar
+     un canvas animat a cada fotograma vol dir recalcular la turbulència
+     60 cops per segon i s'hi perd la fluïdesa. */
+  const filtre = (freq, octaves, llavor, desplaça, pendent, tall) =>
+    "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500">' +
+      '<defs><filter id="f" x="0" y="0" width="100%" height="100%"' +
+      ' color-interpolation-filters="sRGB">' +
+      '<feTurbulence type="fractalNoise" baseFrequency="' + freq + '"' +
+      ' numOctaves="' + octaves + '" seed="' + llavor + '" result="n"/>' +
+      // remena la textura per dins; no toca cap silueta, és un mosaic
+      '<feDisplacementMap in="n" in2="n" scale="' + desplaça + '"' +
+      ' xChannelSelector="R" yChannelSelector="G" result="d"/>' +
+      '<feColorMatrix in="d" type="saturate" values="0" result="g"/>' +
+      // el contrast és el que fa que es vegin clapes i no una grisor plana
+      '<feComponentTransfer>' +
+      '<feFuncR type="linear" slope="' + pendent + '" intercept="' + tall + '"/>' +
+      '<feFuncG type="linear" slope="' + pendent + '" intercept="' + tall + '"/>' +
+      '<feFuncB type="linear" slope="' + pendent + '" intercept="' + tall + '"/>' +
+      '<feFuncA type="linear" slope="0" intercept="1"/>' +
+      '</feComponentTransfer></filter></defs>' +
+      '<rect width="500" height="500" filter="url(#f)"/></svg>');
+
+  /* Les clapes fortes de pigment feien les ones brutes i estranyes.
+     Ens quedem només amb la trama fina del cotó, molt fluixa: prou perquè
+     el color no sigui pla, però sense embrutar l'aiguada.
+     EDIT HERE: si algun dia en voleu més, pugeu "alfa". */
+  const textures = [
+    { src: filtre("0.55", 2, 5, 4, 0.85, 0.08), escala: 1.0, alfa: 0.06, deriva: 1.0 }
+  ];
+
+  textures.forEach((tx) => {
+    tx.img = new Image();
+    tx.img.onload = () => { tx.llest = true; };
+    tx.img.src = tx.src;
+    tx.patro = null;
+  });
+
   let w = 0, h = 0, dpr = 1, raf = null, t = 0, running = true;
+  let grads = [];
 
   const resize = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -528,25 +531,86 @@ safe("sea", () => {
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Els degradats es construeixen només aquí, no a cada fotograma
+    grads = layers.map((layer) => {
+      const g = ctx.createLinearGradient(0, h * layer.y - layer.amp, 0, h);
+      g.addColorStop(0, `rgba(${layer.rgb}, ${layer.edge})`);
+      g.addColorStop(0.16, `rgba(${layer.rgb}, ${layer.body})`);
+      g.addColorStop(1, `rgba(${layer.rgb}, ${layer.pool})`);
+      return g;
+    });
+    textures.forEach((tx) => { tx.patro = null; });
+  };
+
+  const wavePath = (layer, i, yOffset) => {
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+    const base = h * layer.y + yOffset;
+    for (let x = 0; x <= w; x += 4) {
+      const y = base
+        + Math.sin(x * layer.len + t * layer.speed * 60 + i) * layer.amp
+        + Math.sin(x * layer.len * 2.3 + t * layer.speed * 34) * (layer.amp * 0.35);
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(w, h);
+    ctx.closePath();
   };
 
   const draw = () => {
     ctx.clearRect(0, 0, w, h);
+
     layers.forEach((layer, i) => {
-      ctx.beginPath();
-      ctx.moveTo(0, h);
-      const base = h * layer.y;
-      for (let x = 0; x <= w; x += 4) {
-        const y = base
-          + Math.sin(x * layer.len + t * layer.speed * 60 + i) * layer.amp
-          + Math.sin(x * layer.len * 2.3 + t * layer.speed * 34) * (layer.amp * 0.35);
-        ctx.lineTo(x, y);
-      }
-      ctx.lineTo(w, h);
-      ctx.closePath();
-      ctx.fillStyle = layer.color;
+      /* L'aiguada, en tres passades. La vora no és un tall net de vector:
+         hi passem dos traços tous just per sobre, com si el pigment
+         s'hagués escampat una mica abans d'assentar-se. */
+      wavePath(layer, i, -5);
+      ctx.fillStyle = `rgba(${layer.rgb}, ${layer.edge * 0.3})`;
       ctx.fill();
+      wavePath(layer, i, -2.5);
+      ctx.fillStyle = `rgba(${layer.rgb}, ${layer.edge * 0.55})`;
+      ctx.fill();
+      wavePath(layer, i, 0);
+      ctx.fillStyle = grads[i];
+      ctx.fill();
+
+      /* El pigment, retallat a la silueta de fora, perquè també entri a la
+         vora escampada. Com que es pinta amb "source-atop", la seva força
+         segueix l'opacitat del que hi ha a sota: fort al cos de l'ona i
+         gairebé inexistent a la vora, que és el que fa una aquarel·la. */
+      ctx.save();
+      wavePath(layer, i, -5);
+      ctx.clip();
+
+      /* El pigment ha de viatjar AMB l'ona, no quedar-se enganxat a la
+         pantalla. L'ona es desplaça horitzontalment a (speed*60/len)
+         píxels per unitat de temps, així que movem la textura al mateix
+         ritme. Cada textura amb una deriva lleugerament diferent, perquè
+         les clapes i el gra no vagin en bloc. */
+      const avanc = -(t * layer.speed * 60) / layer.len;
+
+      ctx.globalCompositeOperation = "source-atop";
+      textures.forEach((tx, k) => {
+        if (!tx.llest) return;
+        if (!tx.patro) tx.patro = ctx.createPattern(tx.img, "repeat");
+        if (!tx.patro) return;
+        if (tx.patro.setTransform && typeof DOMMatrix === "function") {
+          try {
+            tx.patro.setTransform(
+              new DOMMatrix()
+                .translateSelf(avanc * tx.deriva, i * 37 + k * 53)
+                .scaleSelf(tx.escala, tx.escala)
+            );
+          } catch (e) { /* si no ho admet, la textura es queda quieta */ }
+        }
+        ctx.globalAlpha = tx.alfa;
+        ctx.fillStyle = tx.patro;
+        ctx.fillRect(0, 0, w, h);
+      });
+
+      ctx.restore();
     });
+
     t += 0.016;
     if (running) raf = requestAnimationFrame(draw);
   };
@@ -952,14 +1016,15 @@ safe("cursor", () => {
   const label = $("#cursorLabel");
   if (!cursor || !canHover() || isReduced()) return;
 
+  /* La icona del punter la posa el CSS amb la propietat "cursor", que va
+     sempre clavada i sense retard. L'única cosa que queda per fer aquí és
+     acompanyar el ratolí amb l'etiqueta ("Veure", "Arrossega"…). */
   document.documentElement.classList.add("has-cursor");
 
-  const dot = $(".cursor__dot", cursor);
-  const ring = $(".cursor__ring", cursor);
+  const anchor = $(".cursor__ring", cursor);
   let mx = window.innerWidth / 2, my = window.innerHeight / 2;
   let rx = mx, ry = my;
 
-  // Fins que el ratolí no es mou no sabem on és: millor no ensenyar-lo al mig
   window.addEventListener("mousemove", (e) => {
     mx = e.clientX;
     my = e.clientY;
@@ -968,21 +1033,18 @@ safe("cursor", () => {
       cursor.classList.add("is-awake");
     }
   });
-  window.addEventListener("mousedown", () => cursor.classList.add("is-down"));
-  window.addEventListener("mouseup", () => cursor.classList.remove("is-down"));
   document.addEventListener("mouseleave", () => { cursor.style.opacity = "0"; });
-  document.addEventListener("mouseenter", () => { cursor.style.opacity = "1"; });
+  document.addEventListener("mouseenter", () => { cursor.style.opacity = ""; });
 
   const render = () => {
-    rx = lerp(rx, mx, 0.16);
-    ry = lerp(ry, my, 0.16);
-    if (dot) dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
-    if (ring) ring.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
+    rx = lerp(rx, mx, 0.3);
+    ry = lerp(ry, my, 0.3);
+    if (anchor) anchor.style.transform = `translate3d(${rx}px, ${ry}px, 0)`;
     requestAnimationFrame(render);
   };
   render();
 
-  // Elements que fan créixer el cursor, amb etiqueta quan cal
+  /* Els llocs que expliquen què s'hi pot fer */
   const labels = [
     [".gal", "Veure"],
     [".postcard", "Arrossega"],
@@ -1003,11 +1065,6 @@ safe("cursor", () => {
         if (label) label.textContent = "";
       });
     });
-  });
-
-  $$("a, button, input, textarea, select, [role='button']").forEach((el) => {
-    el.addEventListener("mouseenter", () => cursor.classList.add("is-hover"));
-    el.addEventListener("mouseleave", () => cursor.classList.remove("is-hover"));
   });
 });
 
@@ -1440,21 +1497,6 @@ safe("vinyl", () => {
     const on = vinyl.classList.toggle("is-spinning");
     vinyl.setAttribute("aria-pressed", String(on));
   });
-});
-
-/* ========================================
-   HERO · el manuscrit "ens casem!" s'escriu tot sol
-   ======================================== */
-safe("hero-hand", () => {
-  const hand = $("#heroHand");
-  if (!hand) return;
-
-  if (isReduced()) { hand.style.clipPath = "none"; return; }
-
-  const write = () => hand.classList.add("is-writing");
-
-  if (document.documentElement.classList.contains("is-ready")) write();
-  else window.addEventListener("wedding:ready", write, { once: true });
 });
 
 /* ========================================

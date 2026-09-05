@@ -7,7 +7,7 @@
 
 <!-- EDIT HERE: descripció per a WhatsApp, Instagram i Google -->
 <meta name="description" content="Gemma i Ray es casen el 14 de maig de 2027 a El Convent de Blanes, Costa Brava. Tota la informació del dia: horaris, com arribar-hi, allotjament i confirmació d'assistència.">
-<meta name="theme-color" content="#0f4c9c">
+<meta name="theme-color" content="#17365d">
 <meta name="author" content="Gemma &amp; Ray">
 
 <!-- El web no ha de sortir a Google. Important: la porta d'entrada amaga el
@@ -32,7 +32,7 @@
 <!-- Tipografies -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&family=Italianno&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
 
 
 <!-- ========================================
@@ -55,6 +55,326 @@
 <body>
 
 <a class="skip-link" href="#contingut">Salta al contingut</a>
+
+<!-- Textures globals -->
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- Cursor personalitzat (només escriptori) -->
+<div class="cursor" id="cursor" aria-hidden="true">
+  <div class="cursor__ring"><span class="cursor__label" id="cursorLabel"></span></div>
+  <div class="cursor__dot"></div>
+</div>
+
+<!-- Barra de progrés de lectura -->
+<div class="progress" aria-hidden="true"><div class="progress__bar" id="progressBar"></div></div>
+
+<!-- Sol que baixa a mesura que avancem pel dia -->
+<div class="sun-track" id="sunTrack" aria-hidden="true"><div class="sun-track__body" id="sunBody"></div></div>
+
+<!-- ========================================
+     SPRITE D'IL·LUSTRACIONS DE TINTA
+     Totes les il·lustracions del web viuen aquí.
+     S'hi fa referència amb un element "use" que apunta a l'identificador
+     de cada símbol (per exemple, #i-olive).
+     ======================================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+
+<symbol id="i-olive" viewBox="0 0 140 64">
+  <path class="ink" d="M3 58C28 52 52 42 74 30 94 19 116 11 137 8"/>
+  <ellipse class="ink" cx="30" cy="44" rx="10" ry="3.8" transform="rotate(-24 30 44)"/>
+  <ellipse class="ink" cx="44" cy="52" rx="9" ry="3.4" transform="rotate(18 44 52)"/>
+  <ellipse class="ink" cx="58" cy="34" rx="10" ry="3.8" transform="rotate(-30 58 34)"/>
+  <ellipse class="ink" cx="72" cy="41" rx="9" ry="3.4" transform="rotate(14 72 41)"/>
+  <ellipse class="ink" cx="88" cy="22" rx="10" ry="3.8" transform="rotate(-26 88 22)"/>
+  <ellipse class="ink" cx="102" cy="29" rx="9" ry="3.4" transform="rotate(16 102 29)"/>
+  <ellipse class="ink" cx="118" cy="13" rx="9" ry="3.4" transform="rotate(-22 118 13)"/>
+  <circle class="ink" cx="50" cy="38" r="4.2"/>
+  <circle class="ink" cx="82" cy="30" r="4.2"/>
+  <circle class="ink" cx="110" cy="20" r="3.8"/>
+</symbol>
+
+<symbol id="i-lemon" viewBox="0 0 120 90">
+  <path class="ink" d="M6 8C26 18 44 34 58 54c8 12 14 22 16 30"/>
+  <ellipse class="ink" cx="34" cy="26" rx="12" ry="5" transform="rotate(28 34 26)"/>
+  <ellipse class="ink" cx="52" cy="44" rx="12" ry="5" transform="rotate(34 52 44)"/>
+  <ellipse class="ink" cx="88" cy="42" rx="15" ry="19" transform="rotate(-16 88 42)"/>
+  <path class="ink ink-thin" d="M96 24c3-4 4-6 4-8"/>
+  <ellipse class="ink" cx="66" cy="70" rx="12" ry="15" transform="rotate(12 66 70)"/>
+  <path class="ink ink-thin" d="M60 56c-1-4-1-6 0-8"/>
+</symbol>
+
+<symbol id="i-bloom" viewBox="0 0 100 100">
+  <path class="ink" d="M50 50c-6-14-2-26 8-30 8-3 14 4 12 14-2 8-10 14-20 16Z"/>
+  <path class="ink" d="M50 50c12-9 24-8 29 1 4 8-3 14-13 12-8-2-14-8-16-13Z"/>
+  <path class="ink" d="M50 50c9 12 8 24-1 29-8 4-14-3-12-13 2-8 8-14 13-16Z"/>
+  <path class="ink" d="M50 50c-14 6-26 2-30-8-3-8 4-14 14-12 8 2 14 10 16 20Z"/>
+  <circle class="ink" cx="50" cy="50" r="4"/>
+  <path class="ink ink-thin" d="M50 66c-4 12-14 22-28 28"/>
+</symbol>
+
+<symbol id="i-wave" viewBox="0 0 160 30">
+  <path class="ink" d="M2 18c10-12 22-12 32 0s22 12 32 0 22-12 32 0 22 12 32 0"/>
+  <path class="ink ink-thin" d="M2 27c10-9 22-9 32 0s22 9 32 0 22-9 32 0 22 9 32 0"/>
+</symbol>
+
+<symbol id="i-sun" viewBox="0 0 100 100">
+  <circle class="ink" cx="50" cy="50" r="20"/>
+  <path class="ink" d="M50 6v12M50 82v12M6 50h12M82 50h12M19 19l8 8M73 73l8 8M81 19l-8 8M27 73l-8 8"/>
+</symbol>
+
+<symbol id="i-arch" viewBox="0 0 90 110">
+  <path class="ink" d="M10 106V48a35 35 0 0 1 70 0v58"/>
+  <path class="ink ink-thin" d="M20 106V49a25 25 0 0 1 50 0v57"/>
+  <path class="ink" d="M2 106h86"/>
+  <circle class="ink ink-thin" cx="45" cy="40" r="5"/>
+</symbol>
+
+<symbol id="i-bell" viewBox="0 0 100 100">
+  <path class="ink" d="M22 74c0-8 6-12 6-26 0-14 8-24 22-24s22 10 22 24c0 14 6 18 6 26Z"/>
+  <path class="ink" d="M14 74h72"/>
+  <path class="ink" d="M44 82a6 6 0 0 0 12 0"/>
+  <path class="ink ink-thin" d="M50 24v-8"/>
+</symbol>
+
+<symbol id="i-coupe" viewBox="0 0 70 100">
+  <path class="ink" d="M10 20h50c0 20-11 32-25 32S10 40 10 20Z"/>
+  <path class="ink" d="M35 52v30M20 86h30"/>
+  <path class="ink ink-thin" d="M22 12c2 4 2 6 0 8M35 8c2 5 2 8 0 12M48 12c2 4 2 6 0 8"/>
+</symbol>
+
+<symbol id="i-cocktail" viewBox="0 0 80 100">
+  <path class="ink" d="M8 20h64L40 56Z"/>
+  <path class="ink" d="M40 56v30M24 88h32"/>
+  <path class="ink ink-thin" d="M56 18 72 6"/>
+  <circle class="ink" cx="60" cy="30" r="6"/>
+</symbol>
+
+<symbol id="i-bread" viewBox="0 0 110 80">
+  <path class="ink" d="M8 54c0-18 20-32 47-32s47 14 47 32c0 8-6 12-14 12H22c-8 0-14-4-14-12Z"/>
+  <path class="ink ink-thin" d="M30 44c6-6 14-8 22-6M60 36c8 0 14 3 18 8"/>
+  <circle class="ink" cx="46" cy="52" r="7"/>
+  <path class="ink ink-thin" d="M46 45v-4"/>
+</symbol>
+
+<symbol id="i-olives" viewBox="0 0 100 80">
+  <path class="ink" d="M14 34h72c0 20-16 34-36 34S14 54 14 34Z"/>
+  <path class="ink" d="M6 34h88"/>
+  <ellipse class="ink" cx="38" cy="22" rx="8" ry="10"/>
+  <ellipse class="ink" cx="58" cy="24" rx="7" ry="9"/>
+  <path class="ink ink-thin" d="M38 12V6M58 15V9"/>
+</symbol>
+
+<symbol id="i-fish" viewBox="0 0 130 70">
+  <path class="ink" d="M100 35c0 14-22 26-46 26S12 49 12 35 34 9 54 9s46 12 46 26Z"/>
+  <path class="ink" d="M100 35l24-18v36Z"/>
+  <circle class="ink-fill" cx="34" cy="28" r="3"/>
+  <path class="ink ink-thin" d="M56 14c6 8 6 34 0 42M74 18c5 7 5 27 0 34"/>
+</symbol>
+
+<symbol id="i-boat" viewBox="0 0 110 110">
+  <path class="ink" d="M12 82h86l-14 20H26Z"/>
+  <path class="ink" d="M54 78V10"/>
+  <path class="ink" d="M58 74V18l34 56Z"/>
+  <path class="ink" d="M50 74V26L20 74Z"/>
+  <path class="ink ink-thin" d="M4 96c8-5 14-5 22 0M84 96c8-5 14-5 22 0"/>
+</symbol>
+
+<symbol id="i-parasol" viewBox="0 0 110 110">
+  <path class="ink" d="M8 56a47 47 0 0 1 94 0Z"/>
+  <path class="ink ink-thin" d="M8 56c8-8 16-8 24 0s16 8 24 0 16-8 24 0 16 8 22 0"/>
+  <path class="ink" d="M55 56v46M55 102c8 0 10-4 10-8"/>
+</symbol>
+
+<symbol id="i-bus" viewBox="0 0 150 80">
+  <path class="ink" d="M8 20a8 8 0 0 1 8-8h108l18 22v26a6 6 0 0 1-6 6H14a6 6 0 0 1-6-6Z"/>
+  <path class="ink" d="M20 24h34v20H20ZM64 24h34v20H64ZM108 24h18l12 16v4h-30Z"/>
+  <circle class="ink" cx="38" cy="70" r="9"/>
+  <circle class="ink" cx="112" cy="70" r="9"/>
+  <path class="ink ink-thin" d="M8 60h6M136 60h6"/>
+</symbol>
+
+<symbol id="i-car" viewBox="0 0 140 80">
+  <path class="ink" d="M10 58V44l14-24a8 8 0 0 1 7-4h56a8 8 0 0 1 6 3l18 25 19 5v9a4 4 0 0 1-4 4"/>
+  <path class="ink" d="M10 58h116"/>
+  <path class="ink ink-thin" d="M32 40h32V20M72 20h18l14 20H72Z"/>
+  <circle class="ink" cx="40" cy="60" r="10"/>
+  <circle class="ink" cx="102" cy="60" r="10"/>
+</symbol>
+
+<symbol id="i-train" viewBox="0 0 120 90">
+  <path class="ink" d="M24 8h72a14 14 0 0 1 14 14v40a10 10 0 0 1-10 10H20a10 10 0 0 1-10-10V22A14 14 0 0 1 24 8Z"/>
+  <path class="ink" d="M18 24h84v22H18Z"/>
+  <circle class="ink" cx="34" cy="58" r="5"/>
+  <circle class="ink" cx="86" cy="58" r="5"/>
+  <path class="ink ink-thin" d="M24 72 12 86M96 72l12 14M4 82h112"/>
+</symbol>
+
+<symbol id="i-taxi" viewBox="0 0 140 90">
+  <path class="ink" d="M12 64V48l14-22a8 8 0 0 1 7-4h54a8 8 0 0 1 6 3l17 23 18 5v11"/>
+  <path class="ink" d="M12 64h116"/>
+  <path class="ink ink-thin" d="M34 44h30V22M70 22h16l13 22H70Z"/>
+  <circle class="ink" cx="42" cy="66" r="10"/>
+  <circle class="ink" cx="100" cy="66" r="10"/>
+  <path class="ink" d="M56 14h28v8H56Z"/>
+</symbol>
+
+<symbol id="i-parking" viewBox="0 0 100 100">
+  <rect class="ink" x="12" y="12" width="76" height="76" rx="10"/>
+  <path class="ink" d="M38 74V30h16a13 13 0 0 1 0 26H38"/>
+</symbol>
+
+<symbol id="i-bed" viewBox="0 0 130 80">
+  <path class="ink" d="M10 66V20M10 40h110v26M120 66v-8"/>
+  <path class="ink" d="M10 66h112"/>
+  <path class="ink" d="M30 40V28a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v12"/>
+  <path class="ink ink-thin" d="M20 72v6M112 72v6"/>
+</symbol>
+
+<symbol id="i-ring" viewBox="0 0 110 80">
+  <circle class="ink" cx="38" cy="46" r="26"/>
+  <circle class="ink" cx="72" cy="46" r="26"/>
+  <path class="ink ink-thin" d="M72 20l-6-12h12Z"/>
+</symbol>
+
+<symbol id="i-candle" viewBox="0 0 60 100">
+  <path class="ink" d="M20 40h20v52H20Z"/>
+  <path class="ink" d="M30 40V30"/>
+  <path class="ink" d="M30 8c8 8 10 14 10 18a10 10 0 0 1-20 0c0-4 2-10 10-18Z"/>
+  <path class="ink ink-thin" d="M14 96h32"/>
+</symbol>
+
+<symbol id="i-disco" viewBox="0 0 100 100">
+  <circle class="ink" cx="50" cy="58" r="32"/>
+  <path class="ink ink-thin" d="M50 26v64M18 58h64M27 35c14 12 32 12 46 0M27 81c14-12 32-12 46 0M35 28c-8 18-8 42 0 60M65 28c8 18 8 42 0 60"/>
+  <path class="ink" d="M50 26V8"/>
+</symbol>
+
+<symbol id="i-note" viewBox="0 0 80 100">
+  <path class="ink" d="M32 74V16l34-8v58"/>
+  <ellipse class="ink" cx="20" cy="76" rx="14" ry="10" transform="rotate(-12 20 76)"/>
+  <ellipse class="ink" cx="54" cy="66" rx="14" ry="10" transform="rotate(-12 54 66)"/>
+</symbol>
+
+<symbol id="i-camera" viewBox="0 0 120 90">
+  <path class="ink" d="M8 26a8 8 0 0 1 8-8h20l8-10h32l8 10h20a8 8 0 0 1 8 8v46a8 8 0 0 1-8 8H16a8 8 0 0 1-8-8Z"/>
+  <circle class="ink" cx="60" cy="50" r="19"/>
+  <circle class="ink ink-thin" cx="60" cy="50" r="10"/>
+  <circle class="ink-fill" cx="98" cy="32" r="3"/>
+</symbol>
+
+<symbol id="i-shoe" viewBox="0 0 120 70">
+  <path class="ink" d="M8 50c0-10 4-18 12-18 12 0 16 10 26 10s16-14 30-14c18 0 36 12 36 22 0 6-4 10-12 10H16c-5 0-8-4-8-10Z"/>
+  <path class="ink ink-thin" d="M22 38c6 2 10 6 12 10M46 34c4 4 6 8 6 12"/>
+</symbol>
+
+<symbol id="i-pin" viewBox="0 0 70 100">
+  <path class="ink" d="M35 94S8 60 8 40a27 27 0 0 1 54 0c0 20-27 54-27 54Z"/>
+  <circle class="ink" cx="35" cy="38" r="11"/>
+</symbol>
+
+<symbol id="i-heart" viewBox="0 0 100 90">
+  <path class="ink" d="M50 82S8 56 8 32A22 22 0 0 1 50 22 22 22 0 0 1 92 32c0 24-42 50-42 50Z"/>
+</symbol>
+
+<symbol id="i-arrow-r" viewBox="0 0 60 24">
+  <path class="ink" d="M2 12h54M44 2l12 10-12 10"/>
+</symbol>
+
+<symbol id="i-arrow-l" viewBox="0 0 60 24">
+  <path class="ink" d="M58 12H4M16 2 4 12l12 10"/>
+</symbol>
+
+<symbol id="i-arrow-up" viewBox="0 0 24 60">
+  <path class="ink" d="M12 58V4M2 16 12 4l10 12"/>
+</symbol>
+
+<symbol id="i-close" viewBox="0 0 24 24">
+  <path class="ink" d="M4 4l16 16M20 4 4 20"/>
+</symbol>
+
+<symbol id="i-check" viewBox="0 0 100 100">
+  <circle class="ink" cx="50" cy="50" r="42"/>
+  <path class="ink" d="M30 52l14 14 28-32"/>
+</symbol>
+
+<symbol id="i-scribble-arrow" viewBox="0 0 90 60">
+  <path class="ink ink-thin" d="M4 6c22 2 42 14 52 34"/>
+  <path class="ink ink-thin" d="M44 42l14-2M56 40l2-14"/>
+</symbol>
+
+<symbol id="i-corner" viewBox="0 0 80 80">
+  <path class="ink ink-thin" d="M2 40A38 38 0 0 1 40 2"/>
+  <path class="ink ink-thin" d="M2 20A18 18 0 0 1 20 2"/>
+  <circle class="ink ink-thin" cx="26" cy="26" r="5"/>
+  <path class="ink ink-thin" d="M40 2h14M2 40v14"/>
+  <circle class="ink-fill" cx="54" cy="2" r="1.8"/>
+  <circle class="ink-fill" cx="2" cy="54" r="1.8"/>
+</symbol>
+
+<symbol id="i-thermo" viewBox="0 0 40 100">
+  <path class="ink" d="M14 62V16a6 6 0 0 1 12 0v46a14 14 0 1 1-12 0Z"/>
+  <path class="ink ink-thin" d="M20 70V34M30 26h-4M30 38h-4M30 50h-4"/>
+</symbol>
+
+<symbol id="i-drop" viewBox="0 0 60 90">
+  <path class="ink" d="M30 8C18 28 8 42 8 56a22 22 0 0 0 44 0C52 42 42 28 30 8Z"/>
+  <path class="ink ink-thin" d="M20 58a10 10 0 0 0 8 10"/>
+</symbol>
+
+<symbol id="i-cloud" viewBox="0 0 100 70">
+  <path class="ink" d="M26 58a18 18 0 0 1 2-36 24 24 0 0 1 45 6 16 16 0 0 1-3 30Z"/>
+</symbol>
+
+<symbol id="i-sea-level" viewBox="0 0 100 70">
+  <path class="ink" d="M6 26c9-9 18-9 27 0s18 9 27 0 18-9 27 0"/>
+  <path class="ink ink-thin" d="M6 44c9-9 18-9 27 0s18 9 27 0 18-9 27 0"/>
+  <path class="ink ink-thin" d="M6 60c9-9 18-9 27 0s18 9 27 0 18-9 27 0"/>
+</symbol>
+
+<symbol id="i-gift" viewBox="0 0 100 100">
+  <path class="ink" d="M12 40h76v50H12Z"/>
+  <path class="ink" d="M6 26h88v14H6ZM50 26v64"/>
+  <path class="ink" d="M50 26S40 6 28 10s0 16 22 16ZM50 26s10-20 22-16 0 16-22 16Z"/>
+</symbol>
+
+<symbol id="i-plane" viewBox="0 0 110 90">
+  <path class="ink" d="M6 52 96 12l-24 42 10 30-18-18-24 12 6-22Z"/>
+</symbol>
+
+<symbol id="i-tile-motif" viewBox="0 0 100 100">
+  <path class="ink ink-thin" d="M50 6 74 26 50 50 26 26Z"/>
+  <path class="ink ink-thin" d="M50 50 74 74 50 94 26 74Z"/>
+  <path class="ink ink-thin" d="M6 50 26 26l24 24-24 24Z"/>
+  <path class="ink ink-thin" d="M94 50 74 26 50 50l24 24Z"/>
+  <circle class="ink ink-thin" cx="50" cy="50" r="9"/>
+</symbol>
+
+<symbol id="i-hands" viewBox="0 0 120 90">
+  <path class="ink" d="M8 62c10-6 20-16 26-26 4-6 10-6 12 0 3 8-2 14-6 20"/>
+  <path class="ink" d="M112 62c-10-6-20-16-26-26-4-6-10-6-12 0-3 8 2 14 6 20"/>
+  <path class="ink" d="M40 56c8-4 16-4 20 4M80 56c-8-4-16-4-20 4"/>
+  <path class="ink ink-thin" d="M60 66v16"/>
+</symbol>
+
+<symbol id="i-glasses-cheers" viewBox="0 0 130 100">
+  <!-- copa esquerra, inclinada cap a la dreta -->
+  <g transform="rotate(-14 40 60)">
+    <path class="ink" d="M20 22h40c0 17-9 27-20 27S20 39 20 22Z"/>
+    <path class="ink" d="M40 49v33M28 84h24"/>
+  </g>
+  <!-- copa dreta, inclinada cap a l'esquerra -->
+  <g transform="rotate(14 92 60)">
+    <path class="ink" d="M72 22h40c0 17-9 27-20 27S72 39 72 22Z"/>
+    <path class="ink" d="M92 49v33M80 84h24"/>
+  </g>
+  <!-- espurnes del brindis -->
+  <path class="ink ink-thin" d="M66 12v-9M55 16l-6-7M77 16l6-7"/>
+</symbol>
+
+</defs>
+</svg>
 
 <!-- ========================================
      NAVEGACIÓ
@@ -122,33 +442,14 @@
      01 · HERO
      ======================================== -->
 <section class="hero" id="inici">
-  <div class="hero__glow" aria-hidden="true"></div>
-
-  <!-- Marc ceràmic -->
-  <div class="hero__frame" aria-hidden="true">
-    <svg class="hero__corner hero__corner--tl"><use href="#i-corner"></use></svg>
-    <svg class="hero__corner hero__corner--tr"><use href="#i-corner"></use></svg>
-    <svg class="hero__corner hero__corner--bl"><use href="#i-corner"></use></svg>
-    <svg class="hero__corner hero__corner--br"><use href="#i-corner"></use></svg>
-  </div>
-
-  <!-- Il·lustracions flotants -->
-  <svg class="hero__deco hero__deco--left float-slow" viewBox="0 0 140 64" aria-hidden="true"><use href="#i-olive"></use></svg>
-  <svg class="hero__deco hero__deco--right float-slower" viewBox="0 0 120 90" aria-hidden="true"><use href="#i-lemon"></use></svg>
-  <svg class="hero__deco hero__deco--bloom float-slow" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-bloom"></use></svg>
-
   <div class="hero__inner">
     <p class="hero__overline" data-reveal>
       <span>Blanes</span><i>·</i><span>Costa Brava</span>
     </p>
 
-    <span class="hero__hand-wrap">
-      <span class="hero__hand" id="heroHand">ens casem!</span>
-    </span>
-
     <!-- EDIT HERE: els noms dels nuvis -->
     <h1 class="hero__names" id="coupleName" title="Prova de clicar-hi unes quantes vegades…">
-      <span class="name">Gemma</span><i class="amp">&amp;</i><span class="name">Ray</span>
+      <span class="name">Gemma</span><i class="amp">&amp;</i><span class="name">Raymond</span>
     </h1>
 
     <p class="hero__meta" data-reveal style="--d:400">
@@ -177,8 +478,7 @@
 <section class="section countdown" id="compte-enrere">
   <div class="wrap">
     <div class="countdown__head">
-      <p class="eyebrow eyebrow--center" data-reveal>Falta poquíssim</p>
-      <h2 class="section__title" data-reveal style="--d:100">Compte <em>enrere</em></h2>
+      <h2 class="section__title" data-reveal>Compte <em>enrere</em></h2>
     </div>
 
     <div class="countdown__grid" id="countdown" role="timer" aria-live="off">
@@ -201,7 +501,7 @@
     </div>
     <p class="visually-hidden" id="countdownText"></p>
 
-    <p class="countdown__note" data-reveal>Fins que ens direm que sí davant del mar.</p>
+    <p class="countdown__note" data-reveal>Fins que ens direm el sí vull davant del mar.</p>
 
     <div class="btn-row btn-row--center countdown__actions" data-reveal style="--d:150">
       <button class="btn" type="button" data-action="ics">Afegeix-ho al calendari</button>
@@ -708,13 +1008,13 @@
 
       <!-- EDIT HERE: paleta suggerida -->
       <div class="swatches" data-reveal style="--d:320">
-        <span class="swatch"><span class="swatch__chip" style="background:#fbf6ee"></span><span class="swatch__name">Ivori</span></span>
-        <span class="swatch"><span class="swatch__chip" style="background:#ecdfc9"></span><span class="swatch__name">Sorra</span></span>
-        <span class="swatch"><span class="swatch__chip" style="background:#7ba5c8"></span><span class="swatch__name">Ceràmica</span></span>
-        <span class="swatch"><span class="swatch__chip" style="background:#0f4c9c"></span><span class="swatch__name">Cobalt</span></span>
-        <span class="swatch"><span class="swatch__chip" style="background:#0a2e5a"></span><span class="swatch__name">Nit</span></span>
-        <span class="swatch"><span class="swatch__chip" style="background:#6e7b52"></span><span class="swatch__name">Oliva</span></span>
-        <span class="swatch"><span class="swatch__chip" style="background:#c26f4a"></span><span class="swatch__name">Terracota</span></span>
+        <span class="swatch"><span class="swatch__chip" style="background:#f7f3ea"></span><span class="swatch__name">Ivori</span></span>
+        <span class="swatch"><span class="swatch__chip" style="background:#eee8dc"></span><span class="swatch__name">Pergamí</span></span>
+        <span class="swatch"><span class="swatch__chip" style="background:#d8d0c3"></span><span class="swatch__name">Pedra</span></span>
+        <span class="swatch"><span class="swatch__chip" style="background:#b8cbd8"></span><span class="swatch__name">Blau pols</span></span>
+        <span class="swatch"><span class="swatch__chip" style="background:#6f91ae"></span><span class="swatch__name">Mediterrani</span></span>
+        <span class="swatch"><span class="swatch__chip" style="background:#17365d"></span><span class="swatch__name">Tinta</span></span>
+        <span class="swatch"><span class="swatch__chip" style="background:#c87550"></span><span class="swatch__name">Terracota</span></span>
       </div>
 
       <div class="dress__tips">
@@ -1908,6 +2208,10 @@
   <svg viewBox="0 0 24 60" aria-hidden="true"><use href="#i-arrow-up"></use></svg>
 </button>
 
+<!-- Pètals i fulles que baixen molt de tant en tant -->
+<div class="drift" id="drift" aria-hidden="true"></div>
+
 <script src="./script.js" defer></script>
+<script src="./drift.js" defer></script>
 </body>
 </html>

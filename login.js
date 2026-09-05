@@ -64,6 +64,11 @@ window.grHash = grHash;
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let attempts = 0;
 
+  // El cursor de fulla també aquí, perquè l'entrada i el web es notin
+  // la mateixa cosa. La icona la posa el CSS; això només l'activa.
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (finePointer && !reduced) document.documentElement.classList.add("has-cursor");
+
   // El focus al camp, però sense fer salts bruscos en obrir la pàgina
   setTimeout(() => input.focus({ preventScroll: true }), reduced ? 0 : 800);
 
