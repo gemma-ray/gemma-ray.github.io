@@ -52,28 +52,7 @@ const wedding = {
   },
 
   // Data límit per confirmar assistència (només text informatiu)
-  rsvpDeadline: "14 de març de 2027",
-
-  gate: {
-    // ── PORTA D'ENTRADA ────────────────────────────────────────────────────
-    // Contrasenya actual: gemmairay
-    //
-    // No la guardem en clar, sinó com una empremta, per si algú tafaneja el
-    // codi. NO és seguretat de veritat: tot es comprova al navegador i qui
-    // sàpiga on mirar la pot trobar. Serveix per evitar visites casuals.
-    // No hi poseu mai res sensible al darrere (ni comptes bancaris reals).
-    //
-    // Per canviar-la, obriu la consola del navegador al web i escriviu:
-    //   grHash("la-nova-paraula")
-    // i enganxeu aquí el resultat.
-    hash: "1ma3jmp",
-
-    // Poseu-ho a false si algun dia voleu obrir el web a tothom
-    enabled: true,
-
-    // Quants dies recordem que ja han entrat (0 = només aquesta pestanya)
-    rememberDays: 120
-  }
+  rsvpDeadline: "14 de març de 2027"
 };
 
 /* ========================================
@@ -95,153 +74,11 @@ const safe = (label, fn) => {
 };
 
 /* ========================================
-   PORTA D'ENTRADA
-   La classe .gated ja l'ha posada l'script del <head>, així que el web
-   no s'ha vist ni un instant. Aquí només gestionem el formulari.
-   ======================================== */
-
-/* Empremta senzilla (djb2). Disponible també des de la consola per si
-   voleu calcular el hash d'una contrasenya nova: grHash("paraula") */
-function grHash(text) {
-  let h = 5381;
-  const s = String(text).trim().toLowerCase();
-  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
-  return (h >>> 0).toString(36);
-}
-window.grHash = grHash;
-
-const GATE_KEY = "gr-entrada";
-
-safe("gate", () => {
-  const root = document.documentElement;
-  const gate = $("#gate");
-
-  // Obrir el web a tothom: n'hi ha prou amb enabled: false
-  if (!wedding.gate.enabled) {
-    root.classList.remove("gated");
-    if (gate) gate.remove();
-    return;
-  }
-
-  if (!gate) return;
-
-  // Si ja havia entrat abans, comprovem que el permís no hagi caducat
-  if (!root.classList.contains("gated")) {
-    try {
-      const saved = JSON.parse(localStorage.getItem(GATE_KEY + "-info") || "null");
-      if (saved && saved.until && Date.now() > saved.until) {
-        localStorage.removeItem(GATE_KEY);
-        localStorage.removeItem(GATE_KEY + "-info");
-        root.classList.add("gated");
-      }
-    } catch (e) { /* si falla, el deixem entrar: ja tenia el permís */ }
-  }
-
-  if (!root.classList.contains("gated")) { gate.remove(); return; }
-
-  const form = $("#gateForm");
-  const input = $("#gatePass");
-  const error = $("#gateError");
-  const card = $(".gate__card", gate);
-  const peek = $("#gatePeek");
-  let attempts = 0;
-
-  setTimeout(() => input && input.focus(), 700);
-
-  /* Mostrar / amagar la contrasenya */
-  if (peek) {
-    peek.addEventListener("click", () => {
-      const shown = input.type === "text";
-      input.type = shown ? "password" : "text";
-      peek.textContent = shown ? "veure" : "amagar";
-      peek.setAttribute("aria-pressed", String(!shown));
-      peek.setAttribute("aria-label", shown ? "Mostrar la contrasenya" : "Amagar la contrasenya");
-      input.focus();
-    });
-  }
-
-  const fail = (message) => {
-    if (error) error.textContent = message;
-    if (card) {
-      card.classList.remove("is-wrong");
-      void card.offsetWidth;
-      card.classList.add("is-wrong");
-    }
-    input.select();
-  };
-
-  const open = () => {
-    if (error) error.textContent = "";
-
-    try {
-      localStorage.setItem(GATE_KEY, "oberta");
-      const days = Number(wedding.gate.rememberDays) || 0;
-      if (days > 0) {
-        localStorage.setItem(
-          GATE_KEY + "-info",
-          JSON.stringify({ until: Date.now() + days * 86400000 })
-        );
-      }
-    } catch (e) { /* mode privat: entrarà igualment, però ho tornarà a demanar */ }
-
-    gate.classList.add("is-open");
-
-    // Deixem passar l'animació de sortida i després ensenyem el web
-    const reveal = () => {
-      root.classList.remove("gated");
-      gate.remove();
-      document.body.classList.remove("is-locked");
-      root.classList.add("is-ready");
-      window.scrollTo(0, 0);
-
-      // Mentre la porta era tancada el web estava amagat, així que el mar i
-      // els estels s'havien mesurat a zero. Els fem recalcular.
-      window.dispatchEvent(new Event("resize"));
-      window.dispatchEvent(new Event("scroll"));
-
-      // El hero necessita aquest senyal per escriure "ens casem!"
-      window.dispatchEvent(new CustomEvent("wedding:ready"));
-    };
-
-    if (isReduced()) reveal();
-    else setTimeout(reveal, 780);
-  };
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const value = input.value.trim();
-
-    if (!value) { fail("Escriviu la paraula, si us plau."); return; }
-
-    if (grHash(value) === wedding.gate.hash) { open(); return; }
-
-    attempts += 1;
-    fail(
-      attempts === 1 ? "No és aquesta. Torneu-ho a provar."
-      : attempts === 2 ? "Tampoc. La trobareu a la invitació."
-      : "Escriviu-nos i us la tornem a enviar de seguida."
-    );
-  });
-
-  // Mentre escriuen, esborrem l'error
-  input.addEventListener("input", () => {
-    if (error && error.textContent) error.textContent = "";
-  });
-});
-
-/* ========================================
    PRELOADER · seqüència d'obertura
    ======================================== */
 safe("preloader", () => {
   const pre = $("#preloader");
   if (!pre) return;
-
-  // Si la porta està tancada, la porta ja fa d'introducció:
-  // el preloader s'aparta per no fer esperar dues vegades.
-  if (document.documentElement.classList.contains("gated")) {
-    pre.remove();
-    return;
-  }
 
   const bar = $("#preloaderBar");
   const count = $("#preloaderCount");

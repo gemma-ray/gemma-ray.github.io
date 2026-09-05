@@ -12,7 +12,7 @@ GitHub Pages i ja està en línia.
 
 1. [Estructura del projecte](#estructura-del-projecte)
 2. [Veure'l en local](#veure-l-en-local)
-3. [La porta d'entrada (contrasenya)](#la-porta-dentrada-contrasenya)
+3. [La pàgina d'entrada (contrasenya)](#la-pàgina-dentrada-contrasenya)
 4. [Canviar la informació del casament](#canviar-la-informació-del-casament)
 5. [Substituir les fotos](#substituir-les-fotos)
 6. [Configurar el formulari RSVP](#configurar-el-formulari-rsvp)
@@ -26,22 +26,45 @@ GitHub Pages i ja està en línia.
 
 ```
 /
-├── index.html          Tot el contingut i totes les il·lustracions (SVG en línia)
-├── styles.css          Tots els estils, ordenats per seccions numerades
-├── script.js           Tot el comportament. La configuració és a dalt de tot.
-├── README.md           Aquest fitxer
+├── index.html          LA PÀGINA D'ENTRADA (demana la contrasenya)
+├── login.js            La contrasenya i la comprovació. Res més.
+│
+├── casament.html       EL WEB DEL CASAMENT: totes les seccions i els textos
+├── script.js           Tot el comportament del web. La configuració és a dalt.
+├── styles.css          Els estils de les dues pàgines, per seccions numerades
+│
+├── robots.txt          Perquè el web no surti als cercadors
 ├── .nojekyll           Evita que GitHub Pages processi res pel seu compte
+├── README.md           Aquest fitxer
 └── assets/
-    ├── images/         Aquí van les fotos (ara mateix hi ha degradats generats amb CSS)
+    ├── images/         Aquí van les fotos (ara hi ha degradats fets amb CSS)
     │   └── README.md   Instruccions per substituir cada foto
     └── icons/
         └── favicon.svg Icona de la pestanya
 ```
 
-Només hi ha **tres fitxers** que calgui tocar mai: `index.html` (els textos),
-`script.js` (la configuració) i la carpeta `assets/images/` (les fotos).
+### Com encaixen les dues pàgines
 
-Dins de `index.html` i `styles.css` hi ha comentaris ben visibles marcant els
+```
+        index.html                     casament.html
+   ┌────────────────────┐         ┌─────────────────────┐
+   │  paraula correcta  │  ────>  │  el web sencer      │
+   └────────────────────┘         └─────────────────────┘
+            ^                                │
+            └──────────  si no s'ha entrat  ─┘
+```
+
+`index.html` només demana la paraula. Si és correcta, deixa una marca al
+navegador i porta a `casament.html`. I `casament.html`, abans de pintar res,
+comprova aquesta marca: si no hi és, torna a `index.html`.
+
+Els que ja han entrat abans no han de tornar a escriure res: `index.html`
+els envia directament al casament.
+
+Fitxers que caldrà tocar: **`casament.html`** (els textos), **`script.js`**
+(la configuració), **`login.js`** (la contrasenya) i **`assets/images/`** (les fotos).
+
+Dins de `casament.html` i `styles.css` hi ha comentaris ben visibles marcant els
 punts editables:
 
 ```html
@@ -58,7 +81,7 @@ punts editables:
 
 ## Veure'l en local
 
-**Opció A — obrir el fitxer directament.** Feu doble clic a `index.html`.
+**Opció A — obrir el fitxer directament.** Feu doble clic a `index.html` (la pàgina d'entrada).
 Funciona tot excepte alguna cosa menor de seguretat del navegador.
 
 **Opció B — servidor estàtic (recomanada).** Des de la carpeta del projecte:
@@ -77,67 +100,74 @@ I obriu <http://localhost:8000>.
 
 ---
 
-## La porta d'entrada (contrasenya)
+## La pàgina d'entrada (contrasenya)
 
-En obrir el web es demana una paraula abans d'ensenyar res.
-La contrasenya actual és **`gemmairay`** (no distingeix majúscules ni espais,
-així que `Gemmairay` o ` GEMMAIRAY ` també funcionen).
+`index.html` és una pàgina a part que només demana una paraula. El web del
+casament viu a `casament.html`, i no s'hi arriba sense passar per aquí.
 
-Un cop entrat, el navegador ho recorda **120 dies**, així que els convidats
+La contrasenya actual és **`gemmairay`**. No distingeix majúscules ni espais
+sobrants, així que `Gemmairay` o ` GEMMAIRAY ` també funcionen: ningú no es
+quedarà fora per una lletra gran.
+
+Un cop dins, el navegador ho recorda **120 dies**, de manera que els convidats
 només l'hauran d'escriure un cop per dispositiu.
 
 ### ⚠️ Això no és seguretat de veritat
 
 Aquest web és estàtic: no hi ha servidor, i per tant la comprovació de la
-contrasenya es fa **dins del navegador**. Qualsevol persona amb coneixements
-tècnics pot obrir el codi font de la pàgina i trobar-la.
+contrasenya es fa **dins del navegador**. Qui tingui una mica de coneixement
+tècnic pot obrir el codi font i trobar-la, o anar directament a
+`casament.html` i saltar-se la comprovació.
 
 Serveix per **evitar visites casuals** i perquè el web no circuli fora del
 cercle de convidats. **No hi poseu mai res sensible al darrere**: ni números de
 compte reals, ni adreces privades, ni dades de tercers.
 
-Perquè el web tampoc no aparegui a Google, hi ha un `robots.txt` i una etiqueta
-`<meta name="robots" content="noindex">` a l'`index.html`. Cal tenir-ho present
-perquè el text de la pàgina és al codi font encara que la porta estigui tancada:
-sense aquestes dues línies, els cercadors el podrien indexar igualment.
+Perquè tampoc no aparegui als cercadors, hi ha un `robots.txt` i una etiqueta
+`<meta name="robots" content="noindex">` a les dues pàgines.
+
+Si algun dia necessiteu privacitat de debò, cal un servei amb servidor
+(Netlify, per exemple, porta protecció per contrasenya integrada). Amb GitHub
+Pages i un web estàtic no és possible.
 
 ### Canviar la contrasenya
 
 No es guarda en clar, sinó com una empremta, per si algú tafaneja el codi.
 Per canviar-la:
 
-1. Obriu el web, i després la consola del navegador
-   (Chrome: ⌥⌘J · Safari: cal activar el menú Desenvolupament).
+1. Obriu la pàgina d'entrada i, tot seguit, la consola del navegador
+   (Chrome: ⌥⌘J · Safari: cal activar abans el menú Desenvolupament).
 2. Escriviu-hi:
 
    ```js
    grHash("la-nova-paraula")
    ```
 
-3. Copieu el resultat i enganxeu-lo a `script.js`:
+3. Copieu el resultat i enganxeu-lo a **`login.js`**:
 
    ```js
-   gate: {
+   const login = {
      hash: "aquí-el-resultat",
-     enabled: true,
-     rememberDays: 120
-   }
+     destination: "./casament.html",
+     rememberDays: 120,
+     enabled: true
+   };
    ```
 
-### Treure la porta i obrir el web a tothom
+### Treure la contrasenya i obrir el web a tothom
 
-A `script.js`, canvieu una sola línia:
+A `login.js`, canvieu una sola línia:
 
 ```js
-gate: { enabled: false, ... }
+enabled: false   // la pàgina d'entrada passarà de llarg
 ```
 
-També podeu esborrar el `robots.txt` i l'etiqueta `<meta name="robots">`
+També podeu esborrar el `robots.txt` i les etiquetes `<meta name="robots">`
 si voleu que el web sigui indexable.
 
-### Tornar a veure la porta mentre proveu coses
+### Tornar a veure la pàgina d'entrada mentre proveu coses
 
-Com que el navegador recorda que ja heu entrat, per tornar a veure-la
+Com que el navegador recorda que ja heu entrat, per tornar-la a veure
 escriviu això a la consola i recarregueu:
 
 ```js
@@ -172,7 +202,7 @@ Aquests valors alimenten automàticament el compte enrere, el botó *Afegeix-ho 
 calendari*, l'enllaç de Google Maps, el botó de copiar l'adreça, l'etiqueta i els
 enllaços de Spotify i de l'àlbum de fotos.
 
-**La resta de textos són a `index.html`**, escrits directament en català perquè
+**La resta de textos són a `casament.html`**, escrits directament en català perquè
 els pugueu llegir i canviar sense buscar-los enlloc més. Cerqueu `EDIT HERE`
 per trobar els blocs més habituals:
 
@@ -256,7 +286,7 @@ per `fetch`, poseu `mode: "post"` i el navegador farà l'enviament clàssic.
    (`https://docs.google.com/forms/d/e/…/formResponse`) i el `name`
    de cada camp (`entry.123456789`).
 3. Poseu l'URL a `action`, `mode: "post"`, i canvieu l'atribut `name` de cada
-   `input` de `index.html` pel seu `entry.…` corresponent.
+   `input` de `casament.html` pel seu `entry.…` corresponent.
 
 ### Camps que recull
 
@@ -326,10 +356,10 @@ Si compreu un domini tipus `gemmairay.com`:
 
 ## Afegir o treure seccions
 
-Cada secció d'`index.html` està separada per una capçalera numerada i és
+Cada secció de `casament.html` està separada per una capçalera numerada i és
 completament independent. Per treure'n una:
 
-1. Esborreu el bloc `<section>…</section>` sencer d'`index.html`.
+1. Esborreu el bloc `<section>…</section>` sencer de `casament.html`.
 2. Si surt al menú, esborreu també la seva línia de `.nav__links` i `.menu__list`.
 
 No cal tocar `styles.css` ni `script.js`: tot el JavaScript comprova que
@@ -372,7 +402,7 @@ el temps · hashtag · comparteix les fotos · missatge final · peu de pàgina.
 
 Si les voleu servir des del mateix repositori (per no dependre de Google),
 descarregueu-les, poseu-les a `assets/fonts/` i substituïu l'etiqueta `<link>`
-d'`index.html` per unes regles `@font-face`.
+de `casament.html` i `index.html` per unes regles `@font-face`.
 
 ---
 
