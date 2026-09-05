@@ -503,6 +503,80 @@ safe("countdown", () => {
 });
 
 /* ========================================
+   MAR ANIMAT DEL HERO (canvas)
+   Capes d'ones sinusoïdals en blaus mediterranis.
+   ======================================== */
+safe("sea", () => {
+  const canvas = $("#seaCanvas");
+  if (!canvas || isReduced()) return;
+
+  const ctx = canvas.getContext("2d");
+  const layers = [
+    { color: "rgba(202, 220, 234, 0.55)", amp: 10, len: 0.010, speed: 0.018, y: 0.30 },
+    { color: "rgba(123, 165, 200, 0.65)", amp: 14, len: 0.008, speed: 0.013, y: 0.46 },
+    { color: "rgba(33, 96, 168, 0.75)",   amp: 18, len: 0.006, speed: 0.009, y: 0.62 },
+    { color: "rgba(15, 76, 156, 0.85)",   amp: 12, len: 0.011, speed: 0.021, y: 0.78 },
+    { color: "rgba(10, 46, 90, 0.95)",    amp: 16, len: 0.005, speed: 0.007, y: 0.92 }
+  ];
+
+  let w = 0, h = 0, dpr = 1, raf = null, t = 0, running = true;
+
+  const resize = () => {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.offsetWidth;
+    h = canvas.offsetHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  };
+
+  const draw = () => {
+    ctx.clearRect(0, 0, w, h);
+    layers.forEach((layer, i) => {
+      ctx.beginPath();
+      ctx.moveTo(0, h);
+      const base = h * layer.y;
+      for (let x = 0; x <= w; x += 4) {
+        const y = base
+          + Math.sin(x * layer.len + t * layer.speed * 60 + i) * layer.amp
+          + Math.sin(x * layer.len * 2.3 + t * layer.speed * 34) * (layer.amp * 0.35);
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(w, h);
+      ctx.closePath();
+      ctx.fillStyle = layer.color;
+      ctx.fill();
+    });
+    t += 0.016;
+    if (running) raf = requestAnimationFrame(draw);
+  };
+
+  resize();
+  draw();
+  window.addEventListener("resize", resize);
+
+  // No gastem bateria quan el hero no es veu
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(([entry]) => {
+      running = entry.isIntersecting;
+      if (running && !raf) draw();
+      if (!running && raf) { cancelAnimationFrame(raf); raf = null; }
+    }, { threshold: 0.02 });
+    io.observe(canvas);
+  }
+
+  /* Reflex del sol que segueix el ratolí */
+  const hero = $(".hero");
+  const reflection = $("#heroReflection");
+  if (hero && reflection && canHover()) {
+    hero.addEventListener("mousemove", (e) => {
+      const pct = (e.clientX / window.innerWidth) * 100;
+      reflection.style.setProperty("--mx", `${clamp(pct, 8, 92)}%`);
+    });
+  }
+});
+
+/* ========================================
    ESTELS DE LA FESTA (canvas)
    ======================================== */
 safe("stars", () => {
