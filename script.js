@@ -12,7 +12,7 @@ const wedding = {
 
   // Data i hora d'inici (format ISO amb zona horària de Catalunya).
   // Al maig, Catalunya és UTC+02:00.
-  date: "2027-05-14T16:30:00+02:00",
+  date: "2027-05-14T17:00:00+02:00",
   endDate: "2027-05-15T04:00:00+02:00",
 
   venue: "El Convent de Blanes",
