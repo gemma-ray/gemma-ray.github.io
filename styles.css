@@ -276,23 +276,6 @@ input, textarea, select { font: inherit; color: inherit; }
   color: color-mix(in srgb, var(--fg) 86%, transparent);
 }
 
-/* Ritme vertical de les capçaleres de secció */
-.eyebrow + .section__title,
-.eyebrow + .shout__word,
-.eyebrow + .party__title,
-.eyebrow + .coast__title,
-.eyebrow + .honeymoon__title,
-.eyebrow + .hashtag__big { margin-top: clamp(0.8rem, 1.6vw, 1.4rem); }
-
-.section__title + .lede,
-.section__title + .body-copy,
-.section__title + .dress__statement,
-.party__title + .lede,
-.coast__title + .lede,
-.honeymoon__title + .lede,
-.hashtag__big + .lede,
-.shout__word + .shout__sub { margin-top: clamp(1.1rem, 2vw, 1.8rem); }
-
 .lede + .btn-row, .body-copy + .btn-row { margin-top: clamp(1.4rem, 2.4vw, 2.2rem); }
 
 .body-copy { max-width: var(--measure); color: color-mix(in srgb, var(--fg) 78%, transparent); }
@@ -580,32 +563,6 @@ html.mood-night .sun-track__body {
   text-transform: uppercase;
   color: color-mix(in srgb, var(--fg) 45%, transparent);
 }
-
-/* Marquesina */
-.marquee {
-  --speed: 34s;
-  position: relative;
-  overflow: hidden;
-  padding-block: clamp(1.6rem, 3vw, 3rem);
-  border-block: var(--hair);
-  white-space: nowrap;
-}
-.marquee__track { display: inline-flex; gap: 3rem; animation: marquee var(--speed) linear infinite; }
-.marquee__item {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 5vw, 3.6rem);
-  letter-spacing: -0.01em;
-  color: color-mix(in srgb, var(--fg) 80%, transparent);
-  display: inline-flex;
-  align-items: center;
-  gap: 3rem;
-}
-.marquee__item i { font-style: normal; color: var(--terracotta); font-size: 0.5em; }
-.marquee--outline .marquee__item {
-  color: transparent;
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--fg) 45%, transparent);
-}
-@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ========================================
    04. CURSOR PERSONALITZAT (només escriptori)
@@ -1311,8 +1268,9 @@ html.mood-night .sun-track__body {
    10. LA NOSTRA HISTÒRIA (sticky editorial)
    ======================================== */
 .story { background: var(--ivory); }
-.story__head { display: grid; gap: 1.2rem; margin-bottom: clamp(3rem, 7vw, 6rem); }
-.story__chapters { display: grid; gap: clamp(4rem, 12vh, 10rem); }
+.story__head { display: grid; gap: 1.2rem; margin-bottom: clamp(2rem, 4vw, 3.2rem); }
+/* Molt menys aire entre capítols: ara cadascun és una frase */
+.story__chapters { display: grid; gap: clamp(2.2rem, 5vh, 3.6rem); }
 
 .chapter {
   display: grid;
@@ -1320,10 +1278,13 @@ html.mood-night .sun-track__body {
   align-items: center;
   grid-template-columns: repeat(12, 1fr);
 }
-.chapter__media { position: relative; grid-column: 1 / span 6; }
-.chapter__body { grid-column: 8 / span 5; }
-.chapter:nth-child(even) .chapter__media { grid-column: 7 / span 6; order: 2; }
-.chapter:nth-child(even) .chapter__body { grid-column: 1 / span 5; order: 1; }
+.chapter__media { position: relative; grid-column: 1 / span 3; }
+.chapter__body { grid-column: 5 / span 7; }
+/* Amb text curt, la foto no ha de fer créixer la fila */
+.chapter__media .frame { max-width: 290px; }
+.chapter:nth-child(even) .chapter__media { grid-column: 10 / span 3; order: 2; }
+.chapter:nth-child(even) .chapter__body { grid-column: 1 / span 7; order: 1; }
+.chapter:nth-child(even) .chapter__media .frame { margin-left: auto; }
 
 .chapter__num {
   font-family: var(--font-display);
@@ -1341,7 +1302,7 @@ html.mood-night .sun-track__body {
 }
 .chapter__title {
   font-family: var(--font-display);
-  font-size: var(--t-lg);
+  font-size: clamp(1.3rem, 0.9rem + 1.1vw, 1.9rem);
   line-height: 1.02;
   letter-spacing: -0.025em;
   margin-block: 0.4rem 1rem;
@@ -1356,8 +1317,7 @@ html.mood-night .sun-track__body {
   font-size: var(--t-md);
   color: var(--ink-soft);
 }
-.chapter__media .annotation { bottom: -1.4rem; right: -1rem; }
-.chapter:nth-child(even) .chapter__media .annotation { bottom: auto; top: -2.2rem; right: auto; left: -1rem; transform: rotate(5deg); }
+.chapter__media .annotation { position: static; display: block; margin-top: 0.6rem; text-align: right; }
 
 /* Foto petita superposada */
 .chapter__inset {
@@ -1533,48 +1493,13 @@ html.mood-night .sun-track__body {
   overflow: hidden;
   background: linear-gradient(160deg, #24507f, var(--ink) 60%, var(--navy-deep));
 }
-.map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(0.3) sepia(0.15) hue-rotate(178deg) saturate(1.4) brightness(0.85); }
-/* Marcador de posició del mapa quan encara no s'ha incrustat res */
-.map__placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  gap: 1rem;
-  padding: 2rem;
-  color: rgba(251, 246, 238, 0.85);
-}
-.map__grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(202, 220, 234, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(202, 220, 234, 0.09) 1px, transparent 1px);
-  background-size: 38px 38px;
-}
-.map__pin {
-  position: relative;
-  display: grid;
-  place-items: center;
-  gap: 0.7rem;
-}
-.map__pin-dot {
-  width: 13px; height: 13px;
-  border-radius: 50%;
-  background: var(--terracotta);
-  box-shadow: 0 0 0 0 rgba(194, 111, 74, 0.6);
-  animation: pin-pulse 2.6s var(--ease) infinite;
-}
-@keyframes pin-pulse {
-  0% { box-shadow: 0 0 0 0 rgba(194, 111, 74, 0.55); }
-  100% { box-shadow: 0 0 0 34px rgba(194, 111, 74, 0); }
-}
-.map__coords {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: rgba(251, 246, 238, 0.6);
+/* El mapa es tenyeix una mica perquè no canti damunt del blau de la secció */
+.map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: grayscale(0.55) contrast(0.92) brightness(0.92);
 }
 .venue .btn { --btn-fg: var(--ivory); --btn-line: rgba(251, 246, 238, 0.4); }
 .venue .btn::before { background: var(--ivory); }
@@ -1867,26 +1792,8 @@ html.mood-night .sun-track__body {
 }
 
 /* ========================================
-   16. DRESS CODE
+   16. MOSTRES DE COLOR (dins de les preguntes)
    ======================================== */
-.dress { background: var(--paper); }
-.dress__grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  align-items: center;
-}
-.dress__text { grid-column: 1 / span 5; }
-.dress__art { grid-column: 7 / span 6; position: relative; }
-.dress__statement {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
-  line-height: 1.2;
-  color: var(--cobalt);
-  margin-block: 1rem 1.6rem;
-}
-
 /* Mostres de color */
 .swatches { display: flex; flex-wrap: wrap; gap: clamp(0.6rem, 1.6vw, 1.1rem); margin-top: 2rem; }
 .swatch { display: grid; gap: 0.55rem; justify-items: center; width: clamp(58px, 9vw, 84px); }
@@ -1907,44 +1814,6 @@ html.mood-night .sun-track__body {
   color: var(--ink-soft);
   text-align: center;
 }
-
-.dress__tips { margin-top: 2rem; display: grid; gap: 0.9rem; }
-.dress__tip {
-  display: grid;
-  grid-template-columns: 22px 1fr;
-  gap: 0.9rem;
-  align-items: start;
-  font-size: var(--t-sm);
-  color: var(--ink-soft);
-}
-.dress__tip svg { width: 22px; height: 22px; flex: none; color: var(--olive); margin-top: 0.15em; }
-
-.dress__mood { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; }
-.dress__mood .frame:nth-child(1) { transform: rotate(-2deg) translateY(10px); }
-.dress__mood .frame:nth-child(3) { transform: rotate(2deg) translateY(-8px); }
-
-/* No fer / sí fer */
-.dress__rules {
-  margin-top: 2.4rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.2rem;
-}
-.rule-card {
-  padding: 1.4rem 1.6rem;
-  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
-  background: color-mix(in srgb, var(--ivory) 70%, transparent);
-}
-.rule-card h4 {
-  font-family: var(--font-sans);
-  font-size: var(--t-xs);
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  margin-bottom: 0.8rem;
-  color: var(--cobalt);
-}
-.rule-card--no h4 { color: var(--terracotta); }
-.rule-card li { font-size: var(--t-sm); color: var(--ink-soft); padding-block: 0.2rem; }
 
 /* ========================================
    17. COM ARRIBAR-HI / TRANSPORT
@@ -2122,191 +1991,6 @@ html.mood-night .sun-track__body {
   border-radius: 3px;
 }
 .hotel__link { padding: 0 1.5rem 1.4rem; }
-
-/* ========================================
-   19. EL CAP DE SETMANA
-   ======================================== */
-.weekend {
-  background: linear-gradient(180deg, var(--paper) 0%, var(--sky) 100%);
-}
-.weekend__days {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 3vw, 2.5rem);
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-}
-.wk-day {
-  position: relative;
-  padding-top: 2rem;
-  border-top: 2px solid var(--cobalt);
-}
-.wk-day:nth-child(2) { border-color: var(--terracotta); }
-.wk-day:nth-child(3) { border-color: var(--olive); }
-.wk-day__name {
-  font-family: var(--font-sans);
-  font-size: var(--t-xs);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-.wk-day__date {
-  font-family: var(--font-display);
-  font-size: clamp(2.6rem, 7vw, 5rem);
-  line-height: 0.85;
-  letter-spacing: -0.04em;
-  margin-block: 0.5rem 1rem;
-  color: var(--aegean);
-}
-.wk-day__title { font-family: var(--font-serif); font-style: italic; font-size: var(--t-md); margin-bottom: 0.7rem; }
-.wk-day__text { font-size: var(--t-sm); color: var(--ink-soft); }
-.wk-day__art { width: clamp(50px, 6vw, 80px); height: clamp(52px, 6.2vw, 84px); color: var(--cobalt); margin-top: 1.6rem; opacity: 0.75; }
-
-/* ========================================
-   20. QUÈ FER A BLANES (scroll horitzontal)
-   ======================================== */
-.guide { background: var(--ivory); padding-bottom: 0; }
-.hscroll {
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--cobalt) 45%, transparent) transparent;
-  padding-bottom: 2.5rem;
-  cursor: grab;
-}
-.hscroll.is-dragging { cursor: grabbing; scroll-snap-type: none; }
-.hscroll::-webkit-scrollbar { height: 3px; }
-.hscroll::-webkit-scrollbar-track { background: color-mix(in srgb, var(--ink) 8%, transparent); }
-.hscroll::-webkit-scrollbar-thumb { background: var(--cobalt); }
-.hscroll__track {
-  display: flex;
-  gap: clamp(1rem, 2.4vw, 2rem);
-  padding-inline: var(--gutter);
-  width: max-content;
-}
-.spot {
-  scroll-snap-align: center;
-  width: clamp(240px, 32vw, 400px);
-  flex: none;
-  user-select: none;
-}
-.spot__img { aspect-ratio: 4 / 5; margin-bottom: 1.1rem; }
-.spot__num {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.3em;
-  color: var(--terracotta-deep);
-}
-.spot__name { font-family: var(--font-display); font-size: var(--t-md); letter-spacing: -0.01em; margin-block: 0.3rem 0.5rem; }
-.spot__text { font-size: var(--t-sm); color: var(--ink-soft); }
-.hscroll__hint {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-  margin-top: 1rem;
-  padding-inline: var(--gutter);
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-.hscroll__hint svg { width: 34px; color: var(--cobalt); }
-
-/* ========================================
-   21. LA COSTA BRAVA (cinemàtic)
-   ======================================== */
-.coast {
-  position: relative;
-  min-height: 92vh;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  color: var(--ivory);
-  padding: var(--section-y) var(--gutter);
-  background: linear-gradient(180deg, var(--ink), #24507f 50%, var(--ink));
-}
-.coast__bg {
-  position: absolute;
-  inset: -12% 0;
-  background-image: var(--img, none), linear-gradient(170deg, var(--powder) 0%, var(--blue) 45%, var(--ink) 100%);
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-}
-.coast__bg::after {
-  content: "";
-  position: absolute; inset: 0;
-  background: radial-gradient(90% 70% at 50% 50%, rgba(15, 37, 66, 0.22), rgba(15, 37, 66, 0.84));
-}
-.coast__inner { position: relative; z-index: 3; text-align: center; }
-.coast__title {
-  font-family: var(--font-display);
-  font-size: var(--t-2xl);
-  line-height: 0.86;
-  letter-spacing: -0.04em;
-}
-.coast__title em { font-family: var(--font-serif); font-style: italic; }
-.coast__sub { margin-top: 1.6rem; color: rgba(251, 246, 238, 0.82); margin-inline: auto; }
-.coast__stats {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: clamp(1.5rem, 5vw, 4rem);
-  margin-top: clamp(2.5rem, 5vw, 4rem);
-}
-.coast__stat { text-align: center; }
-.coast__stat b {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.8rem, 4.5vw, 3.2rem);
-  line-height: 1;
-  color: var(--sand);
-}
-.coast__stat span {
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: rgba(251, 246, 238, 0.62);
-}
-
-/* ========================================
-   22. MENJAR & BEURE
-   ======================================== */
-.taste { background: var(--paper); }
-.taste__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: clamp(1.2rem, 3vw, 2.4rem);
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-}
-.taste-item { text-align: center; display: grid; justify-items: center; gap: 0.8rem; }
-.taste-item__art {
-  width: clamp(72px, 9vw, 118px);
-  height: clamp(76px, 9.4vw, 124px);
-  color: var(--cobalt);
-  transition: transform 0.7s var(--ease);
-}
-.taste-item:hover .taste-item__art { transform: translateY(-8px) rotate(-4deg); }
-.taste-item h3 { font-family: var(--font-display); font-size: var(--t-md); letter-spacing: -0.01em; }
-.taste-item p { font-size: var(--t-sm); color: var(--ink-soft); max-width: 30ch; }
-.taste__menu {
-  margin-top: clamp(3rem, 7vw, 5rem);
-  padding: clamp(2rem, 5vw, 3.5rem);
-  border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent);
-  text-align: center;
-}
-.taste__menu h3 {
-  font-family: var(--font-display);
-  font-size: var(--t-lg);
-  letter-spacing: -0.02em;
-  margin-bottom: 0.6rem;
-}
-.taste__menu .stamp-date { display: block; margin-bottom: 1.6rem; }
 
 /* ========================================
    23. PLAYLIST
@@ -2569,58 +2253,6 @@ html.mood-night .sun-track__body {
   color: var(--ink-soft);
   margin-top: 1rem;
 }
-
-/* ========================================
-   26. PETITES COSES (targetes que giren)
-   ======================================== */
-.facts { background: var(--paper); }
-/* Sis targetes: volem una graella de 3 x 2, no cinc i una orfe */
-.facts__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 2.4vw, 1.8rem);
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-}
-@media (max-width: 900px) { .facts__grid { grid-template-columns: repeat(2, 1fr); } }
-.flip { display: block; perspective: 1200px; background: none; border: 0; padding: 0; text-align: left; }
-.flip__inner {
-  /* Ha de ser un bloc: un span en línia ignora width i aspect-ratio */
-  display: block;
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  transform-style: preserve-3d;
-  transition: transform 0.85s var(--ease);
-}
-.flip[aria-pressed="true"] .flip__inner { transform: rotateY(180deg); }
-.flip__face {
-  position: absolute;
-  inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  display: grid;
-  align-content: center;
-  gap: 0.7rem;
-  padding: clamp(1.4rem, 2.6vw, 2rem);
-  border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
-  background: var(--ivory);
-}
-.flip__face--back {
-  transform: rotateY(180deg);
-  background: var(--cobalt);
-  color: var(--ivory);
-  border-color: var(--cobalt);
-}
-.flip__q { font-family: var(--font-display); font-size: var(--t-md); line-height: 1.15; letter-spacing: -0.015em; }
-.flip__a { font-family: var(--font-hand); font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.3; color: var(--sand); }
-.flip__hint {
-  font-family: var(--font-sans);
-  font-size: 0.58rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--terracotta-deep);
-}
-.flip__note { font-size: var(--t-sm); color: rgba(251, 246, 238, 0.75); }
 
 /* ========================================
    27. FAQ
@@ -2939,30 +2571,6 @@ html.mood-night .sun-track__body {
 .wx span { font-family: var(--font-sans); font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-soft); }
 .weather__note { margin-top: 1.6rem; font-family: var(--font-serif); font-style: italic; color: var(--ink-soft); }
 
-/* ========================================
-   31. HASHTAG / COMPARTEIX FOTOS
-   ======================================== */
-.hashtag {
-  background: var(--aegean);
-  color: var(--ivory);
-  text-align: center;
-  overflow: hidden;
-}
-.hashtag__big {
-  font-family: var(--font-display);
-  font-size: var(--t-2xl);
-  line-height: 0.9;
-  letter-spacing: -0.04em;
-  color: var(--ivory);
-  display: inline-block;
-  transition: transform 0.6s var(--ease);
-}
-.hashtag__big:hover { transform: scale(1.03) rotate(-1deg); }
-.hashtag__sub { color: rgba(251, 246, 238, 0.78); margin-inline: auto; margin-top: 1.4rem; }
-.hashtag .btn { --btn-fg: var(--ivory); --btn-line: rgba(251, 246, 238, 0.45); }
-.hashtag .btn::before { background: var(--ivory); }
-.hashtag .btn:hover { color: var(--aegean); }
-
 .share { background: var(--ivory); }
 .share__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 2.5rem; }
 .share-card {
@@ -3211,17 +2819,7 @@ html.mood-night .sun-track__body {
 
   .venue__cols { grid-template-columns: 1fr; }
   .venue__col-a, .venue__col-b { grid-column: 1 / -1; }
-
-  .dress__grid, .playlist__grid, .weather__grid, .faq__grid, .rsvp__grid { grid-template-columns: 1fr; }
-  .dress__text, .dress__art,
-  .playlist__text, .playlist__discs,
-  .weather__text, .weather__cards,
-  .faq__head, .faq__list,
-  .rsvp__intro, .rsvp__form-wrap { grid-column: 1 / -1; }
   .faq__head { position: static; }
-
-  .weekend__days { grid-template-columns: 1fr; gap: 2.5rem; }
-  .wk-day__date { font-size: clamp(2.2rem, 12vw, 3.6rem); }
 
   .gal--a, .gal--f, .gal--g, .gal--h { grid-column: span 12; }
   .gal--b, .gal--c, .gal--d, .gal--e { grid-column: span 6; }
@@ -3253,25 +2851,18 @@ html.mood-night .sun-track__body {
   .route { grid-template-columns: 1fr; gap: 0.4rem; }
   .route__time { font-size: 1.5rem; }
 
-  .dress__mood { grid-template-columns: 1fr 1fr; }
-  .dress__mood .frame:nth-child(3) { display: none; }
-
   .gallery__grid { gap: 0.7rem; }
   .gal--b, .gal--c, .gal--d, .gal--e { grid-column: span 12; }
   .gal--polaroid::after { font-size: 1.3rem; }
 
   .postcards__stage { height: 420px; }
   .postcard { width: min(74vw, 260px); }
-
-  .facts__grid { grid-template-columns: 1fr; }
   .weather__cards { grid-template-columns: 1fr 1fr; }
 
   .form__row { grid-template-columns: 1fr; }
   .choice label { flex: 1 0 auto; justify-content: center; }
 
   .finale__deco { display: none; }
-  .marquee__item { font-size: 1.5rem; gap: 1.6rem; }
-  .marquee__track { gap: 1.6rem; }
 
   .to-top { width: 46px; height: 46px; }
   .lightbox__nav { width: 42px; height: 42px; }
@@ -3313,8 +2904,6 @@ html.mood-night .sun-track__body {
   .draw-on path, .draw-on line, .draw-on circle,
   .draw-on ellipse, .draw-on polyline { stroke-dashoffset: 0 !important; }
   .grain { display: none; }
-  .float-slow, .float-slower, .marquee__track, .disco, .vinyl,
-  .shuttle__bus, .tile-strip, .hero__reflection { animation: none !important; }
   .menu { clip-path: none !important; }
   .menu[hidden] { display: none !important; }
   .menu__item a { transform: none !important; }
@@ -3332,7 +2921,60 @@ html.mood-night .sun-track__body {
   .section { padding-block: 1.5rem; break-inside: avoid; }
 }
 
+/* ========================================
+   37. AJUSTOS DE LA REESTRUCTURACIÓ
+   ======================================== */
 
 
+/* Sis targetes: 3 x 2, no cinc i un forat */
+.travel__grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 900px) { .travel__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) { .travel__grid { grid-template-columns: 1fr; } }
 
+/* Els autocars, ara dins de "Com arribar-hi" */
+.travel__shuttle { margin-top: clamp(3rem, 7vw, 5rem); }
+.travel__subtitle {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--t-lg);
+  letter-spacing: -0.01em;
+  color: var(--aegean);
+  margin-bottom: clamp(1.2rem, 2.4vw, 1.8rem);
+}
+/* La secció ja no és el bloc blau que era: hereta el paper de la de dalt */
+.travel__shuttle .shuttle__routes { margin-top: 0; }
+.travel__shuttle .route { background: var(--ivory); }
+.travel__shuttle .route:hover { background: var(--paper); }
+.travel__shuttle .shuttle__foot { color: color-mix(in srgb, var(--ink) 70%, transparent); }
 
+/* El dress code, ara dins d'una pregunta */
+.faq__lead {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--t-md);
+  color: var(--cobalt);
+  margin-bottom: 0.9rem;
+}
+.acc__panel .swatches { margin: 1.2rem 0 1.4rem; }
+.acc__panel .swatch { width: clamp(48px, 7vw, 66px); }
+.acc__panel p + p { margin-top: 0.9rem; }
+
+/* Peu del mapa */
+.map__coords {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(251, 246, 238, 0.6);
+}
+
+/* Els autocars venien d'una secció blava: aquí el text ha de ser fosc */
+.travel__shuttle .route__path { color: var(--aegean); }
+.travel__shuttle .route__note { color: var(--ink-soft); }
+.travel__shuttle .route__time { color: var(--cobalt); }
+.travel__shuttle .route__path svg { color: var(--ceramic); }
+.travel__shuttle .shuttle__routes {
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+  border-color: color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.travel__shuttle .btn { --btn-fg: var(--fg); --btn-line: color-mix(in srgb, var(--fg) 40%, transparent); }

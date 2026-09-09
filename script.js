@@ -21,7 +21,7 @@ const wedding = {
   address: "El Convent de Blanes, Camí del Convent s/n, 17300 Blanes, Girona",
 
   // Enllaç de Google Maps. Substituïu-lo pel del lloc real.
-  mapsUrl: "https://www.google.com/maps/search/?api=1&query=El+Convent+de+Blanes",
+  mapsUrl: "https://maps.app.goo.gl/RgMQEUsR9MLXghAx5",
 
   hashtag: "#GemmaIRay",
 
@@ -804,18 +804,6 @@ safe("accordion", () => {
 });
 
 /* ========================================
-   TARGETES QUE GIREN
-   ======================================== */
-safe("flip", () => {
-  $$(".flip").forEach((card) => {
-    card.addEventListener("click", () => {
-      const pressed = card.getAttribute("aria-pressed") === "true";
-      card.setAttribute("aria-pressed", String(!pressed));
-    });
-  });
-});
-
-/* ========================================
    GALERIA · lightbox
    ======================================== */
 safe("lightbox", () => {
@@ -945,47 +933,6 @@ safe("postcards", () => {
   window.addEventListener("resize", () => {
     // Si canvia la mida de la pantalla, tornem a col·locar-les
     if (window.innerWidth < 900) place();
-  });
-});
-
-/* ========================================
-   SCROLL HORITZONTAL ARROSSEGABLE (Blanes)
-   ======================================== */
-safe("hscroll", () => {
-  const track = $("#blanesScroll");
-  if (!track) return;
-
-  let down = false, startX = 0, startScroll = 0, moved = 0;
-
-  track.addEventListener("pointerdown", (e) => {
-    if (e.pointerType === "touch") return; // el tàctil ja funciona sol
-    down = true;
-    moved = 0;
-    startX = e.clientX;
-    startScroll = track.scrollLeft;
-    track.classList.add("is-dragging");
-  });
-
-  track.addEventListener("pointermove", (e) => {
-    if (!down) return;
-    const dx = e.clientX - startX;
-    moved = Math.abs(dx);
-    track.scrollLeft = startScroll - dx;
-  });
-
-  const stop = () => {
-    down = false;
-    track.classList.remove("is-dragging");
-  };
-  track.addEventListener("pointerup", stop);
-  track.addEventListener("pointerleave", stop);
-  track.addEventListener("pointercancel", stop);
-
-  // Fletxes del teclat
-  track.addEventListener("keydown", (e) => {
-    const step = track.clientWidth * 0.6;
-    if (e.key === "ArrowRight") { e.preventDefault(); track.scrollBy({ left: step, behavior: "smooth" }); }
-    if (e.key === "ArrowLeft") { e.preventDefault(); track.scrollBy({ left: -step, behavior: "smooth" }); }
   });
 });
 
