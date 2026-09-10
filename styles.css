@@ -1,121 +1,4 @@
-@charset "UTF-8";
-/* ============================================================================
-   GEMMA & RAY · 14 · 05 · 2027 · EL CONVENT DE BLANES
-   styles.css — full stylesheet
-   ----------------------------------------------------------------------------
-   ÍNDEX
-   00. Tokens (colors, tipografia, espais)
-   01. Reset i base
-   02. Tipografia editorial
-   03. Utilitats i decoracions (gra, ones, rajoles, branques d'olivera)
-   04. Cursor personalitzat
-   05. Preloader / seqüència d'obertura
-   06. Barra de progrés
-   07. Navegació + menú mòbil
-   08. Hero
-   09. Compte enrere
-   10. La nostra història
-   11. Ens casem!
-   12. El lloc (El Convent de Blanes)
-   13. El dia (timeline)
-   14. Cerimònia / Aperitiu / Sopar
-   15. La festa (nit)
-   16. Dress code
-   17. Com arribar-hi / Transport
-   18. On dormir
-   19. El cap de setmana
-   20. Què fer a Blanes (scroll horitzontal)
-   21. La Costa Brava
-   22. Menjar & beure
-   23. Playlist
-   24. Fotos (galeria + lightbox)
-   25. Postals arrossegables
-   26. Petites coses (targetes que giren)
-   27. FAQ
-   28. RSVP
-   29. Regals / Lluna de mel
-   30. El temps
-   31. Hashtag / Comparteix fotos
-   32. Missatge final + Footer
-   33. Ous de Pasqua i extres
-   34. Responsive
-   35. prefers-reduced-motion
-   ========================================================================== */
 
-/* ========================================
-   00. TOKENS
-   ======================================== */
-:root {
-  /* — PALETA —
-     Els set papers definits. Tot el que ve després en són tonalitats
-     derivades, per no inventar colors nous. */
-  --ivory: #f7f3ea;        /* fons principal · ivori de paper càlid */
-  --paper: #eee8dc;        /* fons secundari · pergamí suau */
-  --ink: #17365d;          /* text principal · blau tinta profund */
-  --blue: #6f91ae;         /* il·lustració i decoració · blau mediterrani polsós */
-  --powder: #b8cbd8;       /* blau suau · blau pols esvaït */
-  --terracotta: #c87550;   /* accent · terracota apagada */
-  --stone: #d8d0c3;        /* filets i vores fines · pedra càlida */
-
-  /* — Tonalitats derivades dels set de dalt — */
-  --ink-soft: #4a6180;     /* el blau tinta, aclarit, per al text secundari */
-  --navy-deep: #0f2542;    /* el blau tinta, enfosquit, només per a la nit */
-  --sand: #e5ddcc;         /* entre el pergamí i la pedra */
-  --clay: #c4b9a6;         /* la pedra, un to més fosc */
-  --gold: #bfa476;         /* l'accent, apagat, per a espelmes i estrelles */
-
-  /* — Noms antics, conservats perquè res del full d'estil es trenqui — */
-  --sky: var(--powder);
-  --ceramic: var(--blue);
-  --sea: var(--blue);
-  --cobalt: var(--ink);      /* els blocs blaus passen de cobalt a tinta */
-  --aegean: var(--ink);
-  --midnight: var(--navy-deep);
-  --abyss: #081a2e;
-  /* La taula de colors només té un color decoratiu, i és blau: les
-     il·lustracions que abans eren verd oliva ara van en blau. */
-  --olive: var(--blue);
-  --olive-soft: var(--powder);
-
-  /* — Rols — */
-  --bg: var(--ivory);
-  --fg: var(--ink);
-  --accent: var(--cobalt);
-
-  /* — Tipografia — */
-  --font-display: "Bodoni Moda", "Didot", "Times New Roman", serif;
-  --font-serif: "Cormorant Garamond", Garamond, "Times New Roman", serif;
-  --font-sans: "Jost", "Helvetica Neue", Arial, sans-serif;
-  --font-hand: "Mrs Saint Delafield", "Snell Roundhand", cursive;
-  /* Signatura monolineal fina. De moment només l'utilitza el hero. */
-  --font-signature: "Italianno", "Snell Roundhand", "Apple Chancery", cursive;
-
-  /* — Escala fluida — */
-  --t-xs: clamp(0.68rem, 0.64rem + 0.2vw, 0.78rem);
-  --t-sm: clamp(0.8rem, 0.76rem + 0.2vw, 0.9rem);
-  --t-base: clamp(1rem, 0.95rem + 0.25vw, 1.12rem);
-  --t-md: clamp(1.15rem, 1.05rem + 0.5vw, 1.45rem);
-  --t-lg: clamp(1.6rem, 1.2rem + 1.8vw, 2.6rem);
-  --t-xl: clamp(2.2rem, 1.4rem + 3.4vw, 4.4rem);
-  --t-2xl: clamp(3rem, 1.4rem + 6.4vw, 7.5rem);
-  --t-3xl: clamp(3.6rem, 0.8rem + 11vw, 13rem);
-
-  /* — Espai — */
-  --gutter: clamp(1.25rem, 4vw, 4.5rem);
-  --section-y: clamp(5rem, 11vh, 11rem);
-  --maxw: 1440px;
-  --measure: 62ch;
-
-  /* — Moviment — */
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
-  --dur: 0.9s;
-
-  /* — Ombres i vores — */
-  --hair: 1px solid var(--stone);
-  --shadow-soft: 0 18px 50px -24px rgba(23, 54, 93, 0.28);
-  --shadow-lift: 0 34px 80px -32px rgba(15, 37, 66, 0.42);
-}
 
 /* Modes d'ambient — controlats des de script.js sobre <html> */
 html.mood-night {
@@ -582,20 +465,6 @@ html.mood-night .sun-track__body {
   html.has-cursor,
   html.has-cursor * {
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M3 3C9 9 15 15 21 22' stroke='%23f7f3ea' stroke-width='4'/%3E%3Cellipse cx='12' cy='12' rx='9' ry='4' transform='rotate(45 12 12)' stroke='%23f7f3ea' stroke-width='4'/%3E%3Cpath d='M3 3C9 9 15 15 21 22' stroke='%2317365d' stroke-width='1.3'/%3E%3Cellipse cx='12' cy='12' rx='9' ry='4' transform='rotate(45 12 12)' stroke='%2317365d' stroke-width='1.3'/%3E%3C/g%3E%3C/svg%3E") 3 3, auto;
-  }
-
-  /* Damunt d'una cosa on es pot clicar, la fulla treu una oliva
-     terracota: n'hi ha prou per notar que allò respon. */
-  html.has-cursor a,
-  html.has-cursor button,
-  html.has-cursor label,
-  html.has-cursor select,
-  html.has-cursor summary,
-  html.has-cursor [role="button"],
-  html.has-cursor .gal,
-  html.has-cursor .flip,
-  html.has-cursor .acc__btn {
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M3 3C9 9 15 15 21 22' stroke='%23f7f3ea' stroke-width='4'/%3E%3Cellipse cx='12' cy='12' rx='9' ry='4' transform='rotate(45 12 12)' stroke='%23f7f3ea' stroke-width='4'/%3E%3Ccircle cx='22' cy='7' r='4.4' stroke='%23f7f3ea' stroke-width='4'/%3E%3Cpath d='M3 3C9 9 15 15 21 22' stroke='%2317365d' stroke-width='1.3'/%3E%3Cellipse cx='12' cy='12' rx='9' ry='4' transform='rotate(45 12 12)' stroke='%2317365d' stroke-width='1.3'/%3E%3Ccircle cx='22' cy='7' r='4.4' fill='%23c87550' stroke='none'/%3E%3C/g%3E%3C/svg%3E") 3 3, pointer;
   }
 
   /* Als camps de text volem el cursor del sistema: escriure amb una
@@ -1332,66 +1201,6 @@ html.mood-night .sun-track__body {
 .chapter:nth-child(even) .chapter__inset { right: auto; left: -10%; bottom: auto; top: -12%; }
 
 /* ========================================
-   11. ENS CASEM!
-   ======================================== */
-.shout {
-  position: relative;
-  padding: clamp(5rem, 14vh, 11rem) var(--gutter);
-  background: var(--paper);
-  text-align: center;
-  overflow: hidden;
-}
-.shout__word {
-  font-family: var(--font-display);
-  font-size: clamp(2.6rem, 1rem + 8.4vw, 8.5rem);
-  line-height: 1;
-  /* Res de negatiu: a aquesta mida les paraules es toquen */
-  letter-spacing: 0.005em;
-  word-spacing: 0.12em;
-  color: var(--aegean);
-  max-width: 100%;
-  text-wrap: balance;
-}
-.shout__word .stroke {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--aegean);
-  padding-left: 0.06em;
-}
-.shout__hand {
-  font-family: var(--font-hand);
-  /* La lletra manuscrita és ampla i té traços molt alts: cal aire */
-  font-size: clamp(2.6rem, 1rem + 7vw, 6.5rem);
-  color: var(--terracotta);
-  line-height: 1.5;
-  display: block;
-  margin-top: -0.05em;
-  max-width: 100%;
-}
-.shout__sub {
-  margin-top: clamp(1.6rem, 4vw, 2.6rem);
-  font-family: var(--font-serif);
-  font-size: var(--t-md);
-  font-style: italic;
-  color: var(--ink-soft);
-  max-width: 46ch;
-  margin-inline: auto;
-}
-.shout__ring {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  display: grid;
-  place-items: center;
-  z-index: 0;
-  opacity: 0.16;
-}
-.shout__ring svg {
-  width: min(96vw, 900px);
-  color: var(--ceramic);
-  transform: rotate(45deg);
-}
-
-/* ========================================
    12. EL LLOC · EL CONVENT DE BLANES
    ======================================== */
 .venue {
@@ -2065,140 +1874,6 @@ html.mood-night .sun-track__body {
 .playlist__cta { margin-top: 2rem; }
 
 /* ========================================
-   24. FOTOS · GALERIA EDITORIAL
-   ======================================== */
-.gallery { background: var(--ivory); }
-.gallery__grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(0.7rem, 1.8vw, 1.6rem);
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-}
-.gal {
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  background: var(--sand);
-}
-.gal .frame { transition: transform 1.2s var(--ease); height: 100%; }
-.gal:hover .frame { transform: scale(1.05); }
-.gal::after {
-  content: attr(data-caption);
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  padding: 2.4rem 1.2rem 1rem;
-  background: linear-gradient(to top, rgba(4, 22, 46, 0.75), transparent);
-  color: var(--ivory);
-  font-family: var(--font-sans);
-  font-size: 0.62rem;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.5s var(--ease), transform 0.6s var(--ease);
-}
-.gal:hover::after, .gal:focus-visible::after { opacity: 1; transform: none; }
-
-/* Composició asimètrica */
-.gal--a { grid-column: span 7; aspect-ratio: 4 / 3; }
-.gal--b { grid-column: span 5; aspect-ratio: 3 / 4; align-self: end; }
-.gal--c { grid-column: span 4; aspect-ratio: 3 / 4; }
-.gal--d { grid-column: span 4; aspect-ratio: 1; margin-top: clamp(1rem, 4vw, 3.5rem); }
-.gal--e { grid-column: span 4; aspect-ratio: 3 / 4; }
-.gal--f { grid-column: span 6; aspect-ratio: 16 / 10; }
-.gal--g { grid-column: span 6; aspect-ratio: 16 / 10; margin-top: clamp(1rem, 4vw, 3rem); }
-.gal--h { grid-column: span 12; aspect-ratio: 21 / 9; }
-
-/* Polaroid dins la galeria */
-.gal--polaroid {
-  /* Es mesura pel contingut (foto quadrada + peu escrit a mà) */
-  aspect-ratio: auto;
-  align-self: start;
-  background: var(--ivory);
-  padding: 12px 12px 46px;
-  box-shadow: var(--shadow-lift);
-  transform: rotate(-2.5deg);
-  transition: transform 0.7s var(--ease);
-}
-.gal--polaroid:hover { transform: rotate(0deg) scale(1.02); }
-.gal--polaroid .frame { aspect-ratio: 1; }
-.gal--polaroid::after {
-  content: attr(data-caption);
-  background: none;
-  color: var(--ink-soft);
-  font-family: var(--font-hand);
-  font-size: 1.6rem;
-  letter-spacing: 0;
-  text-transform: none;
-  padding: 0.4rem 1rem;
-  opacity: 1;
-  transform: none;
-  text-align: center;
-}
-
-/* Lightbox */
-.lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 960;
-  display: grid;
-  place-items: center;
-  padding: clamp(1rem, 4vw, 3rem);
-  background: rgba(4, 22, 46, 0.94);
-  backdrop-filter: blur(10px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.5s var(--ease), visibility 0s 0.5s;
-}
-.lightbox.is-open { opacity: 1; visibility: visible; transition: opacity 0.5s var(--ease); }
-.lightbox__stage {
-  position: relative;
-  width: min(100%, 1000px);
-  max-height: 82vh;
-  aspect-ratio: 3 / 2;
-  transform: scale(0.94);
-  transition: transform 0.6s var(--ease);
-}
-.lightbox.is-open .lightbox__stage { transform: none; }
-.lightbox__stage .frame { width: 100%; height: 100%; }
-.lightbox__caption {
-  margin-top: 1.2rem;
-  text-align: center;
-  font-family: var(--font-sans);
-  font-size: var(--t-xs);
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: rgba(251, 246, 238, 0.75);
-}
-.lightbox__close {
-  position: absolute;
-  top: clamp(1rem, 3vw, 2rem);
-  right: clamp(1rem, 3vw, 2rem);
-  width: 48px; height: 48px;
-  display: grid; place-items: center;
-  border: 1px solid rgba(251, 246, 238, 0.35);
-  border-radius: 50%;
-  color: var(--ivory);
-  transition: background-color 0.4s, transform 0.4s var(--ease);
-}
-.lightbox__close:hover { background: rgba(251, 246, 238, 0.12); transform: rotate(90deg); }
-.lightbox__nav {
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
-  width: 52px; height: 52px;
-  display: grid; place-items: center;
-  border: 1px solid rgba(251, 246, 238, 0.3);
-  border-radius: 50%;
-  color: var(--ivory);
-  transition: background-color 0.4s, transform 0.4s var(--ease);
-}
-.lightbox__nav:hover { background: rgba(251, 246, 238, 0.12); }
-.lightbox__nav--prev { left: clamp(0.5rem, 2vw, 2rem); }
-.lightbox__nav--next { right: clamp(0.5rem, 2vw, 2rem); }
-.lightbox__nav svg { width: 18px; }
-
-/* ========================================
    25. POSTALS ARROSSEGABLES
    ======================================== */
 .postcards {
@@ -2509,68 +2184,6 @@ html.mood-night .sun-track__body {
   color: var(--cobalt);
 }
 
-.honeymoon {
-  position: relative;
-  background: linear-gradient(180deg, var(--sky), var(--ceramic) 60%, var(--sea));
-  color: var(--ivory);
-  overflow: hidden;
-  text-align: center;
-}
-.honeymoon__title { font-family: var(--font-display); font-size: var(--t-xl); letter-spacing: -0.03em; line-height: 0.98; }
-.honeymoon__sub { color: rgba(251, 246, 238, 0.86); margin-inline: auto; margin-top: 1.2rem; }
-.honeymoon__jars {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: clamp(1rem, 3vw, 2.4rem);
-  margin-top: clamp(2.5rem, 5vw, 3.5rem);
-}
-.jar {
-  display: grid;
-  justify-items: center;
-  gap: 0.8rem;
-  padding: 1.4rem 1.2rem;
-  width: clamp(150px, 20vw, 200px);
-  border: 1px solid rgba(251, 246, 238, 0.4);
-  background: rgba(251, 246, 238, 0.08);
-  transition: transform 0.6s var(--ease), background-color 0.5s;
-}
-.jar:hover { transform: translateY(-8px) rotate(-1.5deg); background: rgba(251, 246, 238, 0.16); }
-.jar svg { width: 44px; height: 46px; color: var(--ivory); }
-.jar b { font-family: var(--font-display); font-weight: 400; font-size: var(--t-md); }
-.jar span { font-size: 0.72rem; color: rgba(251, 246, 238, 0.72); }
-
-/* ========================================
-   30. EL TEMPS
-   ======================================== */
-.weather { background: var(--paper); }
-.weather__grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: clamp(1.5rem, 4vw, 4rem);
-  align-items: center;
-}
-.weather__text { grid-column: 1 / span 5; }
-.weather__cards { grid-column: 7 / span 6; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: color-mix(in srgb, var(--ink) 12%, transparent); border: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
-/* EDIT HERE: dades climàtiques orientatives del maig a Blanes */
-.wx {
-  background: var(--paper);
-  padding: clamp(1.4rem, 3vw, 2.2rem);
-  display: grid;
-  gap: 0.5rem;
-  text-align: center;
-}
-.wx svg { width: 38px; height: 42px; color: var(--cobalt); margin-inline: auto; }
-.wx b {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.6rem, 3.4vw, 2.4rem);
-  line-height: 1;
-  color: var(--aegean);
-}
-.wx span { font-family: var(--font-sans); font-size: 0.6rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--ink-soft); }
-.weather__note { margin-top: 1.6rem; font-family: var(--font-serif); font-style: italic; color: var(--ink-soft); }
-
 .share { background: var(--ivory); }
 .share__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); margin-top: 2.5rem; }
 .share-card {
@@ -2657,12 +2270,6 @@ html.mood-night .sun-track__body {
   color: rgba(251, 246, 238, 0.65);
 }
 .footer__wave { position: absolute; inset: auto 0 0 0; color: rgba(202, 220, 234, 0.14); }
-.footer__sun {
-  width: clamp(46px, 6vw, 74px);
-  margin: 0 auto 1.6rem;
-  color: var(--gold);
-  animation: seal-rotate 40s linear infinite;
-}
 .footer__credit {
   margin-top: 2.6rem;
   font-family: var(--font-sans);
@@ -2820,11 +2427,6 @@ html.mood-night .sun-track__body {
   .venue__cols { grid-template-columns: 1fr; }
   .venue__col-a, .venue__col-b { grid-column: 1 / -1; }
   .faq__head { position: static; }
-
-  .gal--a, .gal--f, .gal--g, .gal--h { grid-column: span 12; }
-  .gal--b, .gal--c, .gal--d, .gal--e { grid-column: span 6; }
-  .gal--b { align-self: auto; }
-  .gal--d { margin-top: 0; }
 }
 
 /* — Telèfons — */
@@ -2851,13 +2453,8 @@ html.mood-night .sun-track__body {
   .route { grid-template-columns: 1fr; gap: 0.4rem; }
   .route__time { font-size: 1.5rem; }
 
-  .gallery__grid { gap: 0.7rem; }
-  .gal--b, .gal--c, .gal--d, .gal--e { grid-column: span 12; }
-  .gal--polaroid::after { font-size: 1.3rem; }
-
   .postcards__stage { height: 420px; }
   .postcard { width: min(74vw, 260px); }
-  .weather__cards { grid-template-columns: 1fr 1fr; }
 
   .form__row { grid-template-columns: 1fr; }
   .choice label { flex: 1 0 auto; justify-content: center; }
@@ -2865,8 +2462,6 @@ html.mood-night .sun-track__body {
   .finale__deco { display: none; }
 
   .to-top { width: 46px; height: 46px; }
-  .lightbox__nav { width: 42px; height: 42px; }
-  .lightbox__stage { aspect-ratio: 3 / 4; }
 }
 
 /* Àrees tàctils còmodes */
@@ -2914,9 +2509,6 @@ html.mood-night .sun-track__body {
 
 /* Impressió — per si algú vol una còpia en paper */
 @media print {
-  .nav, .menu, .cursor, .grain, .vignette, .progress, .to-top,
-  .sun-track, .lightbox, .egg, .confetti-layer,
-  .drift { display: none !important; }
   body { background: #fff; color: #000; }
   .section { padding-block: 1.5rem; break-inside: avoid; }
 }
@@ -2924,7 +2516,6 @@ html.mood-night .sun-track__body {
 /* ========================================
    37. AJUSTOS DE LA REESTRUCTURACIÓ
    ======================================== */
-
 
 /* Sis targetes: 3 x 2, no cinc i un forat */
 .travel__grid { grid-template-columns: repeat(3, 1fr); }
