@@ -332,19 +332,32 @@ safe("mood", () => {
     inici: "",
     "compte-enrere": "sea",
     historia: "",
+    "ens-casem": "",
     "el-lloc": "dusk",
     "el-dia": "golden",
     cerimonia: "golden",
     aperitiu: "",
     sopar: "dusk",
     festa: "night",
+    "dress-code": "",
     "com-arribar": "",
+    transport: "sea",
     allotjament: "",
+    "cap-de-setmana": "",
+    blanes: "",
+    "costa-brava": "dusk",
+    menjar: "",
     playlist: "dusk",
+    fotos: "",
     postals: "",
+    "petites-coses": "",
     faq: "",
     rsvp: "sea",
     regals: "",
+    "lluna-de-mel": "sea",
+    "el-temps": "",
+    hashtag: "dusk",
+    comparteix: "",
     final: ""
   };
 
@@ -787,6 +800,69 @@ safe("accordion", () => {
       btn.setAttribute("aria-expanded", String(!isOpen));
       panel.dataset.open = String(!isOpen);
     });
+  });
+});
+
+/* ========================================
+   GALERIA · lightbox
+   ======================================== */
+safe("lightbox", () => {
+  const box = $("#lightbox");
+  const frame = $("#lightboxFrame");
+  const caption = $("#lightboxCaption");
+  const items = $$(".gal");
+  if (!box || !items.length) return;
+
+  let index = 0;
+  let lastFocus = null;
+
+  const show = (i) => {
+    index = (i + items.length) % items.length;
+    const source = $(".frame", items[index]);
+    if (!source || !frame) return;
+
+    // Copiem l'aspecte del marc original (gradient o foto real)
+    frame.className = `frame ${Array.from(source.classList).filter((c) => c.startsWith("ph-")).join(" ")}`;
+    const img = source.style.getPropertyValue("--img");
+    if (img) frame.style.setProperty("--img", img);
+    else frame.style.removeProperty("--img");
+
+    if (caption) caption.textContent = items[index].dataset.caption || "";
+  };
+
+  const open = (i) => {
+    lastFocus = document.activeElement;
+    box.hidden = false;
+    requestAnimationFrame(() => box.classList.add("is-open"));
+    document.body.classList.add("is-locked");
+    show(i);
+    $("#lightboxClose").focus();
+  };
+
+  const close = () => {
+    box.classList.remove("is-open");
+    document.body.classList.remove("is-locked");
+    setTimeout(() => { box.hidden = true; }, 520);
+    if (lastFocus) lastFocus.focus();
+  };
+
+  items.forEach((item, i) => {
+    item.addEventListener("click", () => open(i));
+    item.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(i); }
+    });
+  });
+
+  $("#lightboxClose").addEventListener("click", close);
+  $("#lightboxPrev").addEventListener("click", () => show(index - 1));
+  $("#lightboxNext").addEventListener("click", () => show(index + 1));
+  box.addEventListener("click", (e) => { if (e.target === box) close(); });
+
+  document.addEventListener("keydown", (e) => {
+    if (box.hidden) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowLeft") show(index - 1);
+    if (e.key === "ArrowRight") show(index + 1);
   });
 });
 
