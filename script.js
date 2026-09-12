@@ -28,9 +28,6 @@ const wedding = {
   // Enllaç de la playlist de Spotify (o Apple Music, o el que vulgueu)
   spotifyUrl: "https://open.spotify.com/",
 
-  // Àlbum compartit de fotos per als convidats (Google Photos, Dropbox…)
-  photoAlbum: "",
-
   // Número de compte per als regals. Deixeu-lo buit fins que el vulgueu publicar.
   iban: "",
 
@@ -133,6 +130,11 @@ safe("reveal", () => {
     return;
   }
 
+  /* A partir d'aquí sí que podem amagar coses: el CSS només aplica l'estat
+     amagat si hi ha aquesta classe. Si aquest fitxer no arribés a executar-se,
+     el web es veuria igualment, sense animacions. */
+  document.documentElement.classList.add("js-reveal");
+
   // Longitud real de cada traç, per a les il·lustracions que es dibuixen
   $$(".draw-on").forEach((svg) => {
     $$("path, line, circle, ellipse, polyline", svg).forEach((shape, i) => {
@@ -142,15 +144,42 @@ safe("reveal", () => {
     });
   });
 
+  const mostra = (el) => {
+    if (el.classList.contains("is-in")) return;
+    el.classList.add("is-in");
+    io.unobserve(el);
+  };
+
+  /* Amb threshold 0 n'hi ha prou que l'element comenci a entrar.
+     Amb valors alts, un element pot quedar-se sense revelar mai i, si porta
+     data-reveal="mask", desapareix del tot: just el que passava amb l'arc
+     d'El Convent, que deixava mitja pantalla blava i buida. */
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-in");
-      io.unobserve(entry.target);
+      if (entry.isIntersecting) mostra(entry.target);
     });
-  }, { rootMargin: "0px 0px -12% 0px", threshold: 0.12 });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0 });
 
   targets.forEach((el) => io.observe(el));
+
+  /* Xarxa de seguretat: si per algun motiu l'avís no arriba, res no pot
+     quedar invisible. Cada cop que es fa scroll, tot el que ja hauria
+     d'haver aparegut, apareix. */
+  let comprovant = false;
+  const repassa = () => {
+    comprovant = false;
+    const limit = window.innerHeight * 0.95;
+    targets.forEach((el) => {
+      if (el.classList.contains("is-in")) return;
+      if (el.getBoundingClientRect().top < limit) mostra(el);
+    });
+  };
+  window.addEventListener("scroll", () => {
+    if (!comprovant) { comprovant = true; requestAnimationFrame(repassa); }
+  }, { passive: true });
+  window.addEventListener("resize", repassa);
+  window.addEventListener("load", repassa);
+  setTimeout(repassa, 1200);
 });
 
 /* ========================================
@@ -804,69 +833,6 @@ safe("accordion", () => {
 });
 
 /* ========================================
-   GALERIA · lightbox
-   ======================================== */
-safe("lightbox", () => {
-  const box = $("#lightbox");
-  const frame = $("#lightboxFrame");
-  const caption = $("#lightboxCaption");
-  const items = $$(".gal");
-  if (!box || !items.length) return;
-
-  let index = 0;
-  let lastFocus = null;
-
-  const show = (i) => {
-    index = (i + items.length) % items.length;
-    const source = $(".frame", items[index]);
-    if (!source || !frame) return;
-
-    // Copiem l'aspecte del marc original (gradient o foto real)
-    frame.className = `frame ${Array.from(source.classList).filter((c) => c.startsWith("ph-")).join(" ")}`;
-    const img = source.style.getPropertyValue("--img");
-    if (img) frame.style.setProperty("--img", img);
-    else frame.style.removeProperty("--img");
-
-    if (caption) caption.textContent = items[index].dataset.caption || "";
-  };
-
-  const open = (i) => {
-    lastFocus = document.activeElement;
-    box.hidden = false;
-    requestAnimationFrame(() => box.classList.add("is-open"));
-    document.body.classList.add("is-locked");
-    show(i);
-    $("#lightboxClose").focus();
-  };
-
-  const close = () => {
-    box.classList.remove("is-open");
-    document.body.classList.remove("is-locked");
-    setTimeout(() => { box.hidden = true; }, 520);
-    if (lastFocus) lastFocus.focus();
-  };
-
-  items.forEach((item, i) => {
-    item.addEventListener("click", () => open(i));
-    item.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(i); }
-    });
-  });
-
-  $("#lightboxClose").addEventListener("click", close);
-  $("#lightboxPrev").addEventListener("click", () => show(index - 1));
-  $("#lightboxNext").addEventListener("click", () => show(index + 1));
-  box.addEventListener("click", (e) => { if (e.target === box) close(); });
-
-  document.addEventListener("keydown", (e) => {
-    if (box.hidden) return;
-    if (e.key === "Escape") close();
-    if (e.key === "ArrowLeft") show(index - 1);
-    if (e.key === "ArrowRight") show(index + 1);
-  });
-});
-
-/* ========================================
    POSTALS ARROSSEGABLES
    ======================================== */
 safe("postcards", () => {
@@ -993,7 +959,6 @@ safe("cursor", () => {
 
   /* Els llocs que expliquen què s'hi pot fer */
   const labels = [
-    [".gal", "Veure"],
     [".postcard", "Arrossega"],
     [".flip", "Gira-la"],
     [".vinyl", "Fes-lo girar"],
@@ -1459,17 +1424,6 @@ safe("bind-config", () => {
   set("#spotifyLink", (el) => {
     if (wedding.spotifyUrl) el.href = wedding.spotifyUrl;
     else { el.removeAttribute("href"); el.setAttribute("aria-disabled", "true"); el.textContent = "Playlist ben aviat"; }
-  });
-
-  set("#photoAlbumLink", (el) => {
-    if (wedding.photoAlbum) {
-      el.href = wedding.photoAlbum;
-    } else {
-      el.removeAttribute("href");
-      el.removeAttribute("target");
-      el.textContent = "Enllaç disponible el 14 de maig";
-      el.style.opacity = "0.6";
-    }
   });
 
   set("#giftIban", (el) => {
