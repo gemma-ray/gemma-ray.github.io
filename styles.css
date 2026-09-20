@@ -2808,3 +2808,82 @@ html.mood-night .sun-track__body {
   border-color: color-mix(in srgb, var(--ink) 12%, transparent);
 }
 .travel__shuttle .btn { --btn-fg: var(--fg); --btn-line: color-mix(in srgb, var(--fg) 40%, transparent); }
+
+
+/* ========================================
+   EL BOTÓ DE LA MÚSICA
+   Fix a baix a l'esquerra: acompanya tota l'estona, també quan la barra
+   de dalt s'amaga en baixar. Dos estats ben diferents: altaveu barrat
+   quan està apagat, altaveu amb ones quan sona.
+   ======================================== */
+.music {
+  position: fixed;
+  left: clamp(1rem, 2.6vw, 2rem);
+  bottom: clamp(1rem, 2.6vw, 2rem);
+  z-index: 720;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.62rem 1.05rem 0.62rem 0.85rem;
+  border-radius: 999px;
+  background: var(--ivory);
+  color: var(--ink-soft);
+  border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent);
+  box-shadow: var(--shadow-soft);
+  transition: color 0.4s var(--ease), border-color 0.4s var(--ease),
+              background-color 0.4s var(--ease);
+}
+.music:hover,
+.music:focus-visible {
+  color: var(--cobalt);
+  border-color: color-mix(in srgb, var(--cobalt) 45%, transparent);
+}
+
+.music__icon { width: 19px; height: 17px; flex: none; }
+.music__icon .ink { stroke-width: 1.5; }
+.music__icon--on { display: none; }
+
+.music__label {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ── Sonant ── */
+.music[aria-pressed="true"] {
+  background: var(--cobalt);
+  color: var(--ivory);
+  border-color: var(--cobalt);
+}
+.music[aria-pressed="true"] .music__icon--off { display: none; }
+.music[aria-pressed="true"] .music__icon--on { display: block; }
+/* Les ones de l'altaveu bateguen suaument mentre sona */
+.music[aria-pressed="true"] .music__icon--on { animation: music-puls 2.4s ease-in-out infinite; }
+@keyframes music-puls {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@media (max-width: 560px) {
+  /* En mòbil, només l'altaveu: la barra de sota ha de quedar lliure */
+  .music__label { display: none; }
+  .music { padding: 0.62rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music[aria-pressed="true"] .music__icon--on { animation: none; }
+}
+
+
+/* El Save the Date de debò, al final de la pàgina */
+.std { padding: clamp(0.9rem, 2vw, 1.3rem); }
+.std .tilt__inner { display: grid; gap: 1.2rem; justify-items: center; }
+.std__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}

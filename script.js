@@ -25,8 +25,20 @@ const wedding = {
 
   hashtag: "#GemmaIRay",
 
-  // Enllaç de la playlist de Spotify (o Apple Music, o el que vulgueu)
-  spotifyUrl: "https://open.spotify.com/",
+  music: {
+    // ── LA CANÇÓ DE FONS ───────────────────────────────────────────────
+    // Ha de ser un fitxer d'àudio del mateix web. Poseu-lo a
+    // assets/audio/ i escriviu aquí el camí.
+    //
+    // No es pot fer sonar una cançó directament des de Spotify: Spotify
+    // només deixa incrustar el seu reproductor, amb la seva finestra i
+    // els seus botons, i no permet que una altra web li posi la música
+    // de fons. Per això cal el fitxer.
+    //
+    // Cançó que voleu: Fly Me to the Moon (2008 Remastered), Frank Sinatra.
+    file: "assets/audio/fly-me-to-the-moon.mp3",
+    volume: 0.35         // de 0 a 1
+  },
 
   // Número de compte per als regals. Deixeu-lo buit fins que el vulgueu publicar.
   iban: "",
@@ -961,7 +973,6 @@ safe("cursor", () => {
   const labels = [
     [".postcard", "Arrossega"],
     [".flip", "Gira-la"],
-    [".vinyl", "Fes-lo girar"],
     [".hscroll", "Arrossega"],
     ["#coupleName", "Clica'ns"]
   ];
@@ -981,102 +992,93 @@ safe("cursor", () => {
 });
 
 /* ========================================
-   SO AMBIENT DEL MAR
-   Es genera amb Web Audio: cap fitxer d'àudio, cap descàrrega.
-   SEMPRE comença apagat. Només sona si l'usuari ho demana.
+   LA CANÇÓ DE FONS
+   SEMPRE comença apagada: els navegadors no deixen que soni res sol,
+   i tampoc no estaria bé. Sona quan el convidat prem el botó.
+   El fitxer es configura a dalt de tot, a wedding.music.
    ======================================== */
-safe("sound", () => {
+safe("music", () => {
   const toggle = $("#soundToggle");
   if (!toggle) return;
 
-  let ctx = null, master = null, playing = false, timer = null;
+  const font = (wedding.music && wedding.music.file) || "";
+  if (!font) {
+    // Sense cançó configurada, el botó no ha de sortir
+    toggle.remove();
+    return;
+  }
 
-  const build = () => {
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    if (!AudioCtx) return false;
-    ctx = new AudioCtx();
+  const audio = new Audio(font);
+  audio.loop = true;
+  audio.preload = "metadata";   // la carrega quan cal, però ja sap què és
+  audio.volume = 0;
 
-    // Soroll rosa com a base de l'onatge
-    const seconds = 4;
-    const buffer = ctx.createBuffer(1, ctx.sampleRate * seconds, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    let b0 = 0, b1 = 0, b2 = 0;
-    for (let i = 0; i < data.length; i++) {
-      const white = Math.random() * 2 - 1;
-      b0 = 0.99765 * b0 + white * 0.0990460;
-      b1 = 0.96300 * b1 + white * 0.2965164;
-      b2 = 0.57000 * b2 + white * 1.0526913;
-      data[i] = (b0 + b1 + b2 + white * 0.1848) * 0.09;
+  let sonant = false;
+  const VOLUM = Math.min(Math.max(Number(wedding.music.volume) || 0.35, 0), 1);
+
+  /* El volum, amb entrada i sortida suaus.
+
+     IMPORTANT: el volum es posa al seu valor de seguida i el suavitzat
+     només l'acompanya. Abans el volum començava a 0 i pujava dins d'un
+     requestAnimationFrame; si aquell bucle no arrencava, la cançó sonava
+     però amb el volum a zero, i semblava que el botó no funcionés. */
+  let fosa = null;
+
+  const posaVolum = (desti, ms) => {
+    clearInterval(fosa);
+    const inici = audio.volume;
+    if (!ms) { audio.volume = desti; return; }
+    const passos = Math.max(Math.round(ms / 50), 1);
+    let n = 0;
+    fosa = setInterval(() => {
+      n += 1;
+      const k = Math.min(n / passos, 1);
+      audio.volume = Math.min(Math.max(inici + (desti - inici) * k, 0), 1);
+      if (k >= 1) {
+        clearInterval(fosa);
+        audio.volume = desti;          // el valor final, garantit
+        if (desti === 0) audio.pause();
+      }
+    }, 50);
+  };
+
+  const marca = (on) => {
+    toggle.setAttribute("aria-pressed", String(on));
+    toggle.setAttribute("aria-label", on ? "Aturar la música" : "Posar música");
+  };
+
+  const engega = () => {
+    /* El botó respon de seguida i la cançó ja se sent: si la fosa no
+       s'arribés a executar, el volum ja és el bo. */
+    sonant = true;
+    marca(true);
+    audio.volume = VOLUM * 0.4;
+    posaVolum(VOLUM, 900);
+
+    const p = audio.play();
+    if (p && p.catch) {
+      p.catch((e) => {
+        console.warn("[music] no s'ha pogut reproduir:", e);
+        sonant = false;
+        marca(false);
+        posaVolum(0, 0);
+      });
     }
-
-    const source = ctx.createBufferSource();
-    source.buffer = buffer;
-    source.loop = true;
-
-    // Filtre que s'obre i es tanca: simula les onades trencant
-    const filter = ctx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 520;
-    filter.Q.value = 0.7;
-
-    master = ctx.createGain();
-    master.gain.value = 0;
-
-    source.connect(filter).connect(master).connect(ctx.destination);
-    source.start();
-
-    // Cada onada: puja i baixa el volum i el filtre
-    const wave = () => {
-      if (!ctx || !playing) return;
-      const now = ctx.currentTime;
-      const peak = 0.16 + Math.random() * 0.09;
-      const rise = 1.6 + Math.random() * 1.4;
-      const fall = 2.4 + Math.random() * 1.8;
-
-      master.gain.cancelScheduledValues(now);
-      master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(peak, now + rise);
-      master.gain.linearRampToValueAtTime(0.045, now + rise + fall);
-
-      filter.frequency.cancelScheduledValues(now);
-      filter.frequency.setValueAtTime(filter.frequency.value, now);
-      filter.frequency.linearRampToValueAtTime(1100 + Math.random() * 500, now + rise);
-      filter.frequency.linearRampToValueAtTime(420, now + rise + fall);
-
-      timer = setTimeout(wave, (rise + fall) * 1000);
-    };
-
-    toggle._wave = wave;
-    return true;
   };
 
-  const start = async () => {
-    if (!ctx && !build()) return;
-    if (ctx.state === "suspended") await ctx.resume();
-    playing = true;
-    toggle._wave();
-    toggle.setAttribute("aria-pressed", "true");
-    toggle.setAttribute("aria-label", "Desactivar el so ambient del mar");
+  const atura = () => {
+    sonant = false;
+    marca(false);
+    posaVolum(0, 500);
+    // Xarxa de seguretat: si la fosa falla, la parem igualment
+    setTimeout(() => { if (!sonant) { audio.pause(); audio.volume = 0; } }, 800);
   };
 
-  const stop = () => {
-    playing = false;
-    clearTimeout(timer);
-    if (master && ctx) {
-      const now = ctx.currentTime;
-      master.gain.cancelScheduledValues(now);
-      master.gain.setValueAtTime(master.gain.value, now);
-      master.gain.linearRampToValueAtTime(0, now + 0.8);
-    }
-    toggle.setAttribute("aria-pressed", "false");
-    toggle.setAttribute("aria-label", "Activar el so ambient del mar");
-  };
+  toggle.addEventListener("click", () => (sonant ? atura() : engega()));
 
-  toggle.addEventListener("click", () => (playing ? stop() : start()));
-
-  // Si l'usuari canvia de pestanya, callem
+  // Si es canvia de pestanya, callem
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden && playing) stop();
+    if (document.hidden && sonant) atura();
   });
 });
 
@@ -1400,18 +1402,6 @@ safe("easter-egg", () => {
 });
 
 /* ========================================
-   VINIL DE LA PLAYLIST
-   ======================================== */
-safe("vinyl", () => {
-  const vinyl = $("#vinyl");
-  if (!vinyl) return;
-  vinyl.addEventListener("click", () => {
-    const on = vinyl.classList.toggle("is-spinning");
-    vinyl.setAttribute("aria-pressed", String(on));
-  });
-});
-
-/* ========================================
    ENLLAÇOS I TEXTOS QUE VENEN DE LA CONFIGURACIÓ
    ======================================== */
 safe("bind-config", () => {
@@ -1420,11 +1410,6 @@ safe("bind-config", () => {
   set("#mapsLink", (el) => { el.href = wedding.mapsUrl; });
   set("#venueAddress", (el) => { el.textContent = wedding.address; });
   set("#hashtagBig", (el) => { el.textContent = wedding.hashtag; });
-
-  set("#spotifyLink", (el) => {
-    if (wedding.spotifyUrl) el.href = wedding.spotifyUrl;
-    else { el.removeAttribute("href"); el.setAttribute("aria-disabled", "true"); el.textContent = "Playlist ben aviat"; }
-  });
 
   set("#giftIban", (el) => {
     if (wedding.iban) el.textContent = wedding.iban;

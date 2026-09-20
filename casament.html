@@ -286,6 +286,17 @@
   <path class="ink" d="M58 12H4M16 2 4 12l12 10"/>
 </symbol>
 
+<symbol id="i-speaker-off" viewBox="0 0 28 24">
+  <path class="ink" d="M3 9h4l6-5v16l-6-5H3z"/>
+  <path class="ink" d="M18 9l7 6M25 9l-7 6"/>
+</symbol>
+
+<symbol id="i-speaker-on" viewBox="0 0 28 24">
+  <path class="ink" d="M3 9h4l6-5v16l-6-5H3z"/>
+  <path class="ink" d="M17.5 8.5a6 6 0 0 1 0 7"/>
+  <path class="ink" d="M21 6a10 10 0 0 1 0 12"/>
+</symbol>
+
 <symbol id="i-arrow-up" viewBox="0 0 24 60">
   <path class="ink" d="M12 58V4M2 16 12 4l10 12"/>
 </symbol>
@@ -396,10 +407,7 @@
   </nav>
 
   <div class="nav__right">
-    <!-- So ambient: sempre desactivat per defecte -->
-    <button class="icon-btn" id="soundToggle" type="button" aria-pressed="false" aria-label="Activar el so ambient del mar">
-      <span class="sound__wave" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-    </button>
+    <!-- La música: sempre comença apagada -->
     <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="Obrir el menú">
       <span></span><span></span><span></span>
     </button>
@@ -524,69 +532,70 @@
     <header class="story__head">
       <p class="eyebrow" data-reveal>Capítol a capítol</p>
       <h2 class="section__title" data-split>La nostra <em>història</em></h2>
-      <p class="lede" data-reveal style="--d:200">
-        No hi ha res especialment cinematogràfic en com ens vam conèixer.
-        I, tot i així, aquí som.
-      </p>
     </header>
 
     <div class="story__chapters">
 
-      <!-- EDIT HERE: un capítol = un any, un titular i una frase.
-           Deixeu-ho curt: la gràcia és que es llegeixi d'una tirada. -->
+      <!-- EDIT HERE: un capítol = una data, un lloc, un titular i el text.
+           Per posar la foto, afegiu --img al .frame:
+           style="--img:url('assets/images/sagaro.jpg')" -->
       <article class="chapter">
         <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-stone" role="img" aria-label="La nit que es van conèixer (foto pendent)"></div>
+          <div class="frame frame--square ph-sea" style="--img:url('assets/images/01-sagaro.jpg')" role="img" aria-label="La Gemma i en Raymond fent-se un petó una nit d'estiu, entre pins i xiprers, a S'Agaró"></div>
         </div>
         <div class="chapter__body">
-          <p class="chapter__year" data-reveal>Juny de 2019 · Barcelona</p>
-          <h3 class="chapter__title" data-reveal style="--d:80">Un sopar al qual <em>cap dels dos</em> volia anar</h3>
+          <p class="chapter__year" data-reveal>08.08.2022 · S'Agaró</p>
+          <h3 class="chapter__title" data-reveal style="--d:80">On va <em>començar</em> tot</h3>
           <p class="body-copy" data-reveal style="--d:140">
-            Un terrat de Gràcia. Ella hi va arribar tard, ell estava a punt de marxar,
-            i van acabar baixant les escales quan ja apagaven els llums.
+            Ens vam conèixer una nit d'estiu a S'Agaró i vam anar a sopar al Villa Mas.
+            Sense saber-ho, aquell vespre començava la nostra història. Vam passar la
+            resta de l'estiu junts i ja no ens vam voler separar.
           </p>
         </div>
       </article>
 
       <article class="chapter">
         <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-sea" role="img" aria-label="El primer viatge a la Costa Brava (foto pendent)"></div>
-          <p class="annotation">el primer mar</p>
+          <div class="frame frame--square ph-stone" style="--img:url('assets/images/02-amsterdam.jpg')" role="img" aria-label="La Gemma i en Raymond fent-se un petó en un pont d'Amsterdam, amb bicicletes i geranis vermells"></div>
         </div>
         <div class="chapter__body">
-          <p class="chapter__year" data-reveal>Agost de 2020 · Cap de Creus</p>
-          <h3 class="chapter__title" data-reveal style="--d:80">El primer <em>viatge</em></h3>
+          <p class="chapter__year" data-reveal>2023 · Amsterdam</p>
+          <h3 class="chapter__title" data-reveal style="--d:80">Allà on <em>fossis tu</em></h3>
           <p class="body-copy" data-reveal style="--d:140">
-            Tres dies, un cotxe que feia un soroll estrany i un mapa de cales
-            dibuixat en un tovalló. Ens vam banyar a totes.
+            Durant sis mesos, el nostre amor va viure entre Barcelona i Amsterdam.
+            Però la distància pesava massa i les ganes d'estar junts encara més.
+            La Gemma va fer les maletes i Amsterdam es va convertir en la nostra primera llar.
           </p>
         </div>
       </article>
 
       <article class="chapter">
         <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-sunset" role="img" aria-label="La petició a Sa Palomera (foto pendent)"></div>
+          <div class="frame frame--square ph-olive" style="--img:url('assets/images/03-naomi.jpg')" role="img" aria-label="La Gemma i en Raymond a la muntanya amb la Naomi, la seva gossa, en braços"></div>
         </div>
         <div class="chapter__body">
-          <p class="chapter__year" data-reveal>Setembre de 2025 · Blanes</p>
-          <h3 class="chapter__title" data-reveal style="--d:80">La <em>pregunta</em></h3>
+          <p class="chapter__year" data-reveal>2025 · Barcelona</p>
+          <h3 class="chapter__title" data-reveal style="--d:80">La nostra petita <em>família</em></h3>
           <p class="body-copy" data-reveal style="--d:140">
-            A Sa Palomera, amb el sol caient. Ella va contestar abans
-            que ell acabés de preguntar-ho.
+            Després de dos anys a Amsterdam, vam tornar a Barcelona per continuar
+            construint la nostra vida. Poc després va arribar la Naomi, que va omplir
+            casa nostra d'alegria i ens va convertir en una família de tres.
           </p>
         </div>
       </article>
 
       <article class="chapter">
         <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-tile" role="img" aria-label="El Convent de Blanes (foto pendent)"></div>
+          <div class="frame frame--square ph-sunset" style="--img:url('assets/images/04-anell.jpg')" role="img" aria-label="Les mans de la Gemma i en Raymond agafades, amb l'anell de compromís, davant del mar al capvespre"></div>
+          <p class="annotation">va dir que sí</p>
         </div>
         <div class="chapter__body">
-          <p class="chapter__year" data-reveal>14 de maig de 2027 · El Convent</p>
-          <h3 class="chapter__title" data-reveal style="--d:80">I ara, <em>això</em></h3>
+          <p class="chapter__year" data-reveal>09.06.2026 · Hawaii</p>
+          <h3 class="chapter__title" data-reveal style="--d:80">El nostre <em>sí</em></h3>
           <p class="body-copy" data-reveal style="--d:140">
-            Un convent mirant el mar, taules llargues sota les oliveres
-            i la gent que estimem. Només hi falteu vosaltres.
+            En una platja de Hawaii, mentre sortia el sol, en Ray va fer la pregunta
+            més bonica. La Gemma va dir que sí, amb el mar al davant i tota una vida
+            plegats per imaginar.
           </p>
           <div class="btn-row" data-reveal style="--d:200">
             <a class="btn btn--solid" href="#rsvp">Digueu-nos que hi sereu</a>
@@ -756,7 +765,7 @@
      ======================================== -->
 <section class="moment ceremony" id="cerimonia">
   <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--cine" data-parallax="0.05" role="img" aria-label="El jardí d'oliveres on serà la cerimònia (foto pendent)">
+    <div class="frame frame--cine" data-parallax="0.05" style="--img:url('assets/images/costa-mediterrania.jpg')" role="img" aria-label="La Gemma i en Raymond fent-se un petó en un mirador sobre el Mediterrani, amb els penya-segats al fons">
       <span class="frame__label">Jardí de les oliveres · 18.00 h</span>
     </div>
     <p class="annotation" style="right:-1rem;bottom:-2rem">aquí ens direm que sí</p>
@@ -787,7 +796,7 @@
      ======================================== -->
 <section class="moment moment--flip aperitiu" id="aperitiu">
   <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--wide ph-tile" data-parallax="0.05" role="img" aria-label="El claustre on es farà l'aperitiu (foto pendent)">
+    <div class="frame frame--wide ph-tile" data-parallax="0.05" style="--img:url('assets/images/vestits-pedra.jpg')" role="img" aria-label="La Gemma i en Raymond ben vestits davant d'un portal de pedra antiga, amb pètals a terra">
       <span class="frame__label" style="color:rgba(10,46,90,.6)">El claustre · 19.00 h</span>
     </div>
   </div>
@@ -817,7 +826,7 @@
      ======================================== -->
 <section class="moment dinner" id="sopar">
   <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--cine ph-sunset" data-parallax="0.06" role="img" aria-label="Taules llargues amb espelmes per al sopar (foto pendent)">
+    <div class="frame frame--cine ph-sunset" data-parallax="0.06" style="--img:url('assets/images/vestits-mar.jpg')" role="img" aria-label="La Gemma i en Raymond vestits de casament amb el Mediterrani al darrere">
       <span class="frame__label">Terrassa del Convent · 21.00 h</span>
     </div>
   </div>
@@ -1092,44 +1101,6 @@
 </section>
 
 <!-- ========================================
-     19 · PLAYLIST
-     EDIT HERE: enllaç de Spotify i llista de cançons
-     ======================================== -->
-<section class="section playlist" id="playlist">
-  <div class="wrap playlist__grid">
-    <div class="playlist__text">
-      <p class="eyebrow" data-reveal>Banda sonora</p>
-      <h2 class="section__title" style="color:var(--ivory)" data-split>La <em>playlist</em></h2>
-      <p class="lede"  data-reveal>
-        Cançons per començar a entrar en mood. Posa-la mentre planeges el viatge,
-        mentre tries què et poses o mentre mires el mar per la finestra del tren.
-      </p>
-
-      <ol class="tracklist">
-        <li class="track"><span class="track__n">01</span><span class="track__name">Mamma Mia</span><span class="track__artist">ABBA</span></li>
-        <li class="track"><span class="track__n">02</span><span class="track__name">Boig per tu</span><span class="track__artist">Sau</span></li>
-        <li class="track"><span class="track__n">03</span><span class="track__name">Estate</span><span class="track__artist">João Gilberto</span></li>
-        <li class="track"><span class="track__n">04</span><span class="track__name">L'Estaca</span><span class="track__artist">Lluís Llach</span></li>
-        <li class="track"><span class="track__n">05</span><span class="track__name">Voglio Vederti Danzare</span><span class="track__artist">Franco Battiato</span></li>
-        <li class="track"><span class="track__n">06</span><span class="track__name">Que tinguem sort</span><span class="track__artist">Lluís Llach</span></li>
-        <li class="track"><span class="track__n">07</span><span class="track__name">Dancing Queen</span><span class="track__artist">ABBA</span></li>
-        <li class="track"><span class="track__n">08</span><span class="track__name">Vull ser jo</span><span class="track__artist">Antònia Font</span></li>
-      </ol>
-
-      <div class="btn-row playlist__cta" data-reveal>
-        <a class="btn" id="spotifyLink" href="#" target="_blank" rel="noopener">Obrir a Spotify</a>
-        <a class="btn btn--ghost" href="#rsvp">Proposa'ns una cançó</a>
-      </div>
-    </div>
-
-    <div class="playlist__discs" data-reveal="scale">
-      <button class="vinyl" id="vinyl" type="button" aria-pressed="false" aria-label="Fer girar el disc"></button>
-      <p class="stamp-date" style="margin-top:1.6rem;color:rgba(251,246,238,.5)">Cara A · 14 · 05 · 2027</p>
-    </div>
-  </div>
-</section>
-
-<!-- ========================================
      21 · POSTALS ARROSSEGABLES
      EDIT HERE: text de cada postal
      ======================================== -->
@@ -1377,12 +1348,6 @@
           </div>
         </div>
 
-        <div class="field">
-          <label class="field__label" for="missatge">Un missatge per als nuvis</label>
-          <textarea id="missatge" name="missatge" placeholder="Escriu-nos el que vulguis. Ho llegirem tot, prometem."></textarea>
-          <span class="field__line" aria-hidden="true"></span>
-        </div>
-
         <div class="form__submit">
           <button class="btn btn--solid" type="submit" id="rsvpSubmit">Enviar confirmació</button>
           <p class="form__note">No compartirem les teves dades amb ningú. Faltaria més.</p>
@@ -1453,13 +1418,12 @@
     <p class="stamp-date" style="margin-top:2rem" data-reveal>14 · 05 · 2027 · El Convent de Blanes</p>
 
     <!-- Mini save the date -->
+    <!-- El Save the Date de debò, tal com el vau enviar -->
     <div class="std tilt" style="margin-top:3.5rem" data-reveal="scale">
-      <div class="tilt__inner" style="display:grid;gap:.9rem;justify-items:center">
-        <span class="std__eyebrow">Save the date</span>
-        <span class="std__names">Gemma &amp; Ray</span>
-        <svg class="draw" style="width:90px" viewBox="0 0 160 30" aria-hidden="true"><use href="#i-wave"></use></svg>
-        <span class="std__date">14 · 05 · 2027</span>
-        <button class="btn btn--ghost" type="button" data-action="ics" style="margin-top:.6rem">Guardar-ho al calendari</button>
+      <div class="tilt__inner">
+        <img class="std__img" src="assets/images/save-the-date.jpg" loading="lazy"
+             alt="Save the Date de la Gemma i en Raymond: un gravat en blau de la terrassa del Convent de Blanes amb les cadires de la cerimònia mirant al mar, i la data 14.05.27">
+        <button class="btn btn--ghost" type="button" data-action="ics">Guardar-ho al calendari</button>
       </div>
     </div>
   </div>
@@ -1517,6 +1481,14 @@
 
 <!-- Confeti de fulles d'olivera -->
 <div class="confetti-layer" id="confetti" aria-hidden="true"></div>
+
+<!-- La música. Fix a baix a l'esquerra perquè no desaparegui
+     en fer scroll, com passava quan vivia a la barra de dalt. -->
+<button class="music" id="soundToggle" type="button" aria-pressed="false" aria-label="Posar música">
+  <svg class="music__icon music__icon--off" viewBox="0 0 28 24" aria-hidden="true"><use href="#i-speaker-off"></use></svg>
+  <svg class="music__icon music__icon--on" viewBox="0 0 28 24" aria-hidden="true"><use href="#i-speaker-on"></use></svg>
+  <span class="music__label">Música</span>
+</button>
 
 <!-- Tornar a dalt -->
 <button class="to-top" id="toTop" type="button" aria-label="Tornar a dalt de tot">
