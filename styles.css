@@ -2039,7 +2039,6 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
   max-width: 100%;
 }
 .party__title em { font-family: var(--font-serif); font-style: italic; color: var(--sky); }
-.party__lede { color: rgba(244, 246, 248, 0.78); text-align: center; margin-inline: auto; margin-top: 1.5rem; }
 
 /* Garlanda de bombetes */
 .string-lights {
