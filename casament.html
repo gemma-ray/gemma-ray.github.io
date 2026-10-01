@@ -46,6 +46,21 @@
     try { ok = localStorage.getItem("gr-entrada") === "oberta"; } catch (e) { ok = false; }
     if (!ok) location.replace("./index.html");
   })();
+
+  /* Els noms de la portada van en Italianno. Fins que no arriba, el navegador
+     els pinta amb una lletra de reserva molt més ampla i es veu un salt.
+     Els amaguem fins que la font és a punt (o 1,5 s com a molt). */
+  (function () {
+    var root = document.documentElement;
+    if (!document.fonts || !document.fonts.load) return;
+    root.classList.add("fonts-wait");
+    var done = function () { root.classList.remove("fonts-wait"); };
+    Promise.all([
+      document.fonts.load('1em "Italianno"', "Gemma Raymond"),
+      document.fonts.load('italic 300 1em "Cormorant Garamond"', "&")
+    ]).then(done, done);
+    setTimeout(done, 1500);
+  })();
 </script>
 
 <link rel="stylesheet" href="./styles.css">
@@ -524,8 +539,7 @@
 
 <!-- ========================================
      03 · LA NOSTRA HISTÒRIA
-     EDIT HERE: tota la història és inventada.
-     Substituïu cada capítol pel vostre.
+     EDIT HERE: un capítol per cada moment.
      ======================================== -->
 <section class="section story" id="historia">
   <div class="wrap">
@@ -537,12 +551,13 @@
     <div class="story__chapters">
 
       <!-- EDIT HERE: un capítol = una data, un lloc, un titular i el text.
-           Per posar la foto, afegiu --img al .frame:
-           style="--img:url('assets/images/sagaro.jpg')" -->
+           La foto va dins la polaroid: canvieu el src de l'<img>
+           i el text a mà de sota (figcaption). Millor fotos verticals 3:4. -->
       <article class="chapter">
-        <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-sea" style="--img:url('assets/images/01-sagaro.jpg')" role="img" aria-label="La Gemma i en Raymond fent-se un petó una nit d'estiu, entre pins i xiprers, a S'Agaró"></div>
-        </div>
+        <figure class="chapter__media print" data-reveal>
+          <img class="print__img" src="assets/images/01-sagaro.jpg" alt="La Gemma i en Raymond fent-se un petó una nit d'estiu, entre pins i xiprers, a S'Agaró" loading="lazy" width="1050" height="1400">
+          <figcaption class="print__cap">S'Agaró, 2022</figcaption>
+        </figure>
         <div class="chapter__body">
           <p class="chapter__year" data-reveal>08.08.2022 · S'Agaró</p>
           <h3 class="chapter__title" data-reveal style="--d:80">On va <em>començar</em> tot</h3>
@@ -555,9 +570,10 @@
       </article>
 
       <article class="chapter">
-        <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-stone" style="--img:url('assets/images/02-amsterdam.jpg')" role="img" aria-label="La Gemma i en Raymond fent-se un petó en un pont d'Amsterdam, amb bicicletes i geranis vermells"></div>
-        </div>
+        <figure class="chapter__media print" data-reveal>
+          <img class="print__img" src="assets/images/02-amsterdam.jpg" alt="La Gemma i en Raymond fent-se un petó en un pont d'Amsterdam, amb bicicletes i geranis vermells" loading="lazy" width="1050" height="1400">
+          <figcaption class="print__cap">Amsterdam</figcaption>
+        </figure>
         <div class="chapter__body">
           <p class="chapter__year" data-reveal>2023 · Amsterdam</p>
           <h3 class="chapter__title" data-reveal style="--d:80">Allà on <em>fossis tu</em></h3>
@@ -570,9 +586,10 @@
       </article>
 
       <article class="chapter">
-        <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-olive" style="--img:url('assets/images/03-naomi.jpg')" role="img" aria-label="La Gemma i en Raymond a la muntanya amb la Naomi, la seva gossa, en braços"></div>
-        </div>
+        <figure class="chapter__media print" data-reveal>
+          <img class="print__img" src="assets/images/03-naomi.jpg" alt="La Gemma i en Raymond a la muntanya amb la Naomi, la seva gossa, en braços" loading="lazy" width="1050" height="1400">
+          <figcaption class="print__cap">amb la Naomi</figcaption>
+        </figure>
         <div class="chapter__body">
           <p class="chapter__year" data-reveal>2025 · Barcelona</p>
           <h3 class="chapter__title" data-reveal style="--d:80">La nostra petita <em>família</em></h3>
@@ -585,10 +602,10 @@
       </article>
 
       <article class="chapter">
-        <div class="chapter__media" data-reveal="mask">
-          <div class="frame frame--square ph-sunset" style="--img:url('assets/images/04-anell.jpg')" role="img" aria-label="Les mans de la Gemma i en Raymond agafades, amb l'anell de compromís, davant del mar al capvespre"></div>
-          <p class="annotation">va dir que sí</p>
-        </div>
+        <figure class="chapter__media print" data-reveal>
+          <img class="print__img" src="assets/images/04-anell.jpg" alt="Les mans de la Gemma i en Raymond agafades, amb l'anell de compromís, davant del mar al capvespre" loading="lazy" width="1050" height="1400">
+          <figcaption class="print__cap">va dir que sí</figcaption>
+        </figure>
         <div class="chapter__body">
           <p class="chapter__year" data-reveal>09.06.2026 · Hawaii</p>
           <h3 class="chapter__title" data-reveal style="--d:80">El nostre <em>sí</em></h3>
@@ -634,15 +651,6 @@
     <div class="venue__cols">
       <div class="venue__col-a">
         <h3 class="section__title" style="font-size:var(--t-lg)" data-reveal>Un convent del <em>segle XVI</em> mirant el mar</h3>
-        <p class="body-copy" data-reveal style="--d:120; color:rgba(251,246,238,.82)">
-          El Convent va ser durant segles un espai de silenci i horts. Avui conserva el claustre,
-          els arcs de pedra i els jardins d'oliveres i buguenvíl·lees, però hi entra el sol de
-          la tarda i la remor del mar per totes bandes.
-        </p>
-        <p class="body-copy" data-reveal style="--d:180; color:rgba(251,246,238,.82)">
-          Farem la cerimònia al jardí, l'aperitiu sota els arcs, el sopar en taules llargues
-          amb espelmes i la festa fins que ens facin fora. Que serà tard.
-        </p>
 
         <dl class="venue__facts">
           <div class="venue__fact" data-reveal><dt>Adreça</dt><dd id="venueAddress">El Convent de Blanes, Blanes, Girona</dd></div>
@@ -684,7 +692,7 @@
     <p class="eyebrow" data-reveal>Divendres 14 de maig</p>
     <h2 class="section__title" data-split>El dia, <em>hora a hora</em></h2>
     <p class="lede" data-reveal style="--d:200">
-      Un horari orientatiu perquè sapigueu on sereu a cada moment. Spoiler: acaba tard.
+      Un horari orientatiu perquè sapigueu on sereu a cada moment.
     </p>
 
     <div class="timeline">
@@ -765,7 +773,8 @@
      ======================================== -->
 <section class="moment ceremony" id="cerimonia">
   <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--cine" data-parallax="0.05" style="--img:url('assets/images/costa-mediterrania.jpg')" role="img" aria-label="La Gemma i en Raymond fent-se un petó en un mirador sobre el Mediterrani, amb els penya-segats al fons">
+    <div class="frame frame--cine frame--drawing" data-parallax="0.05" role="img" aria-label="Dibuix de dos anells entrellaçats">
+      <svg class="frame__drawing draw draw-on" viewBox="0 0 110 80" aria-hidden="true"><use href="#i-ring"></use></svg>
       <span class="frame__label">Jardí de les oliveres · 18.00 h</span>
     </div>
     <p class="annotation" style="right:-1rem;bottom:-2rem">aquí ens direm que sí</p>
@@ -796,7 +805,8 @@
      ======================================== -->
 <section class="moment moment--flip aperitiu" id="aperitiu">
   <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--wide ph-tile" data-parallax="0.05" style="--img:url('assets/images/vestits-pedra.jpg')" role="img" aria-label="La Gemma i en Raymond ben vestits davant d'un portal de pedra antiga, amb pètals a terra">
+    <div class="frame frame--wide ph-tile frame--drawing" data-parallax="0.05" role="img" aria-label="Dibuix de dues copes brindant">
+      <svg class="frame__drawing draw draw-on" viewBox="0 0 130 100" aria-hidden="true"><use href="#i-glasses-cheers"></use></svg>
       <span class="frame__label" style="color:rgba(10,46,90,.6)">El claustre · 19.00 h</span>
     </div>
   </div>
@@ -826,7 +836,8 @@
      ======================================== -->
 <section class="moment dinner" id="sopar">
   <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--cine ph-sunset" data-parallax="0.06" style="--img:url('assets/images/vestits-mar.jpg')" role="img" aria-label="La Gemma i en Raymond vestits de casament amb el Mediterrani al darrere">
+    <div class="frame frame--cine ph-sunset frame--drawing" data-parallax="0.06" role="img" aria-label="Dibuix d'una espelma encesa">
+      <svg class="frame__drawing draw draw--paper draw-on" viewBox="0 0 60 100" aria-hidden="true"><use href="#i-candle"></use></svg>
       <span class="frame__label">Terrassa del Convent · 21.00 h</span>
     </div>
   </div>
@@ -845,7 +856,6 @@
       <li>Menú compartit, de temporada i de mercat</li>
       <li>Opcions vegetarianes i veganes per a tothom qui ho demani</li>
       <li>Al·lèrgies i intoleràncies: digueu-nos-ho al formulari</li>
-      <li>Els nens tenen el seu propi menú (i la seva pròpia taula)</li>
     </ul>
 
     <div class="candles" aria-hidden="true">
@@ -1177,11 +1187,6 @@
 
     <div class="faq__list" id="faqList">
       <div class="acc">
-        <h3><button class="acc__btn" type="button" aria-expanded="false">Hi poden venir nens?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-        <div class="acc__panel" data-open="false"><div><p>És clar que sí. Hi haurà menú infantil, una taula per a ells i, a partir del sopar, dues cangurs al claustre amb jocs i mantes perquè els pares puguin sopar tranquils. Indiqueu-nos al formulari quants nens veniu i quina edat tenen.</p></div></div>
-      </div>
-
-      <div class="acc">
         <h3><button class="acc__btn" type="button" aria-expanded="false">Hi haurà transport?<span class="acc__icon" aria-hidden="true"></span></button></h3>
         <div class="acc__panel" data-open="false"><div><p>Sí, i és gratuït. Hi ha autocar des de Barcelona (15:00 h) i des de la zona d'hotels de Blanes (16:00 h), amb tres tornades durant la nit: 01:00, 02:30 i 04:00 h. Cal reservar plaça al formulari de confirmació perquè puguem calcular quants autocars necessitem.</p></div></div>
       </div>
@@ -1229,18 +1234,8 @@
       </div>
 
       <div class="acc">
-        <h3><button class="acc__btn" type="button" aria-expanded="false">Què passa si plou?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-        <div class="acc__panel" data-open="false"><div><p>No passa res: el Convent té una sala interior preciosa amb voltes de pedra i el claustre està cobert. Ho traslladem tot a dins i seguim exactament amb el mateix horari. Al maig a Blanes plou de mitjana quatre o cinc dies, així que anem amb bones estadístiques.</p></div></div>
-      </div>
-
-      <div class="acc">
         <h3><button class="acc__btn" type="button" aria-expanded="false">Com confirmo assistència?<span class="acc__icon" aria-hidden="true"></span></button></h3>
         <div class="acc__panel" data-open="false"><div><p>Amb el formulari d'aquesta mateixa pàgina, a la secció <a class="link-line" href="#rsvp">RSVP</a>. Triga dos minuts. La data límit és el <b>14 de març de 2027</b>, dos mesos abans del casament, perquè puguem tancar càtering i autocars.</p></div></div>
-      </div>
-
-      <div class="acc">
-        <h3><button class="acc__btn" type="button" aria-expanded="false">Puc fer fotos?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-        <div class="acc__panel" data-open="false"><div><p>Durant la cerimònia us demanem que no: volem veure-us la cara i no les pantalles, i els fotògrafs ja s'encarreguen de tot. A partir de l'aperitiu, feu-ne totes les que vulgueu. Si ens les envieu després, ens fareu molt feliços: les vostres sempre són les que ens fan més gràcia.</p></div></div>
       </div>
     </div>
   </div>
