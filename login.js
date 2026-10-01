@@ -8,7 +8,7 @@
    CONFIGURACIÓ
    ======================================== */
 const login = {
-  // Contrasenya actual: gemmairay
+  // Contrasenya actual: naomi
   //
   // No la guardem en clar, sinó com una empremta, per si algú tafaneja el codi.
   // ⚠️ NO és seguretat de veritat: la comprovació es fa al navegador i qui
@@ -18,7 +18,7 @@ const login = {
   // Per canviar-la, obriu la consola del navegador en aquesta pàgina i escriviu:
   //   grHash("la-nova-paraula")
   // i enganxeu aquí el resultat.
-  hash: "1ma3jmp",
+  hash: "4for95",
 
   // On van un cop han encertat
   destination: "./casament.html",

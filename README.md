@@ -105,7 +105,7 @@ I obriu <http://localhost:8000>.
 `index.html` és una pàgina a part que només demana una paraula. El web del
 casament viu a `casament.html`, i no s'hi arriba sense passar per aquí.
 
-La contrasenya actual és **`gemmairay`**. No distingeix majúscules ni espais
+La contrasenya actual és **`naomi`**. No distingeix majúscules ni espais
 sobrants, així que `Gemmairay` o ` GEMMAIRAY ` també funcionen: ningú no es
 quedarà fora per una lletra gran.
 

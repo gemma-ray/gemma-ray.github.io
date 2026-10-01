@@ -333,6 +333,10 @@ safe("progress", () => {
   const ring = $(".to-top__ring");
   const sunTrack = $("#sunTrack");
   const sunBody = $("#sunBody");
+  const sunTime = $("#sunTime");
+  // El dia, de l'horari a la festa: de les 17.00 a les 00.00
+  const dayStart = $("#el-dia");
+  const dayEnd = $("#festa");
   let ticking = false;
 
   const update = () => {
@@ -343,10 +347,26 @@ safe("progress", () => {
     if (ring) ring.style.setProperty("--p", p.toFixed(3));
     if (toTop) toTop.classList.toggle("is-on", window.scrollY > window.innerHeight * 1.2);
 
-    // El sol travessa el cel a mesura que avancem pel dia
-    if (sunTrack && sunBody) {
-      sunTrack.classList.toggle("is-visible", window.scrollY > window.innerHeight * 0.6);
-      sunBody.style.top = `${lerp(8, 88, p)}%`;
+    /* El rellotge del dia. Mentre baixes de l'horari a la festa, el sol
+       recorre la via, marca l'hora i a la nit es fa lluna. Fora d'aquest
+       tram, la via no hi és: només té sentit mentre passa el dia. */
+    if (sunTrack && sunBody && dayStart && dayEnd) {
+      const vh = window.innerHeight;
+      const from = dayStart.offsetTop - vh * 0.5;
+      const to = dayEnd.offsetTop + dayEnd.offsetHeight * 0.5 - vh * 0.5;
+      const q = clamp((window.scrollY - from) / (to - from || 1), 0, 1);
+      const inDay = window.scrollY > from - vh * 0.3 && window.scrollY < to + vh * 0.6;
+
+      sunTrack.classList.toggle("is-visible", inDay);
+      sunTrack.classList.toggle("is-clock", inDay && q > 0 && q < 1);
+      sunBody.style.top = `${lerp(10, 90, q)}%`;
+
+      const minutes = 17 * 60 + Math.round(q * 7 * 60 / 5) * 5;   // de 5 en 5 min
+      const hh = Math.floor(minutes / 60) % 24;
+      const mm = minutes % 60;
+      if (sunTime) sunTime.textContent = `${String(hh).padStart(2, "0")}.${String(mm).padStart(2, "0")}`;
+      // De sol a lluna entre les 21.00 i les 23.00
+      sunBody.style.setProperty("--night", clamp((q * 7 - 4) / 2, 0, 1).toFixed(3));
     }
     ticking = false;
   };
@@ -495,11 +515,10 @@ safe("sea", () => {
   const ctx = canvas.getContext("2d");
 
   /* ── LES CAPES ──────────────────────────────────────────────────────
-     amp, len, speed i y són EXACTAMENT els de sempre: la forma, l'alçada
-     i el moviment no canvien. L'únic que canvia és l'ompliment, que ara
-     és un degradat de dues parades en lloc d'un color pla, perquè cada
-     aiguada quedi més densa a la base, com la pintura que baixa i s'hi
-     acumula. */
+     amp, len, speed i y donen la forma, l'alçada i el ritme de cada capa
+     (el moviment el compon waveY, més avall). L'ompliment és un degradat
+     de dues parades en lloc d'un color pla, perquè cada aiguada quedi més
+     densa a la base, com la pintura que baixa i s'hi acumula. */
   const layers = [
     // rgb = el to de la capa; edge / body / pool = l'opacitat a la cresta,
     // just per dins, i al fons. Aquest és el perfil d'una aiguada: la vora
@@ -565,6 +584,49 @@ safe("sea", () => {
   let w = 0, h = 0, dpr = 1, raf = null, t = 0, running = true;
   let grads = [];
 
+  /* ── LA LLUM SOBRE L'AIGUA ─────────────────────────────────────────
+     Espurnes curtes que s'encenen i s'apaguen al voltant del reflex de la
+     lluna. Es concentren a sota del reflex i s'obren cap a baix, com fa
+     la llum de veritat. Segueixen el ratolí amb el reflex. */
+  const GLINTS = window.matchMedia("(max-width: 700px)").matches ? 26 : 48;
+  const glints = Array.from({ length: GLINTS }, () => ({
+    dx: (Math.random() + Math.random() + Math.random() - 1.5) / 1.5, // campana
+    dy: Math.random(),
+    len: 2 + Math.random() * 7,
+    speed: 0.6 + Math.random() * 1.6,
+    phase: Math.random() * Math.PI * 2
+  }));
+  let lightX = 0.5;          // on és el reflex (0–1), el mou el ratolí
+  let lightTarget = 0.5;
+
+  /* Cada espurna és aquesta taca de llum: un oval que s'esvaeix cap a
+     les vores. Es pinta una sola vegada i després s'estira a cada mida;
+     amb traços nets semblaven guionets. */
+  const spark = document.createElement("canvas");
+  spark.width = 64; spark.height = 16;
+  {
+    const s = spark.getContext("2d");
+    s.translate(32, 8);
+    s.scale(4, 1);
+    const g = s.createRadialGradient(0, 0, 0, 0, 0, 8);
+    g.addColorStop(0, "rgba(255, 255, 255, 1)");
+    g.addColorStop(0.35, "rgba(255, 255, 255, 0.55)");
+    g.addColorStop(1, "rgba(255, 255, 255, 0)");
+    s.fillStyle = g;
+    s.fillRect(-8, -8, 16, 16);
+  }
+
+  /* En començar a baixar, el mar puja una mica i s'agita, com si
+     t'hi apropessis. 0 = a dalt de tot, 1 = el hero ja ha passat. */
+  let rise = 0;
+  const hero = $(".hero");
+  const readRise = () => {
+    const hh = hero ? hero.offsetHeight : window.innerHeight;
+    rise = clamp(window.scrollY / (hh || 1), 0, 1);
+  };
+  window.addEventListener("scroll", readRise, { passive: true });
+  readRise();
+
   const resize = () => {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     w = canvas.offsetWidth;
@@ -584,18 +646,210 @@ safe("sea", () => {
     textures.forEach((tx) => { tx.patro = null; });
   };
 
+  /* L'alçada de l'ona a cada punt. Tres onades que se sumen: la principal,
+     una de curta que va en sentit contrari i un mar de fons molt llarg i
+     lent. Juntes no es repeteixen mai igual, que és el que fa que sembli
+     aigua i no una sinusoide. Les capes de prop pugen més amb el scroll. */
+  const waveY = (layer, i, x) => {
+    const near = i / (layers.length - 1);            // 0 = lluny, 1 = a prop
+    const swell = 1 + rise * (0.35 + near * 0.5);
+    return h * layer.y - rise * h * (0.06 + near * 0.12)
+      + Math.sin(x * layer.len + t * layer.speed * 60 + i) * layer.amp * swell
+      + Math.sin(x * layer.len * 2.3 - t * layer.speed * 26 + i * 1.7) * (layer.amp * 0.28)
+      + Math.sin(x * layer.len * 0.37 + t * layer.speed * 14 + i * 0.6) * (layer.amp * 0.55);
+  };
+
   const wavePath = (layer, i, yOffset) => {
     ctx.beginPath();
     ctx.moveTo(0, h);
-    const base = h * layer.y + yOffset;
-    for (let x = 0; x <= w; x += 4) {
-      const y = base
-        + Math.sin(x * layer.len + t * layer.speed * 60 + i) * layer.amp
-        + Math.sin(x * layer.len * 2.3 + t * layer.speed * 34) * (layer.amp * 0.35);
-      ctx.lineTo(x, y);
-    }
+    for (let x = 0; x <= w; x += 4) ctx.lineTo(x, waveY(layer, i, x) + yOffset);
     ctx.lineTo(w, h);
     ctx.closePath();
+  };
+
+  /* Una línia d'escuma molt fina a la cresta de les capes de prop,
+     que s'aprima i s'esvaeix als dos extrems de cada ona. */
+  const crest = (layer, i) => {
+    if (i < 2) return;
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += 6) {
+      const y = waveY(layer, i, x) + 0.5;
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(255, 255, 255, ${0.16 + (i - 2) * 0.06})`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  };
+
+  const drawGlints = () => {
+    lightX += (lightTarget - lightX) * 0.04;
+    const top = h * layers[1].y;
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    glints.forEach((g) => {
+      const a = Math.sin(t * g.speed * 3 + g.phase);
+      if (a <= 0.4) return;                           // apagada
+      const y = top + g.dy * (h - top);
+      const spread = 0.04 + g.dy * 0.14;              // s'obre cap a baix
+      const x = (lightX + g.dx * spread) * w;
+      const sw = (g.len * 2.6) * (0.7 + g.dy * 0.6);  // més llargues a prop
+      const sh = sw / 4.5;
+      ctx.globalAlpha = Math.pow((a - 0.4) / 0.6, 1.6) * (0.4 + g.dy * 0.45);
+      ctx.drawImage(spark, x - sw / 2, y - sh / 2, sw, sh);
+    });
+    ctx.restore();
+  };
+
+  /* ── LA VIDA DEL MAR ────────────────────────────────────────────────
+     De tant en tant salta un peixet: una silueta fina de tinta que fa
+     un arc, gira seguint la corba i torna a entrar, amb unes ones que
+     s'obren a l'aigua i quatre gotes de llum. A vegades només treu la
+     cua, fa un cop i s'enfonsa. Surt de la capa del mig, així que les
+     ones de davant el tapen una mica: sembla que neda entre elles. */
+  const LIFE_LAYER = 2;
+  const life = [];                     // peixos i cues en curs
+  const ripples = [];                  // ones a l'aigua
+  let nextLife = 0.6 + Math.random() * 0.9;
+
+  const surface = (x) => waveY(layers[LIFE_LAYER], LIFE_LAYER, x);
+
+  const spawnLife = () => {
+    const dir = Math.random() < 0.5 ? 1 : -1;
+    const small = w < 700;
+    // lluny del centre, on hi ha el reflex i el "Desplaça't"
+    const side = Math.random() < 0.5 ? 0.1 + Math.random() * 0.28 : 0.62 + Math.random() * 0.28;
+    const kind = Math.random() < 0.3 ? "tail" : "jump";
+    life.push({
+      kind, dir,
+      x0: side * w,
+      start: t,
+      dur: kind === "jump" ? 1.05 + Math.random() * 0.35 : 1.5,
+      dist: (small ? 42 : 64) + Math.random() * 34,
+      height: (small ? 22 : 32) + Math.random() * 20,
+      size: (small ? 12 : 16) + Math.random() * 6
+    });
+    ripples.push({ x: side * w, born: t, big: true });
+  };
+
+  const fishPath = (L) => {
+    ctx.beginPath();
+    // el cos, un fus allargat amb el morro a la dreta
+    ctx.moveTo(L * 0.5, 0);
+    ctx.quadraticCurveTo(L * 0.12, -L * 0.21, -L * 0.3, -L * 0.02);
+    ctx.lineTo(-L * 0.3, L * 0.02);
+    ctx.quadraticCurveTo(L * 0.12, L * 0.19, L * 0.5, 0);
+    // la cua en forquilla
+    ctx.moveTo(-L * 0.27, 0);
+    ctx.lineTo(-L * 0.52, -L * 0.17);
+    ctx.quadraticCurveTo(-L * 0.43, 0, -L * 0.52, L * 0.17);
+    ctx.closePath();
+  };
+
+  const drawFish = (L, alpha) => {
+    fishPath(L);
+    ctx.fillStyle = `rgba(27, 47, 78, ${0.78 * alpha})`;
+    ctx.fill();
+    // un fil de llum al llom
+    ctx.beginPath();
+    ctx.moveTo(L * 0.38, -L * 0.05);
+    ctx.quadraticCurveTo(L * 0.08, -L * 0.17, -L * 0.2, -L * 0.03);
+    ctx.strokeStyle = `rgba(255, 255, 255, ${0.35 * alpha})`;
+    ctx.lineWidth = 0.8;
+    ctx.stroke();
+  };
+
+  const drawLife = () => {
+    if (t >= nextLife) {
+      spawnLife();
+      // A vegades en salten dos, un darrere l'altre, com fan al mar
+      if (Math.random() < 0.4) setTimeout(spawnLife, 260 + Math.random() * 220);
+      nextLife = t + 1.6 + Math.random() * 1.6;
+    }
+
+    // Les ones: el·lipses que s'obren i s'esvaeixen
+    for (let k = ripples.length - 1; k >= 0; k--) {
+      const r = ripples[k];
+      const age = (t - r.born) / 1.6;
+      if (age >= 1) { ripples.splice(k, 1); continue; }
+      const y = surface(r.x) + 1;
+      const rad = (r.big ? 22 : 14) * (0.15 + age);
+      ctx.beginPath();
+      ctx.ellipse(r.x, y, rad, rad * 0.2, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = `rgba(255, 255, 255, ${(0.55 * (1 - age)).toFixed(3)})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      if (age < 0.6) {
+        ctx.beginPath();
+        ctx.ellipse(r.x, y, rad * 0.55, rad * 0.11, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${(0.4 * (1 - age / 0.6)).toFixed(3)})`;
+        ctx.stroke();
+      }
+    }
+
+    // Peixos i cues, retallats a sobre de l'aigua d'aquesta capa
+    if (!life.length) return;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    for (let x = 0; x <= w; x += 6) ctx.lineTo(x, surface(x));
+    ctx.lineTo(w, 0);
+    ctx.closePath();
+    ctx.clip();
+
+    for (let k = life.length - 1; k >= 0; k--) {
+      const f = life[k];
+      const p = (t - f.start) / f.dur;
+      if (p >= 1) {
+        if (f.kind === "jump") {
+          const xe = f.x0 + f.dir * f.dist;
+          ripples.push({ x: xe, born: t, big: true });
+          ripples.push({ x: xe + f.dir * 9, born: t + 0.12, big: false });
+        }
+        life.splice(k, 1);
+        continue;
+      }
+
+      if (f.kind === "jump") {
+        // un arc de paràbola; el peix mira cap on va
+        const x = f.x0 + f.dir * f.dist * p;
+        const y = surface(x) - 4 * f.height * p * (1 - p) + 2;
+        const angle = Math.atan2(-4 * f.height * (1 - 2 * p), f.dir * f.dist);
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+        if (f.dir < 0) ctx.scale(1, -1);       // la panxa sempre avall
+        drawFish(f.size, 1);
+        ctx.restore();
+
+        // gotes de llum que es desprenen en sortir
+        if (p < 0.35) {
+          for (let d = 0; d < 4; d++) {
+            const q = p / 0.35;
+            const gx = f.x0 + f.dir * (4 + d * 5) * q;
+            const gy = surface(f.x0) - (10 + d * 4) * Math.sin(q * Math.PI);
+            ctx.fillStyle = `rgba(255, 255, 255, ${(0.7 * (1 - q)).toFixed(3)})`;
+            ctx.beginPath();
+            ctx.arc(gx, gy, 1 + (d % 2) * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+      } else {
+        // la cua: puja, fa un cop i s'enfonsa
+        const rise = Math.sin(p * Math.PI);
+        const flick = Math.sin(p * Math.PI * 3) * 0.35;
+        // el peix cap per avall: el cos queda sota l'aigua i només en surt la cua
+        const L = f.size * 1.2;
+        const x = f.x0;
+        const y = surface(x) + L * 0.5 - rise * L * 0.45;
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(Math.PI / 2 + flick * f.dir);
+        drawFish(L, Math.min(1, rise * 1.6));
+        ctx.restore();
+        if (Math.abs(p - 0.5) < 0.012) ripples.push({ x, born: t, big: false });
+      }
+    }
+    ctx.restore();
   };
 
   const draw = () => {
@@ -650,7 +904,11 @@ safe("sea", () => {
       });
 
       ctx.restore();
+      crest(layer, i);
+      if (i === LIFE_LAYER) drawLife();
     });
+
+    drawGlints();
 
     t += 0.016;
     if (running) raf = requestAnimationFrame(draw);
@@ -670,15 +928,107 @@ safe("sea", () => {
     io.observe(canvas);
   }
 
-  /* Reflex del sol que segueix el ratolí */
-  const hero = $(".hero");
+  /* Reflex de la lluna que segueix el ratolí (i les espurnes amb ell) */
   const reflection = $("#heroReflection");
   if (hero && reflection && canHover()) {
     hero.addEventListener("mousemove", (e) => {
-      const pct = (e.clientX / window.innerWidth) * 100;
-      reflection.style.setProperty("--mx", `${clamp(pct, 8, 92)}%`);
+      const pct = clamp((e.clientX / window.innerWidth) * 100, 8, 92);
+      reflection.style.setProperty("--mx", `${pct}%`);
+      lightTarget = pct / 100;
     });
   }
+});
+
+/* ========================================
+   EL SOBRE DE L'ENTRADA
+   El <head> ja ha decidit si es mostra (classe has-envelope). Aquí
+   només es posa en marxa la seqüència quan es trenca el segell, i en
+   acabar s'avisa la resta del web amb l'esdeveniment gr:envelope-open.
+   ======================================== */
+safe("envelope", () => {
+  window.__grEnvelope = true;            // la guarda del <head> ja no cal
+  const root = document.documentElement;
+  const box = $("#envelope");
+  if (!box) return;
+  if (!root.classList.contains("has-envelope")) { box.remove(); return; }
+
+  const seal = $("#envSeal");
+  const skip = $("#envSkip");
+  let started = false;
+  let finished = false;
+
+  const finish = () => {
+    if (finished) return;
+    finished = true;
+    root.classList.remove("has-envelope");
+    try { localStorage.setItem("gr-sobre", "obert"); } catch (e) { /* mode privat */ }
+    box.remove();
+    document.dispatchEvent(new CustomEvent("gr:envelope-open"));
+  };
+
+  // Els temps van lligats a les transicions del CSS (33e)
+  // Ha de passar dins del mateix toc: és l'únic moment en què el
+  // navegador deixa que la música comenci a sonar
+  const gesture = () => document.dispatchEvent(new CustomEvent("gr:envelope-gesture"));
+
+  const open = () => {
+    if (started) return;
+    started = true;
+    gesture();
+    box.classList.add("is-breaking");
+    setTimeout(() => box.classList.add("is-open"), 450);
+    setTimeout(() => box.classList.add("is-out"), 1250);
+    setTimeout(() => box.classList.add("is-done"), 2750);
+    setTimeout(finish, 3700);
+  };
+  const skipIt = () => {
+    if (finished || box.classList.contains("is-done")) return;
+    if (!started) gesture();
+    started = true;
+    box.classList.add("is-done");
+    setTimeout(finish, 1000);
+  };
+
+  if (seal) seal.addEventListener("click", open);
+  if (skip) skip.addEventListener("click", skipIt);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") skipIt(); });
+  if (seal) requestAnimationFrame(() => seal.focus({ preventScroll: true }));
+});
+
+/* ========================================
+   ESCRIT AMB TINTA
+   Els noms de la portada s'escriuen quan el convidat els veu de debò:
+   amb la lletra ja carregada i, si hi ha el sobre, un cop obert.
+   La signatura del final s'escriu quan arriba a la pantalla.
+   ======================================== */
+safe("ink", () => {
+  window.__grInk = true;               // la guarda del <head> ja no cal
+  const root = document.documentElement;
+  const names = $("#coupleName");
+
+  const write = () => {
+    if (!names || !root.classList.contains("write-pending")) return;
+    const fonts = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    fonts.then(() => requestAnimationFrame(() => {
+      names.classList.add("is-writing");
+      root.classList.remove("write-pending");
+    }));
+  };
+  if (root.classList.contains("has-envelope")) {
+    document.addEventListener("gr:envelope-open", write, { once: true });
+  } else {
+    write();
+  }
+
+  const sign = $(".finale__sign.ink-write");
+  if (!sign) return;
+  if (isReduced() || !("IntersectionObserver" in window)) { sign.classList.add("is-signing"); return; }
+  const io = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting) return;
+    sign.classList.add("is-signing");
+    io.disconnect();
+  }, { threshold: 0.6 });
+  io.observe(sign);
 });
 
 /* ========================================
@@ -863,6 +1213,11 @@ safe("postcards", () => {
       card.style.top = y;
       card.style.transform = `rotate(${r})`;
       card.style.zIndex = ++z;
+      // En pantalles estretes, que cap postal no quedi tallada pels costats
+      const maxX = stage.clientWidth - card.offsetWidth;
+      const maxY = stage.clientHeight - card.offsetHeight;
+      if (card.offsetLeft > maxX) card.style.left = `${Math.max(maxX, 0)}px`;
+      if (card.offsetTop > maxY) card.style.top = `${Math.max(maxY, 0)}px`;
     });
   };
   place();
@@ -993,8 +1348,12 @@ safe("cursor", () => {
 
 /* ========================================
    LA CANÇÓ DE FONS
-   SEMPRE comença apagada: els navegadors no deixen que soni res sol,
-   i tampoc no estaria bé. Sona quan el convidat prem el botó.
+   Vol sonar des del principi. Els navegadors no deixen que una web soni
+   sola fins que la persona hi ha tocat alguna cosa, així que:
+     · amb el sobre, arrenca en trencar el segell (és un toc de debò);
+     · sense sobre, s'intenta de seguida i, si el navegador ho bloqueja,
+       arrenca amb el primer toc o tecla a la pàgina.
+   Si algú l'apaga, ho recordem i no tornarà a sonar sola.
    El fitxer es configura a dalt de tot, a wedding.music.
    ======================================== */
 safe("music", () => {
@@ -1042,9 +1401,27 @@ safe("music", () => {
     }, 50);
   };
 
+  const label = $(".music__label", toggle);
   const marca = (on) => {
     toggle.setAttribute("aria-pressed", String(on));
-    toggle.setAttribute("aria-label", on ? "Aturar la música" : "Posar música");
+    toggle.setAttribute("aria-label", on ? "Apagar la música" : "Posar música");
+    if (label) label.textContent = on ? "Apagar la música" : "Posar música";
+  };
+
+  // Si algú l'ha apagat, no la tornem a engegar sola
+  const OFF_KEY = "gr-musica";
+  const apagadaPerElConvidat = () => {
+    try { return localStorage.getItem(OFF_KEY) === "off"; } catch (e) { return false; }
+  };
+  const recorda = (off) => {
+    try { off ? localStorage.setItem(OFF_KEY, "off") : localStorage.removeItem(OFF_KEY); } catch (e) { /* mode privat */ }
+  };
+
+  /* Quan arrenca sola, el botó es fa notar uns segons (s'hi veu el text
+     també al mòbil) perquè tothom sàpiga on és per apagar-la. */
+  const anuncia = () => {
+    toggle.classList.add("is-announcing");
+    setTimeout(() => toggle.classList.remove("is-announcing"), 6500);
   };
 
   const engega = () => {
@@ -1074,11 +1451,48 @@ safe("music", () => {
     setTimeout(() => { if (!sonant) { audio.pause(); audio.volume = 0; } }, 800);
   };
 
-  toggle.addEventListener("click", () => (sonant ? atura() : engega()));
+  toggle.addEventListener("click", () => {
+    if (sonant) { atura(); recorda(true); }
+    else { engega(); recorda(false); }
+  });
 
-  // Si es canvia de pestanya, callem
+  /* — Arrencada automàtica — */
+  const autoEngega = () => {
+    if (sonant || apagadaPerElConvidat()) return;
+    engega();
+    anuncia();
+  };
+
+  // Al primer toc o tecla (si el navegador no ha deixat sonar abans).
+  // Un toc al mateix botó ja el gestiona el botó.
+  const gestos = ["pointerdown", "keydown", "touchstart"];
+  const alPrimerGest = (e) => {
+    if (toggle.contains(e.target)) return;
+    gestos.forEach((g) => document.removeEventListener(g, alPrimerGest, true));
+    autoEngega();
+  };
+  const esperaUnGest = () => {
+    gestos.forEach((g) => document.addEventListener(g, alPrimerGest, true));
+  };
+
+  if (document.documentElement.classList.contains("has-envelope")) {
+    // El sobre avisa just quan es trenca el segell, dins del mateix toc
+    document.addEventListener("gr:envelope-gesture", autoEngega, { once: true });
+  } else if (!apagadaPerElConvidat()) {
+    sonant = true;                        // perquè cap gest no l'engegui dues vegades
+    marca(true);
+    audio.volume = VOLUM * 0.4;
+    posaVolum(VOLUM, 1200);
+    const p = audio.play();
+    const fallat = () => { sonant = false; marca(false); audio.volume = 0; esperaUnGest(); };
+    if (p && p.then) p.then(anuncia, fallat); else anuncia();
+  }
+
+  /* En canviar de pestanya, callem; en tornar, si sonava, continua */
+  let reprendre = false;
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden && sonant) atura();
+    if (document.hidden && sonant) { reprendre = true; audio.pause(); }
+    else if (!document.hidden && reprendre) { reprendre = false; if (sonant) audio.play().catch(() => {}); }
   });
 });
 

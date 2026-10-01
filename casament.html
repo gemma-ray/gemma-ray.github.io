@@ -61,6 +61,34 @@
     ]).then(done, done);
     setTimeout(done, 1500);
   })();
+
+  /* El sobre de l'entrada: només el primer cop, i mai a qui té el moviment
+     reduït. Afegint ?sobre a l'adreça es torna a veure (per provar-lo). */
+  (function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var seen = false;
+    try { seen = localStorage.getItem("gr-sobre") === "obert"; } catch (e) { seen = true; }
+    if (!seen || /[?&]sobre\b/.test(location.search)) {
+      document.documentElement.classList.add("has-envelope");
+      // Sense script.js el sobre no es podria obrir: no ha de tapar mai el web
+      setTimeout(function () {
+        if (!window.__grEnvelope) document.documentElement.classList.remove("has-envelope");
+      }, 5000);
+    }
+  })();
+
+  /* Els noms s'escriuen amb tinta (script.js ho engega). Fins aleshores,
+     "write-pending" els té amagats. Per si script.js no arribés a
+     carregar, als 4 s els tornem a ensenyar tal qual: mai no s'han de
+     quedar invisibles. */
+  (function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var root = document.documentElement;
+    root.classList.add("write-pending");
+    setTimeout(function () {
+      if (!window.__grInk) root.classList.remove("write-pending");
+    }, 4000);
+  })();
 </script>
 
 <link rel="stylesheet" href="./styles.css">
@@ -85,7 +113,9 @@
 <div class="progress" aria-hidden="true"><div class="progress__bar" id="progressBar"></div></div>
 
 <!-- Sol que baixa a mesura que avancem pel dia -->
-<div class="sun-track" id="sunTrack" aria-hidden="true"><div class="sun-track__body" id="sunBody"></div></div>
+<div class="sun-track" id="sunTrack" aria-hidden="true">
+  <div class="sun-track__body" id="sunBody"><span class="sun-track__time" id="sunTime">17.00</span></div>
+</div>
 
 <!-- ========================================
      SPRITE D'IL·LUSTRACIONS DE TINTA
@@ -306,11 +336,6 @@
   <path class="ink" d="M18 9l7 6M25 9l-7 6"/>
 </symbol>
 
-<symbol id="i-speaker-on" viewBox="0 0 28 24">
-  <path class="ink" d="M3 9h4l6-5v16l-6-5H3z"/>
-  <path class="ink" d="M17.5 8.5a6 6 0 0 1 0 7"/>
-  <path class="ink" d="M21 6a10 10 0 0 1 0 12"/>
-</symbol>
 
 <symbol id="i-arrow-up" viewBox="0 0 24 60">
   <path class="ink" d="M12 58V4M2 16 12 4l10 12"/>
@@ -399,8 +424,62 @@
   <path class="ink ink-thin" d="M66 12v-9M55 16l-6-7M77 16l6-7"/>
 </symbol>
 
+<!-- Segell de lacre blau amb el monograma, per al sobre de l'entrada -->
+<radialGradient id="seal-wax" cx="38%" cy="32%" r="75%">
+  <stop offset="0" stop-color="#6787b5"/>
+  <stop offset=".45" stop-color="#2f4b78"/>
+  <stop offset="1" stop-color="#16263f"/>
+</radialGradient>
+<radialGradient id="seal-press" cx="50%" cy="45%" r="60%">
+  <stop offset="0" stop-color="#2a446d"/>
+  <stop offset="1" stop-color="#1d3253"/>
+</radialGradient>
+<filter id="seal-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter>
+<symbol id="i-seal" viewBox="0 0 100 100">
+  <!-- el lacre, irregular com quan s'aboca -->
+  <path fill="url(#seal-wax)" d="M50 3C62 2 70 8 78 10c10 3 15 14 17 23 4 11 2 22 1 30-2 11-8 20-17 26-9 7-20 9-29 8-11 1-21-2-29-8C12 83 6 73 4 63 1 52 3 41 6 32c3-10 10-19 20-23 8-4 16-5 24-6Z"/>
+  <!-- la part premuda pel segell -->
+  <circle cx="50" cy="51" r="31" fill="url(#seal-press)"/>
+  <circle cx="50" cy="51" r="31" fill="none" stroke="#7d9bc4" stroke-opacity=".45" stroke-width="1"/>
+  <circle cx="50" cy="51" r="27.5" fill="none" stroke="#7d9bc4" stroke-opacity=".25" stroke-width=".6" stroke-dasharray="1.2 2.2"/>
+  <!-- monograma en relleu: una ombra fosca i la lletra clara a sobre -->
+  <text x="50.8" y="60.6" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-style="italic" font-size="27" fill="#0e1b30" fill-opacity=".7">G&amp;R</text>
+  <text x="50" y="59.6" text-anchor="middle" font-family="Cormorant Garamond, Garamond, serif" font-style="italic" font-size="27" fill="#b9cce2">G&amp;R</text>
+  <!-- la lluentor del lacre -->
+  <ellipse cx="34" cy="24" rx="15" ry="7" transform="rotate(-28 34 24)" fill="#fff" opacity=".22" filter="url(#seal-soft)"/>
+</symbol>
+
 </defs>
 </svg>
+
+<!-- ========================================
+     EL SOBRE
+     Només la primera vegada que un convidat entra: un sobre tancat amb un
+     segell de lacre. En trencar el segell s'obre, en surt el Save the Date
+     i dona pas al web. Es pot saltar. Ho governa script.js (safe "envelope")
+     i la decisió de mostrar-lo es pren al <head> (classe has-envelope).
+     ======================================== -->
+<div class="envelope" id="envelope" role="dialog" aria-modal="true" aria-labelledby="envelopeHint">
+  <div class="envelope__stage">
+    <div class="env" id="env">
+      <div class="env__back"></div>
+      <div class="env__letter-clip">
+        <div class="env__letter"><img src="assets/images/save-the-date.jpg" alt="" width="933" height="1400"></div>
+      </div>
+      <div class="env__pocket"><div class="env__pocket-face"><span class="env__note">Blanes, 14 de maig de 2027</span></div></div>
+      <div class="env__flap">
+        <div class="env__flap-face env__flap-face--out"></div>
+        <div class="env__flap-face env__flap-face--in"></div>
+      </div>
+      <button class="env__seal" id="envSeal" type="button" aria-label="Trencar el segell i obrir la invitació">
+        <svg class="env__seal-half env__seal-half--l" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-seal"></use></svg>
+        <svg class="env__seal-half env__seal-half--r" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-seal"></use></svg>
+      </button>
+    </div>
+    <p class="envelope__hint" id="envelopeHint">Toqueu el segell per obrir la invitació</p>
+  </div>
+  <button class="envelope__skip" id="envSkip" type="button">Entrar sense obrir</button>
+</div>
 
 <!-- ========================================
      NAVEGACIÓ
@@ -445,7 +524,7 @@
       </ul>
     </nav>
     <div class="menu__aside">
-      <svg class="draw draw--paper" style="width:120px" aria-hidden="true"><use href="#i-olive"></use></svg>
+      <svg class="draw draw--paper" style="width:120px" viewBox="0 0 140 64" aria-hidden="true"><use href="#i-olive"></use></svg>
       <p class="menu__meta">El Convent de Blanes<br>Divendres 14 de maig de 2027<br>17.00 h</p>
       <p class="menu__meta" style="font-family:var(--font-hand);font-size:2.4rem;line-height:.9;color:var(--sand)">Us hi esperem</p>
     </div>
@@ -470,7 +549,7 @@
 
     <!-- EDIT HERE: els noms dels nuvis -->
     <h1 class="hero__names" id="coupleName" title="Prova de clicar-hi unes quantes vegades…">
-      <span class="name">Gemma</span><i class="amp">&amp;</i><span class="name">Raymond</span>
+      <span class="name ink-write">Gemma</span><i class="amp ink-write">&amp;</i><span class="name ink-write">Raymond</span>
     </h1>
 
     <p class="hero__meta" data-reveal style="--d:400">
@@ -553,7 +632,7 @@
       <article class="chapter">
         <figure class="chapter__media print" data-reveal>
           <img class="print__img" src="assets/images/01-sagaro.jpg" alt="La Gemma i en Raymond fent-se un petó una nit d'estiu, entre pins i xiprers, a S'Agaró" loading="lazy" width="1050" height="1400">
-          <figcaption class="print__cap">S'Agaró, 2022</figcaption>
+          <figcaption class="print__cap">S'Agaró</figcaption>
         </figure>
         <div class="chapter__body">
           <p class="chapter__year" data-reveal>08.08.2022 · S'Agaró</p>
@@ -1115,48 +1194,35 @@
       no hi ha cap ordre correcte.
     </p>
 
+    <!-- EDIT HERE: una postal = una foto (--img), un títol i una frase escrita a mà.
+         Les fotos són verticals: la postal també. -->
     <div class="postcards__stage" id="postcardStage">
-      <article class="postcard" style="--x:2%;--y:6%;--r:-5deg">
-        <div class="frame postcard__img ph-sea"></div>
+      <article class="postcard" style="--x:3%;--y:5%;--r:-5deg">
+        <div class="frame postcard__img" style="--img:url('assets/images/costa-mediterrania.jpg')" role="img"
+             aria-label="La Gemma i en Raymond fent-se un petó en un mirador sobre el Mediterrani, amb els penya-segats al fons"></div>
         <div class="postcard__body">
-          <h3 class="postcard__title">Cap de Creus, 2020</h3>
-          <p class="postcard__text">«Ens hem perdut, però mira quina aigua»</p>
+          <h3 class="postcard__title">Mirant el Mediterrani</h3>
+          <p class="postcard__text">«Un petó amb el mar de testimoni»</p>
         </div>
         <span class="postcard__stamp">14<br>05<br>27</span>
       </article>
 
-      <article class="postcard" style="--x:26%;--y:30%;--r:4deg">
-        <div class="frame postcard__img ph-olive"></div>
+      <article class="postcard" style="--x:35%;--y:14%;--r:3deg">
+        <div class="frame postcard__img" style="--img:url('assets/images/vestits-pedra.jpg')" role="img"
+             aria-label="La Gemma i en Raymond ben vestits davant d'un portal de pedra antiga, amb pètals a terra"></div>
         <div class="postcard__body">
-          <h3 class="postcard__title">El pis de Gràcia</h3>
-          <p class="postcard__text">«Vam pintar la cuina de blau. Dues vegades»</p>
+          <h3 class="postcard__title">Ben vestits</h3>
+          <p class="postcard__text">«Pètals a terra i nosaltres, de convidats»</p>
         </div>
         <span class="postcard__stamp">G<br>&amp;<br>R</span>
       </article>
 
-      <article class="postcard" style="--x:52%;--y:4%;--r:-2deg">
-        <div class="frame postcard__img ph-sunset"></div>
+      <article class="postcard" style="--x:66%;--y:3%;--r:-3deg">
+        <div class="frame postcard__img" style="--img:url('assets/images/vestits-mar.jpg')" role="img"
+             aria-label="La Gemma i en Raymond vestits d'etiqueta en una terrassa blanca, amb el mar al darrere"></div>
         <div class="postcard__body">
-          <h3 class="postcard__title">Sicília, 2022</h3>
-          <p class="postcard__text">«Quinze dies de granissat i discussions sobre mapes»</p>
-        </div>
-        <span class="postcard__stamp">✦</span>
-      </article>
-
-      <article class="postcard" style="--x:14%;--y:52%;--r:6deg">
-        <div class="frame postcard__img ph-stone"></div>
-        <div class="postcard__body">
-          <h3 class="postcard__title">Els gats</h3>
-          <p class="postcard__text">«La Nina i el Pere. No estan convidats»</p>
-        </div>
-        <span class="postcard__stamp">2</span>
-      </article>
-
-      <article class="postcard" style="--x:58%;--y:46%;--r:-7deg">
-        <div class="frame postcard__img ph-tile"></div>
-        <div class="postcard__body">
-          <h3 class="postcard__title">Sa Palomera</h3>
-          <p class="postcard__text">«Aquí ens vam quedar sense bateria de tant trucar»</p>
+          <h3 class="postcard__title">Vora el mar</h3>
+          <p class="postcard__text">«Assajant per al gran dia»</p>
         </div>
         <span class="postcard__stamp">SÍ</span>
       </article>
@@ -1401,7 +1467,7 @@
     <p class="finale__text" data-split>
       Ens faria immensament feliços tenir-vos al nostre costat.
     </p>
-    <span class="finale__sign">Gemma &amp; Ray</span>
+    <span class="finale__sign ink-write">Gemma &amp; Ray</span>
     <p class="stamp-date" style="margin-top:2rem" data-reveal>14 · 05 · 2027 · El Convent de Blanes</p>
 
     <!-- Mini save the date -->
@@ -1469,8 +1535,8 @@
      en fer scroll, com passava quan vivia a la barra de dalt. -->
 <button class="music" id="soundToggle" type="button" aria-pressed="false" aria-label="Posar música">
   <svg class="music__icon music__icon--off" viewBox="0 0 28 24" aria-hidden="true"><use href="#i-speaker-off"></use></svg>
-  <svg class="music__icon music__icon--on" viewBox="0 0 28 24" aria-hidden="true"><use href="#i-speaker-on"></use></svg>
-  <span class="music__label">Música</span>
+  <span class="music__eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+  <span class="music__label">Posar música</span>
 </button>
 
 <!-- Tornar a dalt -->
