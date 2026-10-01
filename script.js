@@ -720,7 +720,7 @@ safe("stars", () => {
       const twinkle = s.a + Math.sin(now * s.speed + s.phase) * 0.28;
       ctx.beginPath();
       ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(251, 246, 238, ${clamp(twinkle, 0.05, 0.95)})`;
+      ctx.fillStyle = `rgba(244, 246, 248, ${clamp(twinkle, 0.05, 0.95)})`;
       ctx.fill();
     });
 
@@ -740,8 +740,8 @@ safe("stars", () => {
       shooting.len += shooting.speed * dt;
       const { x, y, len, max } = shooting;
       const grad = ctx.createLinearGradient(x, y, x + len, y + len * 0.4);
-      grad.addColorStop(0, "rgba(251, 246, 238, 0)");
-      grad.addColorStop(1, "rgba(251, 246, 238, 0.85)");
+      grad.addColorStop(0, "rgba(244, 246, 248, 0)");
+      grad.addColorStop(1, "rgba(244, 246, 248, 0.85)");
       ctx.strokeStyle = grad;
       ctx.lineWidth = 1.3;
       ctx.beginPath();
@@ -1323,7 +1323,7 @@ function dropConfetti(amount = 46) {
   const layer = $("#confetti");
   if (!layer || isReduced()) return;
 
-  const colors = ["#6e7b52", "#97a37c", "#c26f4a", "#0f4c9c", "#7ba5c8", "#ecdfc9"];
+  const colors = ["#1b2f4e", "#3f5f8c", "#5f80a8", "#6f8fb6", "#a9bfd6", "#dfe7ef"];
 
   for (let i = 0; i < amount; i++) {
     const leaf = document.createElement("span");
@@ -1432,11 +1432,11 @@ safe("bind-config", () => {
    ======================================== */
 console.log(
   "%cGemma & Ray · 14 · 05 · 2027",
-  "font-size:15px;font-family:Georgia,serif;color:#0f4c9c;letter-spacing:.08em"
+  "font-size:15px;font-family:Georgia,serif;color:#1b2f4e;letter-spacing:.08em"
 );
 console.log(
   "%cEl Convent de Blanes · Costa Brava\nSi has arribat fins aquí, prova de clicar els nostres noms set vegades.",
-  "color:#6e7b52;font-family:system-ui;font-size:11px"
+  "color:#5f80a8;font-family:system-ui;font-size:11px"
 );
 
 
