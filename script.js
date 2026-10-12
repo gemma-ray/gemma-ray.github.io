@@ -334,9 +334,9 @@ safe("progress", () => {
   const sunTrack = $("#sunTrack");
   const sunBody = $("#sunBody");
   const sunTime = $("#sunTime");
-  // El dia, de l'horari a la festa: de les 17.00 a les 00.00
+  // El dia, de la benvinguda a la festa: de les 17.30 a les 00.00
   const dayStart = $("#el-dia");
-  const dayEnd = $("#festa");
+  const dayEnd = $("#la-nit");
   let ticking = false;
 
   const update = () => {
@@ -361,12 +361,12 @@ safe("progress", () => {
       sunTrack.classList.toggle("is-clock", inDay && q > 0 && q < 1);
       sunBody.style.top = `${lerp(10, 90, q)}%`;
 
-      const minutes = 17 * 60 + Math.round(q * 7 * 60 / 5) * 5;   // de 5 en 5 min
+      const minutes = 17 * 60 + 30 + Math.round(q * 6.5 * 60 / 5) * 5;   // de 5 en 5 min
       const hh = Math.floor(minutes / 60) % 24;
       const mm = minutes % 60;
       if (sunTime) sunTime.textContent = `${String(hh).padStart(2, "0")}.${String(mm).padStart(2, "0")}`;
       // De sol a lluna entre les 21.00 i les 23.00
-      sunBody.style.setProperty("--night", clamp((q * 7 - 4) / 2, 0, 1).toFixed(3));
+      sunBody.style.setProperty("--night", clamp((q * 6.5 - 3.5) / 2, 0, 1).toFixed(3));
     }
     ticking = false;
   };
@@ -396,10 +396,6 @@ safe("mood", () => {
     "ens-casem": "",
     "el-lloc": "dusk",
     "el-dia": "golden",
-    cerimonia: "golden",
-    aperitiu: "",
-    sopar: "dusk",
-    festa: "night",
     "dress-code": "",
     "com-arribar": "",
     transport: "sea",
@@ -1032,7 +1028,7 @@ safe("ink", () => {
 });
 
 /* ========================================
-   ESTELS DE LA FESTA (canvas)
+   ESTELS DE LA NIT, al final de l'horari (canvas)
    ======================================== */
 safe("stars", () => {
   const canvas = $("#starCanvas");
@@ -1152,6 +1148,76 @@ safe("timeline", () => {
   const fill = $("#timelineFill");
   if (!spine || !fill) return;
 
+  /* La garlanda: el fil queda clavat a cada punt de l'horari i, entre
+     punt i punt, fa una corba cap a un costat i cap a l'altre, amb bombetes
+     penjades. Es mesura amb offsetTop (no amb getBoundingClientRect) perquè
+     les animacions d'aparició no desplacin els claus. */
+  const NS = "http://www.w3.org/2000/svg";
+  const track = $(".timeline__spine");
+  let svg = null, bulbs = [];
+
+  const build = () => {
+    if (!track) return;
+    const h = spine.offsetHeight;
+    const pins = [0];
+    $$(".tl-item", spine).forEach((li) => {
+      const body = $(".tl-item__body", li);
+      const dot = $(".tl-item__dot", li);
+      if (body && dot) pins.push(li.offsetTop + body.offsetTop + dot.offsetTop + dot.offsetHeight / 2);
+    });
+    pins.push(h);
+
+    if (svg) svg.remove();
+    svg = document.createElementNS(NS, "svg");
+    svg.setAttribute("class", "tl-garland");
+    svg.setAttribute("aria-hidden", "true");
+    svg.setAttribute("viewBox", `0 0 40 ${h}`);
+    svg.setAttribute("preserveAspectRatio", "none");
+
+    let d = `M20 ${pins[0]}`;
+    const points = [];
+    for (let k = 0; k < pins.length - 1; k++) {
+      const y1 = pins[k], y2 = pins[k + 1], span = y2 - y1;
+      if (span < 4) continue;
+      const side = k % 2 ? -1 : 1;
+      const cx = 20 + side * Math.min(11, span / 14);   // la corba del fil
+      const cy = (y1 + y2) / 2;
+      d += ` Q${cx} ${cy} 20 ${y2}`;
+      const n = Math.max(1, Math.round(span / 78));
+      for (let b = 1; b <= n; b++) {
+        const t = b / (n + 1);
+        const x = (1 - t) * (1 - t) * 20 + 2 * (1 - t) * t * cx + t * t * 20;
+        const y = (1 - t) * (1 - t) * y1 + 2 * (1 - t) * t * cy + t * t * y2;
+        points.push([x, y]);
+      }
+    }
+    const wire = document.createElementNS(NS, "path");
+    wire.setAttribute("class", "tl-garland__wire");
+    wire.setAttribute("d", d);
+    svg.appendChild(wire);
+
+    bulbs = points.map(([x, y], i) => {
+      const g = document.createElementNS(NS, "g");
+      g.setAttribute("class", "tl-garland__bulb");
+      g.style.setProperty("--d", `${-(i * 0.7) % 3.4}s`);
+      const cap = document.createElementNS(NS, "rect");
+      cap.setAttribute("class", "tl-garland__cap");
+      cap.setAttribute("x", (x - 2).toFixed(1));
+      cap.setAttribute("y", y.toFixed(1));
+      cap.setAttribute("width", "4");
+      cap.setAttribute("height", "2.6");
+      const glass = document.createElementNS(NS, "circle");
+      glass.setAttribute("class", "tl-garland__glass");
+      glass.setAttribute("cx", x.toFixed(1));
+      glass.setAttribute("cy", (y + 6.4).toFixed(1));
+      glass.setAttribute("r", "4");
+      g.append(cap, glass);
+      svg.appendChild(g);
+      return { el: g, y };
+    });
+    track.appendChild(svg);
+  };
+
   let ticking = false;
   const update = () => {
     const rect = spine.getBoundingClientRect();
@@ -1159,8 +1225,14 @@ safe("timeline", () => {
     const total = rect.height;
     const scrolled = clamp((vh * 0.55 - rect.top) / total, 0, 1);
     fill.style.setProperty("--fill", `${(scrolled * 100).toFixed(1)}%`);
+    const lit = scrolled * total;
+    bulbs.forEach((b) => b.el.classList.toggle("is-on", b.y <= lit));
     ticking = false;
   };
+
+  build();
+  if ("ResizeObserver" in window) new ResizeObserver(() => { build(); update(); }).observe(spine);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { build(); update(); });
 
   window.addEventListener("scroll", () => {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }

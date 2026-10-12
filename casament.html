@@ -114,7 +114,7 @@
 
 <!-- Sol que baixa a mesura que avancem pel dia -->
 <div class="sun-track" id="sunTrack" aria-hidden="true">
-  <div class="sun-track__body" id="sunBody"><span class="sun-track__time" id="sunTime">17.00</span></div>
+  <div class="sun-track__body" id="sunBody"><span class="sun-track__time" id="sunTime">17.30</span></div>
 </div>
 
 <!-- ========================================
@@ -515,8 +515,8 @@
       <ul class="menu__list">
         <li class="menu__item" style="--i:0"><a href="#inici"><em>01</em> Inici</a></li>
         <li class="menu__item" style="--i:1"><a href="#historia"><em>02</em> La nostra història</a></li>
-        <li class="menu__item" style="--i:2"><a href="#el-lloc"><em>03</em> El lloc</a></li>
-        <li class="menu__item" style="--i:3"><a href="#el-dia"><em>04</em> El dia</a></li>
+        <li class="menu__item" style="--i:2"><a href="#el-dia"><em>03</em> El dia</a></li>
+        <li class="menu__item" style="--i:3"><a href="#el-lloc"><em>04</em> El lloc</a></li>
         <li class="menu__item" style="--i:4"><a href="#com-arribar"><em>05</em> Com arribar-hi</a></li>
         <li class="menu__item" style="--i:5"><a href="#allotjament"><em>06</em> On dormir</a></li>
         <li class="menu__item" style="--i:8"><a href="#faq"><em>09</em> Preguntes</a></li>
@@ -554,7 +554,7 @@
 
     <p class="hero__meta" data-reveal style="--d:400">
       <span>Divendres</span><i class="dot" aria-hidden="true"></i>
-      <span>14 · 05 · 2027</span><i class="dot" aria-hidden="true"></i>
+      <span class="hero__date">14 · 05 · 2027</span><i class="dot" aria-hidden="true"></i>
       <span>17.00 h</span>
     </p>
     <p class="hero__venue" data-reveal style="--d:520">El Convent de Blanes</p>
@@ -701,6 +701,335 @@
 </section>
 
 <!-- ========================================
+     04 · EL DIA · TIMELINE
+     EDIT HERE: horaris del dia
+     ======================================== -->
+<section class="section day" id="el-dia">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal>Divendres 14 de maig</p>
+    <h2 class="section__title" data-split>El dia, <em>hora a hora</em></h2>
+
+    <div class="timeline">
+      <div class="timeline__spine" aria-hidden="true"><i id="timelineFill"></i></div>
+      <ol>
+        <!-- EDIT HERE: els horaris del dia -->
+        <li class="tl-item" data-reveal>
+          <span class="tl-item__time">17.30</span>
+          <div class="tl-item__body">
+            <span class="tl-item__dot" aria-hidden="true"></span>
+            <h3 class="tl-item__title"><em>Benvinguda</em></h3>
+            <p class="tl-item__text">
+              Moment de benvinguda sota l'ombra dels arcs del Convent.
+            </p>
+            <!-- L'entrada del Convent: la porta amb l'arc de pedra, els fanals,
+                 els tarongers en test, les hortènsies i una branca de pi -->
+            <div class="tl-fx tl-fx--arches" aria-hidden="true">
+              <span class="tl-fx__sun"></span>
+              <svg class="draw draw-on" viewBox="0 0 200 134">
+                <defs>
+                  <filter id="ma2" filterUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="154">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="3"/>
+                    <feDisplacementMap in="SourceGraphic" scale="2"/>
+                  </filter>
+                </defs>
+                <g filter="url(#ma2)">
+                  <path class="ink" d="M8 124H192"/>
+                  <path class="ink" d="M85 124V82a15 15 0 0 1 30 0V124"/>
+                  <path class="ink ink-thin" d="M77 124V80a23 21 0 0 1 46 0V124"/>
+                  <path class="ink ink-thin" d="M85.0 78.0L78.3 74.7"/>
+                  <path class="ink ink-thin" d="M89.0 71.0L84.1 65.5"/>
+                  <path class="ink ink-thin" d="M96.0 67.0L94.2 60.2"/>
+                  <path class="ink ink-thin" d="M104.0 67.0L105.8 60.2"/>
+                  <path class="ink ink-thin" d="M111.0 71.0L115.9 65.5"/>
+                  <path class="ink ink-thin" d="M115.0 78.0L121.7 74.7"/>
+                  <path class="ink ink-thin" d="M100 70V124"/>
+                  <path class="ink ink-thin" d="M95 104a1.4 1.4 0 1 0 0.1 0ZM105 104a1.4 1.4 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M72 128H128"/>
+                  <path class="ink ink-thin" d="M74 70h-8v4"/>
+                  <path class="ink" d="M66 74l-3.5 4v7h7v-7Z"/>
+                  <path class="ink ink-thin" d="M64.5 85v2h3v-2"/>
+                  <path class="ink ink-thin" d="M126 70h8v4"/>
+                  <path class="ink" d="M134 74l-3.5 4v7h7v-7Z"/>
+                  <path class="ink ink-thin" d="M132.5 85v2h3v-2"/>
+                  <path class="ink" d="M40 124l2-12h8l2 12Z"/>
+                  <path class="ink ink-thin" d="M46 112v-9"/>
+                  <path class="ink" d="M46 82a11 11 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M42 90a1.3 1.3 0 1 0 0.1 0ZM50 96a1.3 1.3 0 1 0 0.1 0ZM49 87a1.3 1.3 0 1 0 0.1 0Z"/>
+                  <path class="ink" d="M148 124l2-12h8l2 12Z"/>
+                  <path class="ink ink-thin" d="M154 112v-9"/>
+                  <path class="ink" d="M154 82a11 11 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M150 90a1.3 1.3 0 1 0 0.1 0ZM158 96a1.3 1.3 0 1 0 0.1 0ZM157 87a1.3 1.3 0 1 0 0.1 0Z"/>
+                  <path class="ink" d="M15 124l1.5-9h7l1.5 9Z"/>
+                  <path class="ink ink-thin" d="M15 107a4 4 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M20 102.5a4.5 4.5 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M25 107a4 4 0 1 0 0.1 0Z"/>
+                  <path class="ink" d="M175 124l1.5-9h7l1.5 9Z"/>
+                  <path class="ink ink-thin" d="M175 107a4 4 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M180 102.5a4.5 4.5 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M185 107a4 4 0 1 0 0.1 0Z"/>
+                  <path class="ink" d="M2 10C28 14 50 22 70 36"/>
+                  <path class="ink ink-thin" d="M18 12l1 -5"/>
+                  <path class="ink ink-thin" d="M18 12l0 4"/>
+                  <path class="ink ink-thin" d="M18 12l4 -7"/>
+                  <path class="ink ink-thin" d="M18 12l3 6"/>
+                  <path class="ink ink-thin" d="M18 12l7 -5"/>
+                  <path class="ink ink-thin" d="M18 12l6 4"/>
+                  <path class="ink ink-thin" d="M34 16l1 -5"/>
+                  <path class="ink ink-thin" d="M34 16l0 4"/>
+                  <path class="ink ink-thin" d="M34 16l4 -7"/>
+                  <path class="ink ink-thin" d="M34 16l3 6"/>
+                  <path class="ink ink-thin" d="M34 16l7 -5"/>
+                  <path class="ink ink-thin" d="M34 16l6 4"/>
+                  <path class="ink ink-thin" d="M50 23l1 -5"/>
+                  <path class="ink ink-thin" d="M50 23l0 4"/>
+                  <path class="ink ink-thin" d="M50 23l4 -7"/>
+                  <path class="ink ink-thin" d="M50 23l3 6"/>
+                  <path class="ink ink-thin" d="M50 23l7 -5"/>
+                  <path class="ink ink-thin" d="M50 23l6 4"/>
+                  <path class="ink ink-thin" d="M62 30l1 -5"/>
+                  <path class="ink ink-thin" d="M62 30l0 4"/>
+                  <path class="ink ink-thin" d="M62 30l4 -7"/>
+                  <path class="ink ink-thin" d="M62 30l3 6"/>
+                  <path class="ink ink-thin" d="M62 30l7 -5"/>
+                  <path class="ink ink-thin" d="M62 30l6 4"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </li>
+
+        <li class="tl-item" data-reveal>
+          <span class="tl-item__time">18.00</span>
+          <div class="tl-item__body">
+            <span class="tl-item__dot" aria-hidden="true"></span>
+            <h3 class="tl-item__title"><em>Cerimònia</em> al jardí</h3>
+            <p class="tl-item__text">
+              Al jardí de les oliveres, amb el mar de fons. Serà curta, serà
+              nostra i probablement algú plorarà. Segurament nosaltres.
+            </p>
+            <!-- L'arc de flors al jardí, amb el mar, l'olivera, les cadires i els anells -->
+            <div class="tl-fx tl-fx--leaves" aria-hidden="true">
+              <svg class="draw-on" viewBox="0 0 200 134">
+                <defs>
+                  <filter id="ma3" filterUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="154">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="3"/>
+                    <feDisplacementMap in="SourceGraphic" scale="2"/>
+                  </filter>
+                </defs>
+                <g filter="url(#ma3)">
+                  <path class="ink" d="M8 124H192"/>
+                  <path class="ink ink-thin" d="M8 74H58M142 74H192"/>
+                  <path class="ink ink-thin" d="M14 84q4-3 8 0t8 0M160 86q4-3 8 0t8 0"/>
+                  <path class="ink" d="M70 124V76a30 30 0 0 1 60 0V124"/>
+                  <path class="ink ink-thin" d="M70.1 70.2a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M73.1 74.4l4 2"/>
+                  <path class="ink ink-thin" d="M72.2 61.599999999999994a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M75.2 65.8l4 2"/>
+                  <path class="ink ink-thin" d="M76.7 53.9a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M79.7 58.1l4 2"/>
+                  <path class="ink ink-thin" d="M83.2 47.9a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M86.2 52.1l4 2"/>
+                  <path class="ink ink-thin" d="M91.2 44.099999999999994a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M94.2 48.3l4 2"/>
+                  <path class="ink ink-thin" d="M100.0 42.8a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M103.0 47.0l4 2"/>
+                  <path class="ink ink-thin" d="M108.8 44.099999999999994a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M111.8 48.3l4 2"/>
+                  <path class="ink ink-thin" d="M116.8 47.9a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M119.8 52.1l4 2"/>
+                  <path class="ink ink-thin" d="M123.3 53.9a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M126.3 58.1l4 2"/>
+                  <path class="ink ink-thin" d="M127.8 61.599999999999994a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M130.8 65.8l4 2"/>
+                  <path class="ink ink-thin" d="M129.9 70.2a3.2 3.2 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M132.9 74.4l4 2"/>
+                  <path class="ink ink-thin" d="M70 100.6a3.4 3.4 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M70 89a3 3 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M130 100.6a3.4 3.4 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M130 89a3 3 0 1 0 0.1 0Z"/>
+                  <path class="ink" d="M96 92a6 6 0 1 0 0.1 0Z"/>
+                  <path class="ink" d="M104 92a6 6 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M36 124V104M44 124V104M36 108h8M36 104l8 -6M44 104l-8 -6M36 104V96M44 104V96"/>
+                  <path class="ink ink-thin" d="M48 124V104M56 124V104M48 108h8M48 104l8 -6M56 104l-8 -6M48 104V96M56 104V96"/>
+                  <path class="ink ink-thin" d="M144 124V104M152 124V104M144 108h8M144 104l8 -6M152 104l-8 -6M144 104V96M152 104V96"/>
+                  <path class="ink ink-thin" d="M156 124V104M164 124V104M156 108h8M156 104l8 -6M164 104l-8 -6M156 104V96M164 104V96"/>
+                  <path class="ink ink-thin" d="M24 124C26 112 22 104 28 96M28 96c-4-4-8-4-12-2M28 96c4-6 10-8 16-6"/>
+                  <path class="ink ink-thin" d="M14 92a5 2 -20 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M22 86a5 2 10 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M32 84a5 2 -10 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M42 88a5 2 20 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M18 98a5 2 30 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M38 94a5 2 -30 1 0 0.1 0Z"/>
+                </g>
+              </svg>
+              <i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+        </li>
+
+        <li class="tl-item" data-reveal>
+          <span class="tl-item__time">19.00</span>
+          <div class="tl-item__body">
+            <span class="tl-item__dot" aria-hidden="true"></span>
+            <h3 class="tl-item__title"><em>Aperitiu</em> sota els arcs</h3>
+            <p class="tl-item__text">
+              Cava fred, coses del mar, pa amb tomàquet i molta conversa.
+              L'hora preferida de tothom que ha anat mai a un casament.
+            </p>
+            <!-- Dues copes brindant a la terrassa, amb la barana i el mar -->
+            <div class="tl-fx tl-fx--bubbles" aria-hidden="true">
+              <svg class="draw-on" viewBox="0 0 200 134">
+                <defs>
+                  <filter id="ma4" filterUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="154">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="3"/>
+                    <feDisplacementMap in="SourceGraphic" scale="2"/>
+                  </filter>
+                </defs>
+                <g filter="url(#ma4)">
+                  <path class="ink" d="M8 124H192"/>
+                  <path class="ink ink-thin" d="M8 74H192"/>
+                  <path class="ink ink-thin" d="M128 74C142 66 158 62 172 66C182 69 188 68 192 66"/>
+                  <path class="ink ink-thin" d="M8 100H192"/>
+                  <path class="ink ink-thin" d="M12 100V124"/>
+                  <path class="ink ink-thin" d="M24 100V124"/>
+                  <path class="ink ink-thin" d="M36 100V124"/>
+                  <path class="ink ink-thin" d="M48 100V124"/>
+                  <path class="ink ink-thin" d="M60 100V124"/>
+                  <path class="ink ink-thin" d="M72 100V124"/>
+                  <path class="ink ink-thin" d="M84 100V124"/>
+                  <path class="ink ink-thin" d="M96 100V124"/>
+                  <path class="ink ink-thin" d="M108 100V124"/>
+                  <path class="ink ink-thin" d="M120 100V124"/>
+                  <path class="ink ink-thin" d="M132 100V124"/>
+                  <path class="ink ink-thin" d="M144 100V124"/>
+                  <path class="ink ink-thin" d="M156 100V124"/>
+                  <path class="ink ink-thin" d="M168 100V124"/>
+                  <path class="ink ink-thin" d="M180 100V124"/>
+                  <path class="ink" d="M74 92a26 4 0 1 0 52 0a26 4 0 1 0 -52 0Z"/>
+                  <path class="ink" d="M100 96V124M88 124h24"/>
+                  <path class="ink" transform="rotate(12 91 88)" d="M82 70h18c0 6-4 9-9 9s-9-3-9-9ZM91 79v9M86 88h10"/>
+                  <path class="ink" transform="rotate(-12 109 88)" d="M100 70h18c0 6-4 9-9 9s-9-3-9-9ZM109 79v9M104 88h10"/>
+                  <path class="ink ink-thin" d="M100 58v-6M94 60l-4-4M106 60l4-4"/>
+                  <path class="ink" d="M198 8C176 12 160 18 146 28"/>
+                  <path class="ink ink-thin" d="M184 10l-1 -4"/>
+                  <path class="ink ink-thin" d="M184 10l0 4"/>
+                  <path class="ink ink-thin" d="M184 10l-4 -6"/>
+                  <path class="ink ink-thin" d="M184 10l-3 6"/>
+                  <path class="ink ink-thin" d="M184 10l-7 -4"/>
+                  <path class="ink ink-thin" d="M184 10l-6 4"/>
+                  <path class="ink ink-thin" d="M170 14l-1 -4"/>
+                  <path class="ink ink-thin" d="M170 14l0 4"/>
+                  <path class="ink ink-thin" d="M170 14l-4 -6"/>
+                  <path class="ink ink-thin" d="M170 14l-3 6"/>
+                  <path class="ink ink-thin" d="M170 14l-7 -4"/>
+                  <path class="ink ink-thin" d="M170 14l-6 4"/>
+                  <path class="ink ink-thin" d="M156 21l-1 -4"/>
+                  <path class="ink ink-thin" d="M156 21l0 4"/>
+                  <path class="ink ink-thin" d="M156 21l-4 -6"/>
+                  <path class="ink ink-thin" d="M156 21l-3 6"/>
+                  <path class="ink ink-thin" d="M156 21l-7 -4"/>
+                  <path class="ink ink-thin" d="M156 21l-6 4"/>
+                </g>
+              </svg>
+              <i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+        </li>
+
+        <li class="tl-item" data-reveal>
+          <span class="tl-item__time">21.00</span>
+          <div class="tl-item__body">
+            <span class="tl-item__dot" aria-hidden="true"></span>
+            <h3 class="tl-item__title"><em>Banquet</em></h3>
+            <p class="tl-item__text">
+              Estovalles de lli i espelmes, amb el sol acabant de pondre's
+              just quan arribin els primers plats.
+            </p>
+            <!-- La taula rodona amb espelmes i l'aranya penjada de l'arc de ferro -->
+            <div class="tl-fx tl-fx--candles" aria-hidden="true">
+              <svg class="draw-on" viewBox="0 0 200 134">
+                <defs>
+                  <filter id="ma5" filterUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="154">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="3"/>
+                    <feDisplacementMap in="SourceGraphic" scale="2"/>
+                  </filter>
+                </defs>
+                <g filter="url(#ma5)">
+                  <path class="ink" d="M8 124H192"/>
+                  <path class="ink" d="M34 124V44C34 22 56 14 76 18C90 21 100 30 100 38"/>
+                  <path class="ink ink-thin" d="M30 124h8"/>
+                  <path class="ink" d="M74 96a40 6 0 1 0 80 0a40 6 0 1 0 -80 0Z"/>
+                  <path class="ink" d="M74 96V121q40 5 80 0V96"/>
+                  <path class="ink ink-thin" d="M86 103v18M100 104v19M114 104v19M128 104v19M142 103v18"/>
+                  <path class="ink ink-thin" d="M94.4 94V80h3.2V94"/>
+                  <path class="ink ink-thin" d="M106.4 94V76h3.2V94"/>
+                  <path class="ink ink-thin" d="M124.4 94V82h3.2V94"/>
+                  <path class="ink ink-thin" d="M114 87a3 3 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M119 84.6a3.4 3.4 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M124 88.2a2.8 2.8 0 1 0 0.1 0Z"/>
+                  <g class="tl-chandelier">
+                  <path class="ink ink-thin" d="M100 38V48"/>
+                  <path class="ink" d="M93 50h14M94 51l3 18M106 51l-3 18M97 69q3 6 6 0"/>
+                  <path class="ink ink-thin" d="M93 58a7 1.6 0 1 0 14 0a7 1.6 0 1 0 -14 0Z"/>
+                  <path class="ink ink-thin" d="M95.5 66a4.5 1.2 0 1 0 9 0a4.5 1.2 0 1 0 -9 0Z"/>
+                  <path class="ink ink-thin" d="M95 59v3M98 59v4M102 59v4M105 59v3"/>
+                  </g>
+                </g>
+              </svg>
+              <span class="tl-flame" style="--x:48%;--y:56.7%"></span>
+              <span class="tl-flame" style="--x:54%;--y:53.7%"></span>
+              <span class="tl-flame" style="--x:63%;--y:58.2%"></span>
+            </div>
+          </div>
+        </li>
+
+        <!-- La nit: el cel amb estels, la garlanda de bombetes i la bola de mirall -->
+        <li class="tl-item tl-item--night" id="la-nit" data-reveal>
+          <div class="tl-night" aria-hidden="true">
+            <canvas id="starCanvas"></canvas>
+          </div>
+          <span class="tl-item__time">00.00</span>
+          <div class="tl-item__body">
+            <span class="tl-item__dot" aria-hidden="true"></span>
+            <h3 class="tl-item__title">Comença la <em>festa</em></h3>
+            <p class="tl-item__text">
+              Obrim la pista, encenem les bombetes i no ens en anem d'aquí
+              fins que la playlist digui prou. (No dirà prou.)
+            </p>
+            <!-- La festa: bombetes, la bola de mirall, notes i la pista -->
+            <div class="tl-fx tl-fx--disco" aria-hidden="true">
+              <svg class="draw-on" viewBox="0 0 200 134">
+                <defs>
+                  <filter id="ma6" filterUnits="userSpaceOnUse" x="-10" y="-10" width="220" height="154">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="3"/>
+                    <feDisplacementMap in="SourceGraphic" scale="2"/>
+                  </filter>
+                </defs>
+                <g filter="url(#ma6)">
+                  <path class="ink" d="M8 124H192"/>
+                  <path class="ink ink-thin" d="M40 124L56 106H144L160 124M68 106L62 124M84 106L82 124M100 106V124M116 106L118 124M132 106L138 124M50 114H150"/>
+                  <path class="ink ink-thin" d="M8 14C50 40 150 40 192 14"/>
+                  <path class="ink-fill" d="M24 20.8a2.4 2.4 0 1 0 0.1 0Z"/>
+                  <path class="ink-fill" d="M46 26.400000000000002a2.4 2.4 0 1 0 0.1 0Z"/>
+                  <path class="ink-fill" d="M70 30.300000000000004a2.4 2.4 0 1 0 0.1 0Z"/>
+                  <path class="ink-fill" d="M130 30.300000000000004a2.4 2.4 0 1 0 0.1 0Z"/>
+                  <path class="ink-fill" d="M154 26.400000000000002a2.4 2.4 0 1 0 0.1 0Z"/>
+                  <path class="ink-fill" d="M176 20.8a2.4 2.4 0 1 0 0.1 0Z"/>
+                  <path class="ink ink-thin" d="M100 0V34"/>
+                  <path class="ink ink-thin" d="M30 70v-14l8-2v12M30 70a3 2 0 1 1-0.1 0ZM38 68a3 2 0 1 1-0.1 0Z"/>
+                  <path class="ink ink-thin" d="M168 80v-12l7-2v10M168 80a3 2 0 1 1-0.1 0ZM175 78a3 2 0 1 1-0.1 0Z"/>
+                </g>
+              </svg>
+              <div class="disco"></div>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================
      05 · EL LLOC · EL CONVENT DE BLANES
      ======================================== -->
 <section class="section venue" id="el-lloc">
@@ -716,18 +1045,220 @@
         <p class="eyebrow eyebrow--center" style="color:rgba(244,246,248,.7)">On passarà tot</p>
         <h2 class="venue__name" data-split>El Convent <em>de Blanes</em></h2>
         <p class="venue__place">Blanes · La Selva · Costa Brava</p>
-        <svg class="draw draw--paper draw-on" style="width:120px" viewBox="0 0 160 30" aria-hidden="true"><use href="#i-wave"></use></svg>
+        <!-- El Convent dibuixat a mà, en traç blanc: la façana de pedra amb les
+             teulades, l'ull de bou, la finestra geminada, els fanals i les hortènsies;
+             els pins pinyoners, els xiprers, la terrassa i el mar. Es dibuixa sol
+             quan hi arribeu. El filtre "ma" li dona el tremolor del traç a mà. -->
+        <div class="venue__drawing">
+          <svg class="draw-on" viewBox="0 88 1200 284" role="img" aria-label="Dibuix a mà d'El Convent de Blanes, amb els pins, els xiprers i el mar">
+            <defs>
+              <filter id="ma" x="-2%" y="-5%" width="104%" height="110%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7"/>
+                <feDisplacementMap in="SourceGraphic" scale="3"/>
+              </filter>
+            </defs>
+            <g filter="url(#ma)">
+              <path class="ink" d="M14 356C200 353 400 358 600 355S1000 353 1192 357"/>
+              <path class="ink" d="M204 352V212"/>
+              <path class="ink" d="M190 214L264 170L330 206"/>
+              <path class="ink ink-thin" d="M200 220H330"/>
+              <path class="ink" d="M228 236h26v34h-26Z"/>
+              <path class="ink ink-thin" d="M223 231h36v44h-36Z"/>
+              <path class="ink ink-thin" d="M234 236v34M241 236v34M248 236v34M228 253h26"/>
+              <path class="ink ink-thin" d="M236 300h16v24h-16Z"/>
+              <path class="ink" d="M336 352V176M854 176V352"/>
+              <path class="ink" d="M318 172H872"/>
+              <path class="ink" d="M318 172L402 118H788L872 172"/>
+              <path class="ink ink-thin" d="M330 181H860"/>
+              <path class="ink ink-thin" d="M414 170L415 121"/>
+              <path class="ink ink-thin" d="M447 170L446 125"/>
+              <path class="ink ink-thin" d="M475 170L476 124"/>
+              <path class="ink ink-thin" d="M504 170L504 124"/>
+              <path class="ink ink-thin" d="M538 170L537 121"/>
+              <path class="ink ink-thin" d="M573 170L572 122"/>
+              <path class="ink ink-thin" d="M607 170L606 124"/>
+              <path class="ink ink-thin" d="M638 170L637 124"/>
+              <path class="ink ink-thin" d="M671 170L670 121"/>
+              <path class="ink ink-thin" d="M698 170L700 122"/>
+              <path class="ink ink-thin" d="M728 170L728 125"/>
+              <path class="ink ink-thin" d="M760 170L761 124"/>
+              <path class="ink ink-thin" d="M332 163L348 170"/>
+              <path class="ink ink-thin" d="M858 163L842 170"/>
+              <path class="ink ink-thin" d="M346 154L359 170"/>
+              <path class="ink ink-thin" d="M844 154L831 170"/>
+              <path class="ink ink-thin" d="M360 145L371 170"/>
+              <path class="ink ink-thin" d="M830 145L819 170"/>
+              <path class="ink ink-thin" d="M374 136L383 170"/>
+              <path class="ink ink-thin" d="M816 136L807 170"/>
+              <path class="ink ink-thin" d="M388 127L394 170"/>
+              <path class="ink ink-thin" d="M802 127L796 170"/>
+              <path class="ink" d="M708 122V96h18v26M704 96h26"/>
+              <path class="ink" d="M462 120V104h14v16M459 104h20"/>
+              <path class="ink" d="M376.0 204h24v40h-24Z"/>
+              <path class="ink ink-thin" d="M371.0 199h34v50h-34Z"/>
+              <path class="ink ink-thin" d="M388 204v40"/>
+              <path class="ink" d="M508.0 204h24v40h-24Z"/>
+              <path class="ink ink-thin" d="M503.0 199h34v50h-34Z"/>
+              <path class="ink ink-thin" d="M520 204v40"/>
+              <path class="ink" d="M668.0 204h24v40h-24Z"/>
+              <path class="ink ink-thin" d="M663.0 199h34v50h-34Z"/>
+              <path class="ink ink-thin" d="M680 204v40"/>
+              <path class="ink" d="M736.0 204h24v40h-24Z"/>
+              <path class="ink ink-thin" d="M731.0 199h34v50h-34Z"/>
+              <path class="ink ink-thin" d="M748 204v40"/>
+              <path class="ink" d="M800.0 204h24v40h-24Z"/>
+              <path class="ink ink-thin" d="M795.0 199h34v50h-34Z"/>
+              <path class="ink ink-thin" d="M812 204v40"/>
+              <path class="ink" d="M446 207a15 15 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M446 201a21 21 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M585 250V221a5.5 5.5 0 0 1 11 0V250M604 250V221a5.5 5.5 0 0 1 11 0V250"/>
+              <path class="ink ink-thin" d="M600 252V224"/>
+              <path class="ink ink-thin" d="M580 254V214a20 16 0 0 1 40 0V254Z"/>
+              <path class="ink ink-thin" d="M584 254h32"/>
+              <path class="ink" d="M377.0 280h22v36h-22Z"/>
+              <path class="ink ink-thin" d="M372.0 275h32v46h-32Z"/>
+              <path class="ink ink-thin" d="M388 280v36"/>
+              <path class="ink" d="M459.0 280h22v36h-22Z"/>
+              <path class="ink ink-thin" d="M454.0 275h32v46h-32Z"/>
+              <path class="ink ink-thin" d="M470 280v36"/>
+              <path class="ink" d="M689.0 280h22v36h-22Z"/>
+              <path class="ink ink-thin" d="M684.0 275h32v46h-32Z"/>
+              <path class="ink ink-thin" d="M700 280v36"/>
+              <path class="ink" d="M759.0 280h22v36h-22Z"/>
+              <path class="ink ink-thin" d="M754.0 275h32v46h-32Z"/>
+              <path class="ink ink-thin" d="M770 280v36"/>
+              <path class="ink" d="M809.0 280h22v36h-22Z"/>
+              <path class="ink ink-thin" d="M804.0 275h32v46h-32Z"/>
+              <path class="ink ink-thin" d="M820 280v36"/>
+              <path class="ink" d="M584 352V288a16 16 0 0 1 32 0V352"/>
+              <path class="ink ink-thin" d="M576 352V286a24 22 0 0 1 48 0V352"/>
+              <path class="ink ink-thin" d="M600 300v52"/>
+              <path class="ink ink-thin" d="M566 359H634M558 365H642"/>
+              <path class="ink ink-thin" d="M550 258h-10v8"/>
+              <path class="ink" d="M540 266l-6 7v11h12v-11Z"/>
+              <path class="ink ink-thin" d="M537 284v3h6v-3"/>
+              <path class="ink ink-thin" d="M650 258h10v8"/>
+              <path class="ink" d="M660 266l-6 7v11h12v-11Z"/>
+              <path class="ink ink-thin" d="M657 284v3h6v-3"/>
+              <path class="ink" d="M549 352l2-14h10l2 14Z"/>
+              <path class="ink ink-thin" d="M556 338v-12"/>
+              <path class="ink" d="M556 302a12 12 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M637 352l2-14h10l2 14Z"/>
+              <path class="ink ink-thin" d="M644 338v-12"/>
+              <path class="ink" d="M644 302a12 12 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M358 352l2-13h12l2 13Z"/>
+              <path class="ink ink-thin" d="M358 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M366 322a6 6 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M374 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M363 332a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M370 333a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M424 352l2-13h12l2 13Z"/>
+              <path class="ink ink-thin" d="M424 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M432 322a6 6 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M440 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M429 332a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M436 333a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M498 352l2-13h12l2 13Z"/>
+              <path class="ink ink-thin" d="M498 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M506 322a6 6 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M514 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M503 332a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M510 333a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M722 352l2-13h12l2 13Z"/>
+              <path class="ink ink-thin" d="M722 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M730 322a6 6 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M738 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M727 332a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M734 333a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M788 352l2-13h12l2 13Z"/>
+              <path class="ink ink-thin" d="M788 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M796 322a6 6 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M804 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M793 332a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M800 333a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink" d="M832 352l2-13h12l2 13Z"/>
+              <path class="ink ink-thin" d="M832 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M840 322a6 6 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M848 327.5a5.5 5.5 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M837 332a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M844 333a4 4 0 1 0 0.1 0Z"/>
+              <path class="ink ink-thin" d="M639 285q4 -2 7 0"/>
+              <path class="ink ink-thin" d="M744 265q3 -2 7 0"/>
+              <path class="ink ink-thin" d="M486 194q5 -2 10 0"/>
+              <path class="ink ink-thin" d="M403 269q3 -2 7 0"/>
+              <path class="ink ink-thin" d="M643 204q4 -2 9 0"/>
+              <path class="ink ink-thin" d="M417 296q5 -2 9 0"/>
+              <path class="ink ink-thin" d="M356 296q6 -2 12 0"/>
+              <path class="ink ink-thin" d="M557 242q5 -2 9 0"/>
+              <path class="ink ink-thin" d="M363 237q6 -2 12 0"/>
+              <path class="ink ink-thin" d="M638 232q6 -2 12 0"/>
+              <path class="ink ink-thin" d="M363 212q4 -2 7 0"/>
+              <path class="ink ink-thin" d="M478 227q5 -2 10 0"/>
+              <path class="ink ink-thin" d="M469 330q4 -2 9 0"/>
+              <path class="ink ink-thin" d="M475 257q5 -2 9 0"/>
+              <path class="ink ink-thin" d="M535 308q4 -2 8 0"/>
+              <path class="ink ink-thin" d="M419 299q3 -2 7 0"/>
+              <path class="ink ink-thin" d="M479 260q6 -2 12 0"/>
+              <path class="ink ink-thin" d="M776 199q5 -2 10 0"/>
+              <path class="ink ink-thin" d="M413 247q5 -2 10 0"/>
+              <path class="ink ink-thin" d="M348 257q5 -2 11 0"/>
+              <path class="ink ink-thin" d="M668 190q6 -2 12 0"/>
+              <path class="ink ink-thin" d="M463 338q6 -2 12 0"/>
+              <path class="ink ink-thin" d="M361 211q6 -2 12 0"/>
+              <path class="ink ink-thin" d="M828 269q6 -2 11 0"/>
+              <path class="ink ink-thin" d="M381 256q5 -2 9 0"/>
+              <path class="ink ink-thin" d="M685 335q4 -2 9 0"/>
+              <path class="ink" d="M178 352C166 300 165 240 178 168C191 240 190 300 178 352Z"/>
+              <path class="ink ink-thin" d="M178 336C174 300 174 250 178 198"/>
+              <path class="ink" d="M884 352C872 300 871 240 884 190C897 240 896 300 884 352Z"/>
+              <path class="ink ink-thin" d="M884 336C880 300 880 250 884 220"/>
+              <path class="ink" d="M968 356C962 300 990 250 1030 206"/>
+              <path class="ink ink-thin" d="M982 356C978 304 1002 258 1040 210"/>
+              <path class="ink ink-thin" d="M1004 244C1022 230 1050 216 1082 208"/>
+              <path class="ink" d="M900 206C892 190 910 176 932 180C940 160 970 156 986 166C1000 148 1036 146 1052 160C1072 146 1104 150 1114 166C1136 160 1164 172 1160 190C1176 198 1168 214 1148 212C1100 218 1060 214 1030 212C990 214 940 216 900 206Z"/>
+              <path class="ink ink-thin" d="M928 204c10-8 24-8 34 0M1058 206c12-8 26-8 36 0M990 172c8-6 18-6 26 0"/>
+              <path class="ink ink-thin" d="M1030 206C1012 200 990 204 968 210M1030 206C1050 198 1076 200 1100 208M1012 208L1004 196M1066 202L1074 190"/>
+              <path class="ink" d="M118 356C124 300 104 250 84 216"/>
+              <path class="ink ink-thin" d="M104 260C92 248 76 240 60 238"/>
+              <path class="ink" d="M20 216C12 200 30 184 52 190C62 170 96 168 108 180C124 166 156 170 162 188C180 194 176 214 156 214C110 220 60 222 20 216Z"/>
+              <path class="ink ink-thin" d="M46 212c8-6 20-6 28 0M112 210c8-6 20-6 28 0"/>
+              <path class="ink ink-thin" d="M84 216C70 210 56 212 44 216M84 216C98 208 116 208 132 214M66 212L60 202M108 210L114 200"/>
+              <path class="ink" d="M904 330H1190"/>
+              <path class="ink ink-thin" d="M904 352H1190"/>
+              <path class="ink ink-thin" d="M912 331V352"/>
+              <path class="ink ink-thin" d="M928 331V352"/>
+              <path class="ink ink-thin" d="M944 331V352"/>
+              <path class="ink ink-thin" d="M960 331V352"/>
+              <path class="ink ink-thin" d="M976 331V352"/>
+              <path class="ink ink-thin" d="M992 331V352"/>
+              <path class="ink ink-thin" d="M1008 331V352"/>
+              <path class="ink ink-thin" d="M1024 331V352"/>
+              <path class="ink ink-thin" d="M1040 331V352"/>
+              <path class="ink ink-thin" d="M1056 331V352"/>
+              <path class="ink ink-thin" d="M1072 331V352"/>
+              <path class="ink ink-thin" d="M1088 331V352"/>
+              <path class="ink ink-thin" d="M1104 331V352"/>
+              <path class="ink ink-thin" d="M1120 331V352"/>
+              <path class="ink ink-thin" d="M1136 331V352"/>
+              <path class="ink ink-thin" d="M1152 331V352"/>
+              <path class="ink ink-thin" d="M1168 331V352"/>
+              <path class="ink ink-thin" d="M1184 331V352"/>
+              <path class="ink" d="M1046 262H1196"/>
+              <path class="ink ink-thin" d="M1060 262C1090 246 1120 240 1150 246C1170 250 1186 248 1196 244"/>
+              <path class="ink ink-thin" d="M1070 278q6-4 12 0t12 0M1120 290q6-4 12 0t12 0M1150 274q5-3 10 0"/>
+              <path class="ink ink-thin" d="M4 262H64M150 262H168"/>
+              <path class="ink ink-thin" d="M14 280q6-4 12 0t12 0"/>
+            </g>
+          </svg>
+        </div>
         <p class="lede venue__lede">
-          Pedra antiga, claustre, xiprers i una terrassa oberta al Mediterrani.
-          El tipus de lloc on el temps va una mica més a poc a poc.
+          Pedra antiga, xiprers i una terrassa oberta al Mediterrani.
         </p>
       </div>
-    </div>
 
-    <div class="venue__cols">
+      <!-- Tot el que cal saber del lloc, també dins de l'arc -->
+      <div class="venue__cols">
       <div class="venue__col-a">
-        <h3 class="section__title" style="font-size:var(--t-lg)" data-reveal>Un convent del <em>segle XVI</em> mirant el mar</h3>
-
         <dl class="venue__facts">
           <div class="venue__fact" data-reveal><dt>Adreça</dt><dd id="venueAddress">El Convent de Blanes, Blanes, Girona</dd></div>
           <div class="venue__fact" data-reveal style="--d:80"><dt>Des de Barcelona</dt><dd>1 h 10 min en cotxe</dd></div>
@@ -735,7 +1266,7 @@
           <div class="venue__fact" data-reveal style="--d:240"><dt>Aeroports</dt><dd>Girona (40 min) · Barcelona (1 h)</dd></div>
         </dl>
 
-        <div class="btn-row" style="margin-top:2rem" data-reveal>
+        <div class="btn-row" style="margin-top:1.4rem" data-reveal>
           <a class="btn" id="mapsLink" href="#" target="_blank" rel="noopener">Obrir a Google Maps</a>
           <button class="btn btn--ghost" type="button" data-action="copy-address">Copiar l'adreça</button>
           <a class="btn btn--ghost" href="#com-arribar">Com arribar-hi</a>
@@ -753,242 +1284,10 @@
             referrerpolicy="strict-origin-when-cross-origin"
             allowfullscreen></iframe>
         </div>
-        <p class="map__coords" style="margin-top:1rem;text-align:center">Aparcament gratuït al recinte · Llançadora des de Blanes</p>
+        <p class="map__coords" style="margin-top:1rem;text-align:center">Aparcament a baix, al port · Llançadora des de Blanes</p>
+      </div>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ========================================
-     06 · EL DIA · TIMELINE
-     EDIT HERE: horaris del dia
-     ======================================== -->
-<section class="section day" id="el-dia">
-  <div class="wrap">
-    <p class="eyebrow" data-reveal>Divendres 14 de maig</p>
-    <h2 class="section__title" data-split>El dia, <em>hora a hora</em></h2>
-    <p class="lede" data-reveal style="--d:200">
-      Un horari orientatiu perquè sapigueu on sereu a cada moment.
-    </p>
-
-    <div class="timeline">
-      <div class="timeline__spine" aria-hidden="true"><i id="timelineFill"></i></div>
-      <ol>
-        <!-- EDIT HERE: els horaris del dia -->
-        <li class="tl-item" data-reveal>
-          <span class="tl-item__time">17.00</span>
-          <div class="tl-item__body">
-            <span class="tl-item__dot" aria-hidden="true"></span>
-            <h3 class="tl-item__title">Arribada dels <em>convidats</em></h3>
-            <p class="tl-item__text">
-              Us esperem entre les 17.00 i les 18.00 h. Us rebrem amb aigua ben
-              freda, llimonada i una mica d'ombra sota els arcs.
-            </p>
-            <svg class="tl-item__icon draw--olive draw" viewBox="0 0 140 64" aria-hidden="true"><use href="#i-olive"></use></svg>
-          </div>
-        </li>
-
-        <li class="tl-item" data-reveal>
-          <span class="tl-item__time">18.00</span>
-          <div class="tl-item__body">
-            <span class="tl-item__dot" aria-hidden="true"></span>
-            <h3 class="tl-item__title"><em>Cerimònia</em> al jardí</h3>
-            <p class="tl-item__text">
-              Al jardí de les oliveres, amb el mar de fons. Serà curta, serà
-              nostra i probablement algú plorarà. Segurament nosaltres.
-            </p>
-            <svg class="tl-item__icon draw" viewBox="0 0 110 80" aria-hidden="true"><use href="#i-ring"></use></svg>
-          </div>
-        </li>
-
-        <li class="tl-item" data-reveal>
-          <span class="tl-item__time">19.00</span>
-          <div class="tl-item__body">
-            <span class="tl-item__dot" aria-hidden="true"></span>
-            <h3 class="tl-item__title"><em>Aperitiu</em> sota els arcs</h3>
-            <p class="tl-item__text">
-              Cava fred, coses del mar, pa amb tomàquet i molta conversa.
-              L'hora preferida de tothom que ha anat mai a un casament.
-            </p>
-            <svg class="tl-item__icon draw" viewBox="0 0 70 100" aria-hidden="true"><use href="#i-coupe"></use></svg>
-          </div>
-        </li>
-
-        <li class="tl-item" data-reveal>
-          <span class="tl-item__time">21.00</span>
-          <div class="tl-item__body">
-            <span class="tl-item__dot" aria-hidden="true"></span>
-            <h3 class="tl-item__title"><em>Sopar</em> a taules llargues</h3>
-            <p class="tl-item__text">
-              Taules llargues, estovalles de lli i espelmes, amb el sol
-              acabant de pondre's just quan arribin els primers plats.
-            </p>
-            <svg class="tl-item__icon draw" viewBox="0 0 60 100" aria-hidden="true"><use href="#i-candle"></use></svg>
-          </div>
-        </li>
-
-        <li class="tl-item tl-item--night" data-reveal>
-          <span class="tl-item__time">00.00</span>
-          <div class="tl-item__body">
-            <span class="tl-item__dot" aria-hidden="true"></span>
-            <h3 class="tl-item__title">Comença la <em>festa</em></h3>
-            <p class="tl-item__text">
-              Obrim la pista, encenem les bombetes i no ens en anem d'aquí
-              fins que la playlist digui prou. (No dirà prou.)
-            </p>
-            <svg class="tl-item__icon draw" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-disco"></use></svg>
-          </div>
-        </li>
-      </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ========================================
-     07 · CERIMÒNIA
-     ======================================== -->
-<section class="moment ceremony" id="cerimonia">
-  <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--cine frame--drawing" data-parallax="0.05" role="img" aria-label="Dibuix de dos anells entrellaçats">
-      <svg class="frame__drawing draw draw-on" viewBox="0 0 110 80" aria-hidden="true"><use href="#i-ring"></use></svg>
-      <span class="frame__label">Jardí de les oliveres · 18.00 h</span>
-    </div>
-    <p class="annotation" style="right:-1rem;bottom:-2rem">aquí ens direm que sí</p>
-  </div>
-  <div class="moment__body">
-    <p class="moment__index" data-reveal>Moment 01 · 18.00 h</p>
-    <h2 class="moment__title" data-reveal style="--d:80">La <em>cerimònia</em></h2>
-    <p class="body-copy" data-reveal style="--d:140">
-      Serà al jardí, entre oliveres velles i el so del mar de fons. Una cerimònia civil,
-      curta i molt nostra, amb paraules de la gent que ens coneix millor.
-    </p>
-    <p class="body-copy" data-reveal style="--d:200">
-      Us demanem només una cosa: guardeu els mòbils durant la cerimònia.
-      Ja hi haurà temps de fer fotos, i volem veure-us la cara, no la pantalla.
-    </p>
-    <ul class="moment__list" data-reveal style="--d:260">
-      <li>Comencem puntuals a les 18.00 h</li>
-      <li>Cadires al jardí, a l'ombra</li>
-      <li>Durada aproximada: 35 minuts</li>
-      <li>Cerimònia sense mòbils</li>
-    </ul>
-    <svg class="draw draw--olive draw-on" style="width:110px;margin-top:2rem" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-bell"></use></svg>
-  </div>
-</section>
-
-<!-- ========================================
-     08 · APERITIU
-     ======================================== -->
-<section class="moment moment--flip aperitiu" id="aperitiu">
-  <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--wide ph-tile frame--drawing" data-parallax="0.05" role="img" aria-label="Dibuix de dues copes brindant">
-      <svg class="frame__drawing draw draw-on" viewBox="0 0 130 100" aria-hidden="true"><use href="#i-glasses-cheers"></use></svg>
-      <span class="frame__label" style="color:rgba(10,46,90,.6)">El claustre · 19.00 h</span>
-    </div>
-  </div>
-  <div class="moment__body">
-    <p class="moment__index" data-reveal>Moment 02 · 19.00 h</p>
-    <h2 class="moment__title" data-reveal style="--d:80">L'<em>aperitiu</em></h2>
-    <p class="body-copy" data-reveal style="--d:140">
-      La millor hora del dia. Cava ben fred, gerres de vermut, taules amb producte
-      del mercat de Blanes i música en directe suau sota els arcs de pedra.
-    </p>
-    <ul class="moment__list" data-reveal style="--d:200">
-      <li>Cava, vermut, vins de l'Empordà i cerveses fredes</li>
-      <li>Opcions sense alcohol de veritat, no només aigua</li>
-      <li>Peix i marisc de la llotja de Blanes</li>
-      <li>Trio de corda i, més tard, un punt de rumba</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ========================================
-     09 · SOPAR
-     ======================================== -->
-<section class="moment dinner" id="sopar">
-  <div class="moment__media" data-reveal="mask">
-    <div class="frame frame--cine ph-sunset frame--drawing" data-parallax="0.06" role="img" aria-label="Dibuix d'una espelma encesa">
-      <svg class="frame__drawing draw draw--paper draw-on" viewBox="0 0 60 100" aria-hidden="true"><use href="#i-candle"></use></svg>
-      <span class="frame__label">Terrassa del Convent · 21.00 h</span>
-    </div>
-  </div>
-  <div class="moment__body">
-    <p class="moment__index" data-reveal>Moment 03 · 21.00 h</p>
-    <h2 class="moment__title" data-reveal style="--d:80">El <em>sopar</em></h2>
-    <p class="body-copy" data-reveal style="--d:140">
-      Taules llargues de fusta, estovalles de lli, ceràmica blava, branques d'olivera
-      i moltes espelmes. El sol es pon cap a les 21:10 h i la terrassa es tenyeix de taronja.
-    </p>
-    <p class="body-copy" data-reveal style="--d:200">
-      Menú mediterrani compartit: arriba al mig de la taula i cadascú es serveix.
-      Ens agrada que la gent es passi els plats i s'hagi de parlar per demanar el pa.
-    </p>
-    <ul class="moment__list" data-reveal style="--d:260">
-      <li>Menú compartit, de temporada i de mercat</li>
-      <li>Opcions vegetarianes i veganes per a tothom qui ho demani</li>
-      <li>Al·lèrgies i intoleràncies: digueu-nos-ho al formulari</li>
-    </ul>
-
-    <div class="candles" aria-hidden="true">
-      <span class="candle"><span class="candle__flame"></span><span class="candle__body" style="--h:44px"></span></span>
-      <span class="candle"><span class="candle__flame"></span><span class="candle__body" style="--h:64px"></span></span>
-      <span class="candle"><span class="candle__flame"></span><span class="candle__body" style="--h:36px"></span></span>
-      <span class="candle"><span class="candle__flame"></span><span class="candle__body" style="--h:56px"></span></span>
-      <span class="candle"><span class="candle__flame"></span><span class="candle__body" style="--h:48px"></span></span>
-    </div>
-  </div>
-</section>
-
-<!-- ========================================
-     10 · LA FESTA
-     ======================================== -->
-<section class="party" id="festa">
-  <div class="party__stars" aria-hidden="true"><canvas id="starCanvas"></canvas></div>
-
-  <div class="wrap party__inner">
-    <div class="string-lights" aria-hidden="true">
-      <svg viewBox="0 0 1200 90" preserveAspectRatio="none">
-        <path d="M0 10 C 200 80, 400 80, 600 30 S 1000 80, 1200 14" fill="none" stroke="currentColor" stroke-width="1.2"/>
-        <circle class="bulb" cx="120" cy="48" r="5"/>
-        <circle class="bulb" cx="240" cy="66" r="5"/>
-        <circle class="bulb" cx="360" cy="70" r="5"/>
-        <circle class="bulb" cx="480" cy="55" r="5"/>
-        <circle class="bulb" cx="600" cy="31" r="5"/>
-        <circle class="bulb" cx="720" cy="46" r="5"/>
-        <circle class="bulb" cx="840" cy="64" r="5"/>
-        <circle class="bulb" cx="960" cy="62" r="5"/>
-        <circle class="bulb" cx="1080" cy="40" r="5"/>
-      </svg>
-    </div>
-
-    <div class="disco" aria-hidden="true"></div>
-
-    <h2 class="party__title" data-reveal="scale" style="--d:100">La <em>festa</em></h2>
-
-    <div class="party__grid">
-      <article class="party-card" data-reveal>
-        <svg class="party-card__icon draw draw--paper" viewBox="0 0 80 100" aria-hidden="true"><use href="#i-note"></use></svg>
-        <h3>Música</h3>
-        <p>DJ fins a les 3, amb una hora de rumba catalana no negociable i tot el que ens demaneu al formulari.</p>
-      </article>
-      <article class="party-card" data-reveal style="--d:100">
-        <svg class="party-card__icon draw draw--paper" viewBox="0 0 80 100" aria-hidden="true"><use href="#i-cocktail"></use></svg>
-        <h3>Barra</h3>
-        <p>Gin-tonics amb herbes del jardí, negronis, vermut fins al final i llimonada per a qui condueixi.</p>
-      </article>
-      <article class="party-card" data-reveal style="--d:200">
-        <svg class="party-card__icon draw draw--paper" viewBox="0 0 100 90" aria-hidden="true"><use href="#i-heart"></use></svg>
-        <h3>Recena</h3>
-        <p>Cap a les 00:30, entrepans calents i coca de sucre. La part més emotiva de la nit, segons alguns.</p>
-      </article>
-      <article class="party-card" data-reveal style="--d:300">
-        <svg class="party-card__icon draw draw--paper" viewBox="0 0 110 110" aria-hidden="true"><use href="#i-parasol"></use></svg>
-        <h3>Racó tranquil</h3>
-        <p>Al claustre hi haurà mantes, sofàs i silenci per si en algun moment necessiteu baixar el volum.</p>
-      </article>
-    </div>
-
-    <p class="last-song">l'última cançó, la triem entre tots</p>
   </div>
 </section>
 
@@ -1018,8 +1317,8 @@
       <article class="travel-card" data-reveal style="--d:100">
         <svg class="travel-card__icon draw draw-on" viewBox="0 0 100 100" aria-hidden="true"><use href="#i-parking"></use></svg>
         <h3>Aparcament</h3>
-        <p>Hi ha aparcament gratuït dins del recinte del Convent, amb personal que us indicarà on deixar el cotxe. Es pot deixar el cotxe tota la nit i recollir-lo l'endemà al matí sense problema.</p>
-        <p class="travel-card__meta">Gratuït · Es pot deixar la nit</p>
+        <p>Per aparcar, cal deixar el cotxe a baix, al port de Blanes. Des d'allà es puja a peu fins al Convent.</p>
+        <p class="travel-card__meta">A baix, al port de Blanes</p>
       </article>
 
       <article class="travel-card" data-reveal style="--d:200">
@@ -1106,9 +1405,6 @@
           <p class="route__time">04:00 h</p>
         </div>
       </div>
-       <p class="shuttle__foot" data-reveal>
-        Si veniu amb cotxe i preferiu deixar-lo al Convent, podeu recollir-lo l'endemà fins a les 12:00 h.
-      </p>
       <div class="btn-row" style="margin-top:1.6rem" data-reveal>
         <a class="btn" href="#rsvp">Reservar plaça a l'autocar</a>
       </div>
@@ -1245,7 +1541,7 @@
 
       <div class="acc">
         <h3><button class="acc__btn" type="button" aria-expanded="false">Hi ha aparcament?<span class="acc__icon" aria-hidden="true"></span></button></h3>
-        <div class="acc__panel" data-open="false"><div><p>Sí, gratuït i dins del recinte, amb personal que us indicarà on deixar el cotxe. Si al final de la nit preferiu no conduir (i esperem que sigui així), podeu deixar-lo allà i recollir-lo l'endemà fins a les 12:00 h.</p></div></div>
+        <div class="acc__panel" data-open="false"><div><p>Sí, a baix, al port de Blanes. Des d'allà es puja a peu fins al Convent. Si al final de la nit preferiu no conduir (i esperem que sigui així), teniu la llançadora i els taxis.</p></div></div>
       </div>
 
       <!-- EDIT HERE: el dress code viu aquí, dins de les preguntes -->
@@ -1421,21 +1717,19 @@
      EDIT HERE: text del compte quan el tingueu decidit
      ======================================== -->
 <section class="section gifts" id="regals">
+  <!-- Text a l'esquerra i el compte a la dreta: tot en una pantalla -->
   <div class="wrap gifts__inner">
-    <p class="eyebrow eyebrow--center" data-reveal>Si insistiu</p>
-    <h2 class="section__title" data-split>Regals</h2>
-    <p class="gifts__statement" data-reveal style="--d:200">
-      El millor regal és celebrar aquest dia amb vosaltres.
-    </p>
-    <p class="body-copy center" data-reveal style="--d:280">
-      De veritat: no cal res més. Que agafeu un tren, un cotxe o un avió, que us
-      prengueu el dia lliure i que vingueu a ballar amb nosaltres ja és molt més
-      del que podríem demanar.
-    </p>
-    <p class="body-copy center" data-reveal style="--d:340">
-      Ara bé, si teniu ganes de contribuir a la nostra propera aventura, us deixem
-      aquí un lloc on fer-ho. Sense cap mena de compromís i sense que ho comentem mai més.
-    </p>
+    <div class="gifts__text">
+      <p class="eyebrow" data-reveal>Si insistiu</p>
+      <h2 class="section__title" data-split>Regals</h2>
+      <p class="gifts__statement" data-reveal style="--d:200">
+        El millor regal és celebrar aquest dia amb vosaltres.
+      </p>
+      <p class="body-copy" data-reveal style="--d:280">
+        De veritat, no cal res més. Però si teniu ganes de contribuir a la nostra
+        propera aventura, us deixem aquí un lloc on fer-ho, sense cap compromís.
+      </p>
+    </div>
 
     <div class="gifts__box" data-reveal style="--d:400">
       <span class="field__label">Per a la lluna de mel</span>
