@@ -1993,6 +1993,8 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
    va del blanc de porcellana de la tarda al blau pols del capvespre, i
    la nit (a sota) s'hi fon. */
 .day {
+  /* La història ja deixa aire a sota: no cal tot el marge de secció a dalt */
+  padding-top: calc(var(--section-y) * 0.5);
   background: linear-gradient(180deg, var(--ivory) 0%, var(--ivory) 18%, #f0f3f4 34%, var(--paper) 50%, #e2e9ef 66%, #d6e0e9 82%, #cbd8e4 100%);
 }
 .tl-fx {
@@ -2121,7 +2123,7 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
    del Convent (la secció següent) sense cap tall. */
 .day { overflow-x: clip; }
 .tl-item--night {
-  padding-top: clamp(11rem, 22vw, 17rem);
+  padding-top: clamp(5.5rem, 10vw, 9rem);
   padding-bottom: 0;
 }
 .tl-night {
@@ -3166,39 +3168,6 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
   stroke-dasharray: 163;
   stroke-dashoffset: calc(163 - 163 * var(--p, 0));
 }
-
-/* Ou de Pasqua */
-.egg {
-  position: fixed;
-  inset: 0;
-  z-index: 955;
-  display: grid;
-  place-items: center;
-  background: rgba(4, 22, 46, 0.9);
-  backdrop-filter: blur(8px);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.6s var(--ease), visibility 0s 0.6s;
-  padding: var(--gutter);
-  text-align: center;
-}
-.egg.is-on { opacity: 1; visibility: visible; transition: opacity 0.6s var(--ease); }
-.egg__card {
-  max-width: 520px;
-  padding: clamp(2rem, 5vw, 3.5rem);
-  background: var(--ivory);
-  color: var(--ink);
-  border: 1px solid rgba(22, 32, 44, 0.1);
-  display: grid;
-  gap: 1.2rem;
-  justify-items: center;
-  transform: scale(0.9) rotate(-2deg);
-  transition: transform 0.7s var(--ease);
-}
-.egg.is-on .egg__card { transform: none; }
-.egg__card h3 { font-family: var(--font-display); font-size: var(--t-lg); letter-spacing: -0.02em; }
-.egg__card .hand { font-size: clamp(2.4rem, 7vw, 3.6rem); color: var(--terracotta); }
-.egg__card p { color: var(--ink-soft); font-size: var(--t-sm); }
 
 /* Mini "save the date" descarregable */
 .std {

@@ -1400,8 +1400,7 @@ safe("cursor", () => {
   const labels = [
     [".postcard", "Arrossega"],
     [".flip", "Gira-la"],
-    [".hscroll", "Arrossega"],
-    ["#coupleName", "Clica'ns"]
+    [".hscroll", "Arrossega"]
   ];
 
   labels.forEach(([sel, text]) => {
@@ -1839,55 +1838,6 @@ function dropConfetti(amount = 46) {
 }
 
 /* ========================================
-   OU DE PASQUA · clica els noms set vegades
-   ======================================== */
-safe("easter-egg", () => {
-  const name = $("#coupleName");
-  const egg = $("#egg");
-  const close = $("#eggClose");
-  if (!name || !egg) return;
-
-  let clicks = 0;
-  let resetTimer = null;
-
-  name.addEventListener("click", () => {
-    clicks += 1;
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => { clicks = 0; }, 2200);
-
-    if (!isReduced()) {
-      name.animate(
-        [{ transform: "scale(1)" }, { transform: "scale(1.03)" }, { transform: "scale(1)" }],
-        { duration: 340, easing: "cubic-bezier(.22,1,.36,1)" }
-      );
-    }
-
-    if (clicks === 4) toast("Tres més…");
-
-    if (clicks >= 7) {
-      clicks = 0;
-      egg.hidden = false;
-      requestAnimationFrame(() => egg.classList.add("is-on"));
-      document.body.classList.add("is-locked");
-      dropConfetti(70);
-      close.focus();
-    }
-  });
-
-  const hide = () => {
-    egg.classList.remove("is-on");
-    document.body.classList.remove("is-locked");
-    setTimeout(() => { egg.hidden = true; }, 700);
-  };
-
-  close.addEventListener("click", hide);
-  egg.addEventListener("click", (e) => { if (e.target === egg) hide(); });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !egg.hidden) hide();
-  });
-});
-
-/* ========================================
    ENLLAÇOS I TEXTOS QUE VENEN DE LA CONFIGURACIÓ
    ======================================== */
 safe("bind-config", () => {
@@ -1921,7 +1871,7 @@ console.log(
   "font-size:15px;font-family:Georgia,serif;color:#1b2f4e;letter-spacing:.08em"
 );
 console.log(
-  "%cEl Convent de Blanes · Costa Brava\nSi has arribat fins aquí, prova de clicar els nostres noms set vegades.",
+  "%cEl Convent de Blanes · Costa Brava",
   "color:#5f80a8;font-family:system-ui;font-size:11px"
 );
 
