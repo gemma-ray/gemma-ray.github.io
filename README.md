@@ -193,8 +193,8 @@ const wedding = {
   spotifyUrl: "https://open.spotify.com/",
   photoAlbum: "",   // àlbum compartit de fotos; buit = "disponible el 14 de maig"
   iban: "",         // compte per als regals; buit = manté el text de mostra
-  rsvp: { action: "", mode: "formspree" },
-  rsvpDeadline: "14 de març de 2027"
+  rsvp: { action: "", mode: "sheets" },
+  rsvpDeadline: "10 d'abril de 2027"
 };
 ```
 
@@ -259,7 +259,34 @@ El formulari és HTML pur i **no necessita servidor**. De sèrie funciona en *mo
 demostració*: valida els camps, ensenya el missatge d'èxit i llança el confeti,
 però no envia res enlloc (les dades es veuen a la consola del navegador).
 
-### Amb Formspree (el més senzill, gratuït fins a 50 respostes/mes)
+### Amb Google Sheets (el que fem servir)
+
+Cada confirmació entra com una fila nova en un full de càlcul que podeu mirar
+des del mòbil. Gratuït i sense límit de respostes.
+
+1. Creeu un Google Sheet nou (p. ex. *RSVP Gemma & Ray*) i compartiu-lo entre
+   vosaltres dos.
+2. Al full: **Extensions → Apps Script**. Esborreu el que hi hagi, enganxeu-hi
+   el contingut de `google-sheets.gs` i deseu.
+3. **Implementa → Implementació nova → Tipus: Aplicació web.**
+   - *Executa com a*: jo
+   - *Qui hi té accés*: **Qualsevol** (sense això, la web no hi pot escriure)
+4. Autoritzeu-lo amb el vostre compte (Google avisarà que l'app no està
+   verificada: *Avançat → Ves a…*, és el vostre propi script).
+5. Copieu l'URL que acaba en `/exec` i enganxeu-la a `script.js`:
+
+```js
+rsvp: {
+  action: "https://script.google.com/macros/s/xxxxxxxx/exec",
+  mode: "sheets"
+}
+```
+
+La primera confirmació crea la pestanya *Confirmacions* amb les capçaleres.
+Si algun dia canvieu `google-sheets.gs`, cal fer *Gestiona les implementacions
+→ editar → Versió nova* perquè l'URL faci servir el codi nou.
+
+### Amb Formspree (gratuït fins a 50 respostes/mes)
 
 1. Creeu un compte a <https://formspree.io> i un formulari nou.
 2. Copieu l'URL que us donen, de l'estil `https://formspree.io/f/abcdwxyz`.

@@ -48,20 +48,21 @@ const wedding = {
     // Deixeu "action" buit i el formulari funcionarà en mode demostració
     // (ensenya el missatge d'èxit però no envia res enlloc).
     //
-    // Per rebre les respostes de veritat, creeu un formulari gratuït a
-    // https://formspree.io i enganxeu aquí l'URL que us donin:
-    //   action: "https://formspree.io/f/xxxxxxxx"
+    // Les respostes van a un Google Sheet: enganxeu aquí l'URL de l'Apps
+    // Script (acaba en /exec). Els passos són al README → "Amb Google Sheets"
+    // i el codi de l'script és a google-sheets.gs.
+    //   action: "https://script.google.com/macros/s/xxxxxxxx/exec"
     //
-    // També funciona amb Basin, Getform, Formsubmit o un Google Form
-    // (vegeu el README).
+    // També funciona amb Formspree, Basin, Getform o Formsubmit (vegeu el README).
     action: "",
+    // "sheets" envia al Google Sheet i es queda a la pàgina.
     // "formspree" envia JSON i es queda a la pàgina.
     // "post" fa un enviament clàssic i marxa a la pàgina del servei.
-    mode: "formspree"
+    mode: "sheets"
   },
 
   // Data límit per confirmar assistència (només text informatiu)
-  rsvpDeadline: "14 de març de 2027"
+  rsvpDeadline: "10 d'abril de 2027"
 };
 
 /* ========================================
@@ -1665,6 +1666,28 @@ safe("rsvp", () => {
         Object.fromEntries(new FormData(form))
       );
       showSuccess();
+      return;
+    }
+
+    // Google Sheets: l'Apps Script no torna capçaleres CORS, així que enviem
+    // "a cegues" (no-cors). Si la xarxa falla, ho sabrem; si arriba, és una fila nova.
+    if (wedding.rsvp.mode === "sheets") {
+      e.preventDefault();
+      submit.disabled = true;
+      submit.textContent = "Enviant…";
+      try {
+        await fetch(form.action, {
+          method: "POST",
+          mode: "no-cors",
+          body: new URLSearchParams(new FormData(form))
+        });
+        showSuccess();
+      } catch (err) {
+        console.error("[RSVP]", err);
+        submit.disabled = false;
+        submit.textContent = "Tornar-ho a provar";
+        toast("No s'ha pogut enviar. Torna-ho a provar, si us plau.");
+      }
       return;
     }
 

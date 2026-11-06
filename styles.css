@@ -2674,6 +2674,8 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
   user-select: none;
   touch-action: none;
 }
+/* Sense text a sota: el marge gruixut de baix fa de peu de polaroid */
+.postcard { padding-bottom: 44px; }
 .postcard.is-dragging { cursor: grabbing; box-shadow: 0 40px 80px -30px rgba(10, 46, 90, 0.65); }
 /* Les fotos són verticals: la postal també, i l'enquadrament puja una
    mica perquè no talli les cares */
