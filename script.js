@@ -338,7 +338,7 @@ safe("progress", () => {
   const sunTrack = $("#sunTrack");
   const sunBody = $("#sunBody");
   const sunTime = $("#sunTime");
-  // El dia, de la benvinguda a la festa: de les 17.30 a les 00.00
+  // El dia, de la benvinguda a la festa: de les 17.00 a les 00.00
   const dayStart = $("#el-dia");
   const dayEnd = $("#la-nit");
   let ticking = false;
@@ -381,12 +381,12 @@ safe("progress", () => {
       // La via fa 100vh d'alt: un 10 % de la via és 10vh
       sunBody.style.transform = `translateY(${lerp(10, 90, q).toFixed(2)}vh)`;
 
-      const minutes = 17 * 60 + 30 + Math.round(q * 6.5 * 60 / 5) * 5;   // de 5 en 5 min
+      const minutes = 17 * 60 + Math.round(q * 7 * 60 / 5) * 5;   // de 5 en 5 min
       const hh = Math.floor(minutes / 60) % 24;
       const mm = minutes % 60;
       if (sunTime) sunTime.textContent = `${String(hh).padStart(2, "0")}.${String(mm).padStart(2, "0")}`;
       // De sol a lluna entre les 21.00 i les 23.00
-      sunBody.style.setProperty("--night", clamp((q * 6.5 - 3.5) / 2, 0, 1).toFixed(3));
+      sunBody.style.setProperty("--night", clamp((q * 7 - 4) / 2, 0, 1).toFixed(3));
     }
     ticking = false;
   }
