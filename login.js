@@ -99,6 +99,7 @@ window.grHash = grHash;
   const enter = () => {
     if (error) error.textContent = "";
 
+    let destination = login.destination;
     try {
       localStorage.setItem(GATE_KEY, "oberta");
       const days = Number(login.rememberDays) || 0;
@@ -109,15 +110,27 @@ window.grHash = grHash;
         );
       }
     } catch (e) {
-      // Mode privat: el deixem passar igualment, però ho tornarà a demanar
+      /* Navegador que no deixa guardar res (mode privat estricte, alguns
+         navegadors de dins d'apps). Sense això, casament.html no sabria
+         que han encertat i els tornaria aquí. Provem la sessió i, si
+         tampoc, li ho diem per l'adreça. Ho tornarà a demanar un altre dia. */
+      try { sessionStorage.setItem(GATE_KEY, "oberta"); }
+      catch (e2) { destination += "?entrada=oberta"; }
     }
 
-    if (reduced) { location.href = login.destination; return; }
+    // replace: que el botó "enrere" no torni a aquesta porta
+    if (reduced) { location.replace(destination); return; }
 
     // Petita transició abans de canviar de pàgina
     if (page) page.classList.add("is-leaving");
-    setTimeout(() => { location.href = login.destination; }, 620);
+    setTimeout(() => { location.replace(destination); }, 620);
   };
+
+  /* Si el navegador ens torna aquesta pàgina de la memòria (botó enrere),
+     tornaria amb la transició de sortida a mitges, en blanc. */
+  window.addEventListener("pageshow", (e) => {
+    if (e.persisted && page) page.classList.remove("is-leaving");
+  });
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();

@@ -329,8 +329,9 @@ html.js-reveal .split.is-in .w > i { transform: translateY(0) rotate(0deg); }
 html.js-reveal [data-reveal] {
   opacity: 0;
   transform: translateY(28px);
-  will-change: transform, opacity;
 }
+/* Només mentre esperen: un cop a lloc, alliberem la capa de la GPU */
+html.js-reveal [data-reveal]:not(.is-in) { will-change: transform, opacity; }
 html.js-reveal [data-reveal].is-in { opacity: 1; transform: none; }
 
 html.js-reveal [data-reveal="mask"] { opacity: 1; transform: none; clip-path: inset(0 0 100% 0); }
@@ -368,6 +369,12 @@ html.js-reveal [data-reveal="right"] { transform: translateX(36px); }
   animation: grain-drift 7s steps(6) infinite;
 }
 html.mood-night .grain, html.mood-dusk .grain { mix-blend-mode: overlay; opacity: 0.3; }
+/* Als mòbils, una capa fixa tan gran barrejant colors a cada fotograma
+   fa que el scroll s'encalli i parpellegi. A la pantalla petita el gra
+   gairebé no es veu: el traiem. */
+@media (pointer: coarse) {
+  .grain { display: none; }
+}
 @keyframes grain-drift {
   0%   { transform: translate(0, 0); }
   16%  { transform: translate(-3%, 2%); }
@@ -409,10 +416,13 @@ html.mood-night .grain, html.mood-dusk .grain { mix-blend-mode: overlay; opacity
   --night: 0;
   position: absolute;
   left: 50%;
-  top: 8%;
+  top: 0;
   width: 14px; height: 14px;
   margin-left: -7px; margin-top: -7px;
-  transition: top 0.25s linear;
+  /* La via fa 100vh: el sol es mou amb transform (script.js), que no
+     obliga a recalcular la pàgina a cada fotograma */
+  transform: translateY(8vh);
+  transition: transform 0.25s linear;
 }
 /* El halo: blanc de dia, blau de nit */
 .sun-track__body::before {
@@ -982,6 +992,9 @@ html.mood-night .grain, html.mood-dusk .grain { mix-blend-mode: overlay; opacity
   justify-content: space-between;
   gap: 1rem;
   padding: clamp(0.9rem, 2vw, 1.6rem) var(--gutter);
+  /* iPhone en horitzontal: que res no quedi sota el notch */
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
   color: var(--fg);
   transition: transform 0.6s var(--ease), background-color 0.6s var(--ease), padding 0.5s var(--ease), color 1.2s var(--ease-soft);
 }
@@ -1768,7 +1781,6 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
   padding: clamp(3rem, 6vw, 4.5rem) clamp(1.2rem, 5vw, 4.5rem) clamp(1.8rem, 4vw, 2.8rem);
   overflow: hidden;
   background: linear-gradient(180deg, rgba(202, 220, 234, 0.1), rgba(4, 22, 46, 0.25));
-  backdrop-filter: blur(2px);
 }
 .venue__arch::before {
   content: "";
@@ -1906,9 +1918,11 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
   position: absolute;
   top: 0; left: -1px;
   width: 3px;
-  height: var(--fill, 0%);
+  height: 100%;
   background: var(--cobalt);
-  transition: height 0.2s linear;
+  transform: scaleY(var(--fill, 0));
+  transform-origin: top;
+  transition: transform 0.2s linear;
 }
 /* La línia de l'horari és una garlanda de bombetes (la dibuixa script.js):
    el fil queda clavat a cada punt i fa una corba suau entre l'un i l'altre.
@@ -2660,7 +2674,9 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
   position: relative;
   height: clamp(540px, 74vh, 720px);
   margin-top: clamp(2rem, 5vw, 3rem);
-  touch-action: none;
+  /* Al mòbil, el dit ha de poder fer scroll entre les postals;
+     només la postal mateixa s'arrossega (touch-action: none a .postcard) */
+  touch-action: pan-y;
 }
 .postcard {
   position: absolute;
@@ -3139,8 +3155,8 @@ html.fonts-wait .hero__names { opacity: 0; transition: none; }
    ======================================== */
 .to-top {
   position: fixed;
-  right: clamp(1rem, 2.6vw, 2rem);
-  bottom: clamp(1rem, 2.6vw, 2rem);
+  right: max(clamp(1rem, 2.6vw, 2rem), env(safe-area-inset-right, 0px));
+  bottom: max(clamp(1rem, 2.6vw, 2rem), env(safe-area-inset-bottom, 0px));
   z-index: 720;
   width: 54px; height: 54px;
   display: grid;
@@ -3783,8 +3799,8 @@ html.has-envelope .envelope {
    ======================================== */
 .music {
   position: fixed;
-  left: clamp(1rem, 2.6vw, 2rem);
-  bottom: clamp(1rem, 2.6vw, 2rem);
+  left: max(clamp(1rem, 2.6vw, 2rem), env(safe-area-inset-left, 0px));
+  bottom: max(clamp(1rem, 2.6vw, 2rem), env(safe-area-inset-bottom, 0px));
   z-index: 720;
   display: inline-flex;
   align-items: center;

@@ -8,6 +8,8 @@
 <!-- EDIT HERE: descripció per a WhatsApp, Instagram i Google -->
 <meta name="description" content="Gemma i Ray es casen el 14 de maig de 2027 a El Convent de Blanes, Costa Brava. Tota la informació del dia: horaris, com arribar-hi, allotjament i confirmació d'assistència.">
 <meta name="theme-color" content="#1b2f4e">
+<!-- El web és de colors clars: que el navegador no l'enfosqueixi pel seu compte -->
+<meta name="color-scheme" content="light">
 <meta name="author" content="Gemma &amp; Ray">
 
 <!-- El web no ha de sortir a Google. Important: la porta d'entrada amaga el
@@ -44,6 +46,9 @@
   (function () {
     var ok = false;
     try { ok = localStorage.getItem("gr-entrada") === "oberta"; } catch (e) { ok = false; }
+    // Navegadors que no deixen guardar res: login.js ho diu per la sessió o per l'adreça
+    if (!ok) { try { ok = sessionStorage.getItem("gr-entrada") === "oberta"; } catch (e) { ok = false; } }
+    if (!ok) ok = /[?&]entrada=oberta\b/.test(location.search);
     if (!ok) location.replace("./index.html");
   })();
 
@@ -1723,7 +1728,7 @@
     <!-- El Save the Date de debò, tal com el vau enviar -->
     <div class="std tilt" style="margin-top:3.5rem" data-reveal="scale">
       <div class="tilt__inner">
-        <img class="std__img" src="assets/images/save-the-date.jpg" loading="lazy"
+        <img class="std__img" src="assets/images/save-the-date.jpg" loading="lazy" width="933" height="1400"
              alt="Save the Date de la Gemma i en Raymond: un gravat en blau de la terrassa del Convent de Blanes amb les cadires de la cerimònia mirant al mar, i la data 14.05.27">
         <button class="btn btn--ghost" type="button" data-action="ics">Guardar-ho al calendari</button>
       </div>

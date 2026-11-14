@@ -42,7 +42,10 @@ function doPost(e) {
       if (key === "data") return new Date();
       // Si no ve, els detalls no compten (encara que el formulari els enviï)
       if (!coming && ["acompanyants", "noms_acompanyants", "transport", "dieta", "canco"].indexOf(key) > -1) return "";
-      return p[key] || "";
+      const v = String(p[key] || "");
+      // Una resposta que comenci amb = + - @ el Sheet la llegiria com una
+      // fórmula ("- celíac" sortiria com a error): l'apòstrof la deixa com a text.
+      return /^[=+\-@]/.test(v) ? "'" + v : v;
     }));
     return ok_();
   } finally {

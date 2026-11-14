@@ -218,8 +218,11 @@ safe("nav", () => {
 
   /* — Menú a pantalla completa — */
   let lastFocus = null;
+  let hideTimer = null;
 
   const openMenu = () => {
+    // Si el tornen a obrir mentre encara s'està tancant, que no s'amagi
+    clearTimeout(hideTimer);
     lastFocus = document.activeElement;
     menu.hidden = false;
     // Un frame perquè l'animació de clip-path arrenqui bé
@@ -236,7 +239,7 @@ safe("nav", () => {
     burger.setAttribute("aria-expanded", "false");
     burger.setAttribute("aria-label", "Obrir el menú");
     document.body.classList.remove("is-locked");
-    setTimeout(() => { menu.hidden = true; }, 700);
+    hideTimer = setTimeout(() => { menu.hidden = true; }, 700);
     if (lastFocus) lastFocus.focus();
   };
 
@@ -340,7 +343,22 @@ safe("progress", () => {
   const dayEnd = $("#la-nit");
   let ticking = false;
 
-  const update = () => {
+  /* On comença i acaba el dia, mesurat des de dalt de la pàgina. No fem
+     servir offsetTop: #la-nit és dins de .timeline (position: relative)
+     i el seu offsetTop compta des d'allà, no des de dalt. Ho mesurem un
+     cop (i quan canvia la mida), no a cada fotograma. */
+  let dayTop = 0, nightMid = 0;
+  const measure = () => {
+    if (!dayStart || !dayEnd) return;
+    const y = window.scrollY;
+    dayTop = dayStart.getBoundingClientRect().top + y;
+    const n = dayEnd.getBoundingClientRect();
+    nightMid = n.top + y + n.height * 0.5;
+  };
+  measure();
+  if ("ResizeObserver" in window) new ResizeObserver(() => { measure(); update(); }).observe(document.body);
+
+  function update() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const p = max > 0 ? clamp(window.scrollY / max, 0, 1) : 0;
 
@@ -353,14 +371,15 @@ safe("progress", () => {
        tram, la via no hi és: només té sentit mentre passa el dia. */
     if (sunTrack && sunBody && dayStart && dayEnd) {
       const vh = window.innerHeight;
-      const from = dayStart.offsetTop - vh * 0.5;
-      const to = dayEnd.offsetTop + dayEnd.offsetHeight * 0.5 - vh * 0.5;
+      const from = dayTop - vh * 0.5;
+      const to = nightMid - vh * 0.5;
       const q = clamp((window.scrollY - from) / (to - from || 1), 0, 1);
       const inDay = window.scrollY > from - vh * 0.3 && window.scrollY < to + vh * 0.6;
 
       sunTrack.classList.toggle("is-visible", inDay);
       sunTrack.classList.toggle("is-clock", inDay && q > 0 && q < 1);
-      sunBody.style.top = `${lerp(10, 90, q)}%`;
+      // La via fa 100vh d'alt: un 10 % de la via és 10vh
+      sunBody.style.transform = `translateY(${lerp(10, 90, q).toFixed(2)}vh)`;
 
       const minutes = 17 * 60 + 30 + Math.round(q * 6.5 * 60 / 5) * 5;   // de 5 en 5 min
       const hh = Math.floor(minutes / 60) % 24;
@@ -370,12 +389,12 @@ safe("progress", () => {
       sunBody.style.setProperty("--night", clamp((q * 6.5 - 3.5) / 2, 0, 1).toFixed(3));
     }
     ticking = false;
-  };
+  }
 
   window.addEventListener("scroll", () => {
     if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }, { passive: true });
-  window.addEventListener("resize", update);
+  window.addEventListener("resize", () => { measure(); update(); });
   update();
 
   if (toTop) {
@@ -617,10 +636,12 @@ safe("sea", () => {
      t'hi apropessis. 0 = a dalt de tot, 1 = el hero ja ha passat. */
   let rise = 0;
   const hero = $(".hero");
-  const readRise = () => {
-    const hh = hero ? hero.offsetHeight : window.innerHeight;
-    rise = clamp(window.scrollY / (hh || 1), 0, 1);
-  };
+  // L'alçada del hero la llegim només quan canvia la mida, no a cada scroll
+  let hh = 1;
+  const readHero = () => { hh = (hero ? hero.offsetHeight : window.innerHeight) || 1; };
+  const readRise = () => { rise = clamp(window.scrollY / hh, 0, 1); };
+  readHero();
+  window.addEventListener("resize", readHero);
   window.addEventListener("scroll", readRise, { passive: true });
   readRise();
 
@@ -1102,7 +1123,14 @@ safe("stars", () => {
   };
 
   build();
-  window.addEventListener("resize", build);
+  // Al mòbil, la barra d'adreces que s'amaga també és un "resize":
+  // si només canvia l'alçada, no tornem a sembrar el cel.
+  let builtFor = window.innerWidth;
+  window.addEventListener("resize", () => {
+    if (window.innerWidth === builtFor) return;
+    builtFor = window.innerWidth;
+    build();
+  });
 
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(([entry]) => {
@@ -1124,8 +1152,12 @@ safe("parallax", () => {
   let ticking = false;
   const update = () => {
     const vh = window.innerHeight;
-    items.forEach((el) => {
-      const rect = el.getBoundingClientRect();
+    // Primer llegim totes les posicions, després movem. I mesurem el pare,
+    // que no es mou: si mesuréssim l'element, la mesura inclouria el
+    // desplaçament anterior i la imatge tremolaria.
+    const rects = items.map((el) => (el.parentElement || el).getBoundingClientRect());
+    items.forEach((el, i) => {
+      const rect = rects[i];
       if (rect.bottom < -200 || rect.top > vh + 200) return;
       const speed = parseFloat(el.dataset.parallax) || 0.05;
       const offset = (rect.top + rect.height / 2 - vh / 2) * speed;
@@ -1225,7 +1257,7 @@ safe("timeline", () => {
     const vh = window.innerHeight;
     const total = rect.height;
     const scrolled = clamp((vh * 0.55 - rect.top) / total, 0, 1);
-    fill.style.setProperty("--fill", `${(scrolled * 100).toFixed(1)}%`);
+    fill.style.setProperty("--fill", scrolled.toFixed(3));
     const lit = scrolled * total;
     bulbs.forEach((b) => b.el.classList.toggle("is-on", b.y <= lit));
     ticking = false;
@@ -1336,8 +1368,13 @@ safe("postcards", () => {
     card.addEventListener("pointercancel", up);
   });
 
+  // Si canvia l'amplada de la pantalla, tornem a col·locar-les. Només
+  // l'amplada: al mòbil la barra d'adreces canvia l'alçada a cada scroll
+  // i no volem desfer el que el convidat ha mogut.
+  let placedFor = window.innerWidth;
   window.addEventListener("resize", () => {
-    // Si canvia la mida de la pantalla, tornem a col·locar-les
+    if (window.innerWidth === placedFor) return;
+    placedFor = window.innerWidth;
     if (window.innerWidth < 900) place();
   });
 });
@@ -1513,6 +1550,7 @@ safe("music", () => {
         posaVolum(0, 0);
       });
     }
+    return p;
   };
 
   const atura = () => {
@@ -1537,11 +1575,19 @@ safe("music", () => {
 
   // Al primer toc o tecla (si el navegador no ha deixat sonar abans).
   // Un toc al mateix botó ja el gestiona el botó.
-  const gestos = ["pointerdown", "keydown", "touchstart"];
+  // Al mòbil, el navegador només deixa sonar en acabar un toc (touchend,
+  // pointerup, click), no en començar-lo, i un dit que fa scroll no compta.
+  // Per això no deixem d'escoltar fins que la cançó sona de debò.
+  const gestos = ["pointerup", "touchend", "click", "keydown"];
+  const deixaDEscoltar = () => {
+    gestos.forEach((g) => document.removeEventListener(g, alPrimerGest, true));
+  };
   const alPrimerGest = (e) => {
     if (toggle.contains(e.target)) return;
-    gestos.forEach((g) => document.removeEventListener(g, alPrimerGest, true));
-    autoEngega();
+    if (sonant || apagadaPerElConvidat()) { deixaDEscoltar(); return; }
+    Promise.resolve(engega()).then(() => {
+      if (sonant) { deixaDEscoltar(); anuncia(); }
+    }, () => { /* encara no: esperem el pròxim toc */ });
   };
   const esperaUnGest = () => {
     gestos.forEach((g) => document.addEventListener(g, alPrimerGest, true));
@@ -1759,7 +1805,21 @@ function downloadICS() {
     "END:VCALENDAR"
   ];
 
-  const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+  // El format .ics no vol línies de més de 75 bytes: les llargues es
+  // parteixen i la continuació comença amb un espai.
+  const enc = new TextEncoder();
+  const fold = (line) => {
+    let out = "", bytes = 0;
+    for (const ch of line) {
+      const n = enc.encode(ch).length;
+      if (bytes + n > 75) { out += "\r\n "; bytes = 1; }
+      out += ch;
+      bytes += n;
+    }
+    return out;
+  };
+
+  const blob = new Blob([lines.map(fold).join("\r\n") + "\r\n"], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
