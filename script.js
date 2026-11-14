@@ -54,7 +54,7 @@ const wedding = {
     //   action: "https://script.google.com/macros/s/xxxxxxxx/exec"
     //
     // També funciona amb Formspree, Basin, Getform o Formsubmit (vegeu el README).
-    action: "",
+    action: "https://script.google.com/macros/s/AKfycbyiotAJBASw8xD0P0xG5wuPd5y6y_y42vHbFdL-qIPKJry4c9NFQGuf7sUP_kOhNBGR_Q/exec",
     // "sheets" envia al Google Sheet i es queda a la pàgina.
     // "formspree" envia JSON i es queda a la pàgina.
     // "post" fa un enviament clàssic i marxa a la pàgina del servei.
